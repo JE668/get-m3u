@@ -4,8 +4,15 @@ import os, re, requests, time, concurrent.futures
 
 # 不带城市筛选
 FOFA_URL = "https://fofa.info/result?qbase64=IlVEUFhZIiAmJiBjb3VudHJ5PSJDTiIgJiYgcmVnaW9uPSJHdWFuZ2Rvbmci"
-HEADERS = {"User-Agent": "Mozilla/5.0", "Cookie": os.environ.get("FOFA_COOKIE", "")}
-SOURCE_IP_FILE, SOURCE_M3U_FILE, RTP_DIR = "source-ip.txt", "source-m3u.txt", "rtp"
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Cookie": os.environ.get("FOFA_COOKIE", "") 
+}
+
+SOURCE_IP_FILE = "source-ip.txt"
+SOURCE_M3U_FILE = "source-m3u.txt"
+SOURCE_NONCHECK_FILE = "source-m3u-noncheck.txt" # 新增
+RTP_DIR = "rtp"
 
 def verify_geo(ip):
     try:
@@ -25,7 +32,7 @@ def check_status(ip_port):
     return False
 
 if __name__ == "__main__":
-    print("📡 1. 抓取 FOFA...")
+    print("📡 1. 抓取 FOFA 数据...")
     try:
         r = requests.get(FOFA_URL, headers=HEADERS, timeout=15)
         raw_list = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+)', r.text)
@@ -49,16 +56,30 @@ if __name__ == "__main__":
 
     if online_ips:
         online_ips = sorted(list(set(online_ips)))
-        with open(SOURCE_IP_FILE, "w", encoding="utf-8") as f: f.write("\n".join(online_ips))
+        # 输出 source-ip.txt
+        with open(SOURCE_IP_FILE, "w", encoding="utf-8") as f: 
+            f.write("\n".join(online_ips))
         
         rtp_path = os.path.join(RTP_DIR, "广东电信.txt")
         if os.path.exists(rtp_path):
-            with open(rtp_path, encoding="utf-8") as f: rtps = [x.strip() for x in f if "," in x]
-            m3u = []
+            with open(rtp_path, encoding="utf-8") as f: 
+                rtps = [x.strip() for x in f if "," in x]
+            
+            m3u_all = []
             for ip in online_ips:
                 for r in rtps:
                     name, r_url = r.split(",", 1)
                     p = "rtp" if "rtp://" in r_url else "udp"
-                    m3u.append(f"{name},http://{ip}/{p}/{r_url.split('://')[1]}")
-            with open(SOURCE_M3U_FILE, "w", encoding="utf-8") as f: f.write("\n".join(m3u))
-            print(f"✅ 生成 {len(online_ips)} 个服务器，{len(m3u)} 条链接")
+                    m3u_all.append(f"{name},http://{ip}/{p}/{r_url.split('://')[1]}")
+            
+            # --- 关键修改：生成两个文件 ---
+            # 1. source-m3u-noncheck.txt (保留全量，不被 probe.py 修改)
+            with open(SOURCE_NONCHECK_FILE, "w", encoding="utf-8") as f:
+                f.write("\n".join(m3u_all))
+            
+            # 2. source-m3u.txt (作为 probe.py 的输入，会被探测并剔除)
+            with open(SOURCE_M3U_FILE, "w", encoding="utf-8") as f:
+                f.write("\n".join(m3u_all))
+                
+            print(f"✅ 已生成 {len(online_ips)} 个服务器，共拼装 {len(m3u_all)} 条原始链接。")
+            print(f"📄 全量链接已存至 {SOURCE_NONCHECK_FILE}")
