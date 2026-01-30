@@ -32,3 +32,11 @@ jobs:
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: python probe.py
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add source-ip.txt source-m3u.txt log.txt || true
+          git commit -m "Auto Update IPTV Source: $(date +'%Y-%m-%d %H:%M:%S')" || exit 0
+          git push origin main
