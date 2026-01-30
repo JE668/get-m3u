@@ -1,0 +1,34 @@
+name: IPTV Discovery and Probe
+
+on:
+  schedule:
+    - cron: '0 10,22 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run_all:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: pip install requests
+
+      - name: Discovery (main.py)
+        env:
+          FOFA_COOKIE: ${{ secrets.FOFA_COOKIE }}
+        run: python main.py
+
+      - name: Quality Probe (probe.py)
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: python probe.py
