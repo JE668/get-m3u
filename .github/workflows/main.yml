@@ -37,6 +37,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add source-ip.txt source-m3u.txt log.txt || true
+          # 添加所有结果文件
+          git add source-ip.txt source-m3u.txt source-m3u-noncheck.txt log.txt || true
           git commit -m "Auto Update IPTV Source: $(date +'%Y-%m-%d %H:%M:%S')" || exit 0
           git push origin main
