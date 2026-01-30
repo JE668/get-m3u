@@ -1,6 +1,9 @@
 import os, re, requests, time, concurrent.futures
+# 带城市筛选
+# FOFA_URL = "https://fofa.info/result?qbase64=IlVEUFhZIiAmJiBjb3VudHJ5PSJDTiIgJiYgcmVnaW9uPSJHdWFuZ2RvbmciICYmIGNpdHk9Ilpob25nc2hhbiI%3D"
 
-FOFA_URL = "https://fofa.info/result?qbase64=IlVEUFhZIiAmJiBjb3VudHJ5PSJDTiIgJiYgcmVnaW9uPSJHdWFuZ2RvbmciICYmIGNpdHk9Ilpob25nc2hhbiI%3D"
+# 不带城市筛选
+FOFA_URL = "https://fofa.info/result?qbase64=IlVEUFhZIiAmJiBjb3VudHJ5PSJDTiIgJiYgcmVnaW9uPSJHdWFuZ2Rvbmci"
 HEADERS = {"User-Agent": "Mozilla/5.0", "Cookie": os.environ.get("FOFA_COOKIE", "")}
 SOURCE_IP_FILE, SOURCE_M3U_FILE, RTP_DIR = "source-ip.txt", "source-m3u.txt", "rtp"
 
