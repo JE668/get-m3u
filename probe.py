@@ -5,7 +5,6 @@ SOURCE_M3U_FILE, LOG_FILE = "source-m3u.txt", "log.txt"
 TARGET_REPO, TRIGGER_TOKEN = "JE668/iptv-api", os.environ.get("PAT_TOKEN", "")
 
 def probe_stream(line):
-    if "," not in line: return False, line, "无效行"
     name, url = line.split(",", 1)
     start = time.time()
     cmd = ["ffprobe", "-v", "quiet", "-print_format", "json", "-show_format", "-show_streams", "-i", url]
@@ -14,41 +13,53 @@ def probe_stream(line):
         elapsed = round(time.time() - start, 2)
         if res.returncode == 0:
             data = json.loads(res.stdout)
-            if any(s.get("codec_type") == "video" for s in data.get("streams", [])):
-                return True, line, f"[{name}] {url} | 成功 | {elapsed}s"
-        return False, line, f"[{name}] {url} | 失败 | 无流"
-    except: return False, line, f"[{name}] {url} | 失败 | 超时"
+            v = next((s for s in data.get("streams", []) if s.get("codec_type") == "video"), None)
+            if v:
+                res_str = f"{v.get('width')}x{v.get('height')}"
+                return True, line, f"   🟢 [成功] {name} | {res_str} | {elapsed}s"
+        return False, line, f"   🔴 [失败] {name} | 无视频流"
+    except:
+        return False, line, f"   🟡 [超时] {name} | 8s未响应"
 
 if __name__ == "__main__":
-    if not os.path.exists(SOURCE_M3U_FILE): 
-        print(f"❌ 找不到 {SOURCE_M3U_FILE}")
-        exit()
-        
+    print(f"\n{'='*20} FFMPEG 深度探测 {'='*20}")
+    if not os.path.exists(SOURCE_M3U_FILE):
+        print("❌ 错误: 找不到 source-m3u.txt"); exit()
+
     with open(SOURCE_M3U_FILE, encoding="utf-8") as f: 
         lines = [l.strip() for l in f if "," in l]
-    
-    if not lines: exit()
 
-    print(f"🎬 探测 {len(lines)} 条链接...")
-    valid_lines, logs = [], []
+    if not lines:
+        print("⚠️  待测链接为空，跳过探测"); exit()
+
+    print(f"🎬 开始探测 {len(lines)} 条链接，请稍候...")
+    valid_lines, logs, success_count = [], [], 0
+    
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
         futures = [ex.submit(probe_stream, l) for l in lines]
         for f in concurrent.futures.as_completed(futures):
             success, line, log_msg = f.result()
-            logs.append(log_msg)
-            if success: valid_lines.append(line)
+            print(log_msg)
+            logs.append(log_msg.strip())
+            if success:
+                valid_lines.append(line)
+                success_count += 1
 
-    # 写 log.txt
+    # 结果归档
     with open(LOG_FILE, "w", encoding="utf-8") as f:
-        f.write(f"探测时间: {datetime.now()}\n" + "\n".join(sorted(logs)))
+        f.write(f"探测报告 | 时间: {datetime.now()}\n{'='*50}\n")
+        f.write("\n".join(sorted(logs)))
     
-    # 更新 source-m3u.txt (仅保留成功条目)
     with open(SOURCE_M3U_FILE, "w", encoding="utf-8") as f:
         f.write("\n".join(sorted(valid_lines)))
 
-    print(f"✅ 探测完成，有效链接: {len(valid_lines)} 条")
-    
-    # 联动触发
+    print(f"\n📈 探测总结:")
+    print(f"   - 总测试数: {len(lines)}")
+    print(f"   - 成功通过: {success_count}")
+    print(f"   - 过滤比例: {round((1 - success_count/len(lines))*100, 1)}%")
+
     if valid_lines and TRIGGER_TOKEN:
+        print(f"\n🚀 正在发送联动信号至 {TARGET_REPO}...")
         url = f"https://api.github.com/repos/{TARGET_REPO}/actions/workflows/main.yml/dispatches"
-        requests.post(url, headers={"Authorization": f"token {TRIGGER_TOKEN}"}, json={"ref": "main"})
+        r = requests.post(url, headers={"Authorization": f"token {TRIGGER_TOKEN}"}, json={"ref": "main"})
+        print(f"   API 响应状态: {r.status_code}")
