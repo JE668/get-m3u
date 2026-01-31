@@ -20,7 +20,7 @@ RTP_SOURCES = [
 
 # 文件名配置
 RTP_DIR = "rtp"
-RTP_FILENAME = "广东电信.txt"  # 如果你想要 中国电信.txt，请在此修改
+RTP_FILENAME = "ChinaTelecom-Guangdong.txt"
 RTP_FILE = os.path.join(RTP_DIR, RTP_FILENAME)
 
 SOURCE_IP_FILE = "source-ip.txt"
