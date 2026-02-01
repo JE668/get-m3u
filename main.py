@@ -157,7 +157,7 @@ if __name__ == "__main__":
                     name, r_url = r.split(",", 1)
                     # 可选使用 /udp/或/rtp/ 路径
                     suffix = r_url.split("://")[1]
-                    m3u_all.append(f"{name},http://{ip}/rpt/{suffix}")
+                    m3u_all.append(f"{name},http://{ip}/rtp/{suffix}")
             
             with open(SOURCE_NONCHECK_FILE, "w", encoding="utf-8") as f: f.write("\n".join(m3u_all))
             with open(SOURCE_M3U_FILE, "w", encoding="utf-8") as f: f.write("\n".join(m3u_all))
