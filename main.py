@@ -155,15 +155,15 @@ if __name__ == "__main__":
             for ip in online_ips:
                 for r in rtp_data:
                     name, r_url = r.split(",", 1)
-                    # 强制使用 /udp/ 路径
+                    # 可选使用 /udp/或/rtp/ 路径
                     suffix = r_url.split("://")[1]
-                    m3u_all.append(f"{name},http://{ip}/udp/{suffix}")
+                    m3u_all.append(f"{name},http://{ip}/rpt/{suffix}")
             
             with open(SOURCE_NONCHECK_FILE, "w", encoding="utf-8") as f: f.write("\n".join(m3u_all))
             with open(SOURCE_M3U_FILE, "w", encoding="utf-8") as f: f.write("\n".join(m3u_all))
                 
             print(f"\n✨ 最终结果:")
             print(f"   - 在线服务器: {len(online_ips)} 个")
-            print(f"   - 拼装链接: {len(m3u_all)} 条 (路径已统一为 /udp/)")
+            print(f"   - 拼装链接: {len(m3u_all)} ")
     
     print(f"\n⏱️  总耗时: {round(time.time() - start_total, 2)}s")
