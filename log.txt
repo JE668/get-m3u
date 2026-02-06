@@ -1,32 +1,29 @@
-探测报告 | 时间: 2026-02-06 13:45:32
+探测报告 | 时间: 2026-02-06 15:08:51
 ------------------------------------------------------------
 ❌ CCTV-10高清 | 失败 | 无法解析视频流
 ❌ CCTV-10高清 | 失败 | 无法解析视频流
 ❌ CCTV-10高清 | 失败 | 无法解析视频流
 ❌ CCTV-10高清 | 失败 | 无法解析视频流
 ❌ CCTV-10高清 | 失败 | 无法解析视频流
-❌ CCTV-10高清 | 失败 | 无法解析视频流
-❌ CCTV-10高清 | 失败 | 无法解析视频流
-❌ CCTV-10高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ CCTV-10高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ CCTV-10高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV-10高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-10高清测试(CCTV-10科教高清) | 失败 | 无法解析视频流
 ❌ CCTV-10高清测试(CCTV-10科教高清) | 失败 | 无法解析视频流
 ❌ CCTV-10高清测试(CCTV-10科教高清) | 失败 | 无法解析视频流
 ❌ CCTV-10高清测试(CCTV-10科教高清) | 失败 | 无法解析视频流
 ❌ CCTV-10高清测试(CCTV-10科教高清) | 失败 | 无法解析视频流
-❌ CCTV-10高清测试(CCTV-10科教高清) | 失败 | 无法解析视频流
-❌ CCTV-10高清测试(CCTV-10科教高清) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ CCTV-10高清测试(CCTV-10科教高清) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CCTV-10高清测试(CCTV-10科教高清) | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ CCTV-10高清测试(CCTV-10科教高清) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV-10高清测试(CCTV-10科教高清) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-11高清 | 失败 | 无法解析视频流
 ❌ CCTV-11高清 | 失败 | 无法解析视频流
 ❌ CCTV-11高清 | 失败 | 无法解析视频流
 ❌ CCTV-11高清 | 失败 | 无法解析视频流
 ❌ CCTV-11高清 | 失败 | 无法解析视频流
-❌ CCTV-11高清 | 失败 | 无法解析视频流
-❌ CCTV-11高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.77.1.108:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef4ad4fa0>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
 ❌ CCTV-11高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CCTV-11高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ CCTV-11高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV-11高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-12高清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-12高清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-12高清 (CAVS) | 失败 | 无法解析视频流
@@ -39,30 +36,26 @@
 ❌ CCTV-12高清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-12高清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-12高清 (CAVS) | 失败 | 无法解析视频流
-❌ CCTV-12高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ CCTV-12高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ CCTV-12高清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-12高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ CCTV-12高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CCTV-12高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
-❌ CCTV-12高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ CCTV-12高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CCTV-12高清 | 失败 | 无法解析视频流
 ❌ CCTV-12高清 | 失败 | 无法解析视频流
 ❌ CCTV-12高清 | 失败 | 无法解析视频流
 ❌ CCTV-12高清 | 失败 | 无法解析视频流
 ❌ CCTV-12高清 | 失败 | 无法解析视频流
 ❌ CCTV-12高清 | 失败 | 无法解析视频流
-❌ CCTV-12高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ CCTV-12高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CCTV-12高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ CCTV-12高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CCTV-12高清测试 | 失败 | 无法解析视频流
 ❌ CCTV-12高清测试 | 失败 | 无法解析视频流
 ❌ CCTV-12高清测试 | 失败 | 无法解析视频流
 ❌ CCTV-12高清测试 | 失败 | 无法解析视频流
 ❌ CCTV-12高清测试 | 失败 | 无法解析视频流
 ❌ CCTV-12高清测试 | 失败 | 无法解析视频流
-❌ CCTV-12高清测试 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ CCTV-12高清测试 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CCTV-12高清测试 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ CCTV-12高清测试 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CCTV-13高清 | 失败 | 无法解析视频流
 ❌ CCTV-13高清 | 失败 | 无法解析视频流
 ❌ CCTV-13高清 | 失败 | 无法解析视频流
@@ -73,14 +66,12 @@
 ❌ CCTV-13高清 | 失败 | 无法解析视频流
 ❌ CCTV-13高清 | 失败 | 无法解析视频流
 ❌ CCTV-13高清 | 失败 | 无法解析视频流
-❌ CCTV-13高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ CCTV-13高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ CCTV-13高清 | 失败 | 无法解析视频流
+❌ CCTV-13高清 | 失败 | 无法解析视频流
+❌ CCTV-13高清 | 失败 | 无法解析视频流
 ❌ CCTV-13高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ CCTV-13高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CCTV-13高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ CCTV-13高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ CCTV-13高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
-❌ CCTV-13高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ CCTV-13高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.0.188:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7fbf84c74d30>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
 ❌ CCTV-14高清 | 失败 | 无法解析视频流
 ❌ CCTV-14高清 | 失败 | 无法解析视频流
 ❌ CCTV-14高清 | 失败 | 无法解析视频流
@@ -91,23 +82,20 @@
 ❌ CCTV-14高清 | 失败 | 无法解析视频流
 ❌ CCTV-14高清 | 失败 | 无法解析视频流
 ❌ CCTV-14高清 | 失败 | 无法解析视频流
-❌ CCTV-14高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ CCTV-14高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ CCTV-14高清 | 失败 | 无法解析视频流
+❌ CCTV-14高清 | 失败 | 无法解析视频流
+❌ CCTV-14高清 | 失败 | 无法解析视频流
+❌ CCTV-14高清 | 失败 | 无法解析视频流
 ❌ CCTV-14高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ CCTV-14高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CCTV-14高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ CCTV-14高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ CCTV-14高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
-❌ CCTV-14高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-14高清测试 | 失败 | 无法解析视频流
 ❌ CCTV-14高清测试 | 失败 | 无法解析视频流
 ❌ CCTV-14高清测试 | 失败 | 无法解析视频流
 ❌ CCTV-14高清测试 | 失败 | 无法解析视频流
 ❌ CCTV-14高清测试 | 失败 | 无法解析视频流
-❌ CCTV-14高清测试 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ CCTV-14高清测试 | 失败 | 无法解析视频流
+❌ CCTV-14高清测试 | 失败 | 无法解析视频流
 ❌ CCTV-14高清测试 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CCTV-14高清测试 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ CCTV-14高清测试 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-15高清 | 失败 | 无法解析视频流
 ❌ CCTV-15高清 | 失败 | 无法解析视频流
 ❌ CCTV-15高清 | 失败 | 无法解析视频流
@@ -118,12 +106,10 @@
 ❌ CCTV-15高清 | 失败 | 无法解析视频流
 ❌ CCTV-15高清 | 失败 | 无法解析视频流
 ❌ CCTV-15高清 | 失败 | 无法解析视频流
-❌ CCTV-15高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ CCTV-15高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ CCTV-15高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Max retries exceeded with url: /rtp/239.77.1.239:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.21.239.209', port=4022) at 0x7f0ef4978c10>, 'Connection to 14.21.239.209 timed out. (connect timeout=8)'))
+❌ CCTV-15高清 | 失败 | 无法解析视频流
+❌ CCTV-15高清 | 失败 | 无法解析视频流
 ❌ CCTV-15高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CCTV-15高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ CCTV-15高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ CCTV-15高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ CCTV-15高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-15高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-16高清 | 失败 | 无法解析视频流
@@ -131,27 +117,24 @@
 ❌ CCTV-16高清 | 失败 | 无法解析视频流
 ❌ CCTV-16高清 | 失败 | 无法解析视频流
 ❌ CCTV-16高清 | 失败 | 无法解析视频流
-❌ CCTV-16高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.77.0.165:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef4aae790>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
+❌ CCTV-16高清 | 失败 | 无法解析视频流
 ❌ CCTV-16高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CCTV-16高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ CCTV-16高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-17农业高清 | 失败 | 无法解析视频流
 ❌ CCTV-17农业高清 | 失败 | 无法解析视频流
 ❌ CCTV-17农业高清 | 失败 | 无法解析视频流
 ❌ CCTV-17农业高清 | 失败 | 无法解析视频流
-❌ CCTV-17农业高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ CCTV-17农业高清 | 失败 | 无法解析视频流
 ❌ CCTV-17农业高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CCTV-17农业高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ CCTV-17农业高清 | 失败 | 连接错误: HTTPConnectionPool(host='59.34.28.189', port=4022): Max retries exceeded with url: /rtp/239.77.0.198:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='59.34.28.189', port=4022) at 0x7f0ef47c1430>, 'Connection to 59.34.28.189 timed out. (connect timeout=8)'))
+❌ CCTV-17农业高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CCTV-17农业高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-17高清 | 失败 | 无法解析视频流
 ❌ CCTV-17高清 | 失败 | 无法解析视频流
 ❌ CCTV-17高清 | 失败 | 无法解析视频流
 ❌ CCTV-17高清 | 失败 | 无法解析视频流
 ❌ CCTV-17高清 | 失败 | 无法解析视频流
-❌ CCTV-17高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ CCTV-17高清 | 失败 | 无法解析视频流
 ❌ CCTV-17高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CCTV-17高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ CCTV-17高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-1超清 | 失败 | 无法解析视频流
 ❌ CCTV-1超清 | 失败 | 无法解析视频流
@@ -159,8 +142,7 @@
 ❌ CCTV-1超清 | 失败 | 无法解析视频流
 ❌ CCTV-1超清 | 失败 | 无法解析视频流
 ❌ CCTV-1超清 | 失败 | 无法解析视频流
-❌ CCTV-1超清 | 失败 | 无法解析视频流
-❌ CCTV-1超清 | 失败 | 无法解析视频流
+❌ CCTV-1超清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CCTV-1超清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-1高清 | 失败 | 无法解析视频流
 ❌ CCTV-1高清 | 失败 | 无法解析视频流
@@ -173,39 +155,34 @@
 ❌ CCTV-1高清 | 失败 | 无法解析视频流
 ❌ CCTV-1高清 | 失败 | 无法解析视频流
 ❌ CCTV-1高清 | 失败 | 无法解析视频流
-❌ CCTV-1高清 | 失败 | 无法解析视频流
-❌ CCTV-1高清 | 失败 | 无法解析视频流
-❌ CCTV-1高清 | 失败 | 无法解析视频流
-❌ CCTV-1高清 | 失败 | 无法解析视频流
-❌ CCTV-1高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ CCTV-1高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ CCTV-1高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ CCTV-1高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV-1高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV-1高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.1.17:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7fbf84c58fa0>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
 ❌ CCTV-1高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-1高清(CCTV -1综合高清) | 失败 | 无法解析视频流
 ❌ CCTV-1高清(CCTV -1综合高清) | 失败 | 无法解析视频流
 ❌ CCTV-1高清(CCTV -1综合高清) | 失败 | 无法解析视频流
 ❌ CCTV-1高清(CCTV -1综合高清) | 失败 | 无法解析视频流
 ❌ CCTV-1高清(CCTV -1综合高清) | 失败 | 无法解析视频流
-❌ CCTV-1高清(CCTV -1综合高清) | 失败 | 无法解析视频流
-❌ CCTV-1高清(CCTV -1综合高清) | 失败 | 无法解析视频流
-❌ CCTV-1高清(CCTV -1综合高清) | 失败 | 连接错误: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+❌ CCTV-1高清(CCTV -1综合高清) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ CCTV-1高清(CCTV -1综合高清) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CCTV-1高清(CCTV -1综合高清) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-1高清4M | 失败 | 无法解析视频流
 ❌ CCTV-1高清4M | 失败 | 无法解析视频流
 ❌ CCTV-1高清4M | 失败 | 无法解析视频流
 ❌ CCTV-1高清4M | 失败 | 无法解析视频流
 ❌ CCTV-1高清4M | 失败 | 无法解析视频流
-❌ CCTV-1高清4M | 失败 | 无法解析视频流
-❌ CCTV-1高清4M | 失败 | 无法解析视频流
-❌ CCTV-1高清4M | 失败 | 无法解析视频流
+❌ CCTV-1高清4M | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ CCTV-1高清4M | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CCTV-1高清4M | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-2高清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-2高清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-2高清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-2高清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-2高清 (CAVS) | 失败 | 无法解析视频流
-❌ CCTV-2高清 (CAVS) | 失败 | 无法解析视频流
-❌ CCTV-2高清 (CAVS) | 失败 | 无法解析视频流
-❌ CCTV-2高清 (CAVS) | 失败 | 无法解析视频流
+❌ CCTV-2高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ CCTV-2高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CCTV-2高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-2高清 | 失败 | 无法解析视频流
 ❌ CCTV-2高清 | 失败 | 无法解析视频流
@@ -213,8 +190,7 @@
 ❌ CCTV-2高清 | 失败 | 无法解析视频流
 ❌ CCTV-2高清 | 失败 | 无法解析视频流
 ❌ CCTV-2高清 | 失败 | 无法解析视频流
-❌ CCTV-2高清 | 失败 | 无法解析视频流
-❌ CCTV-2高清 | 失败 | 连接错误: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+❌ CCTV-2高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CCTV-2高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-2高清测试(CCTV -2财经高清) | 失败 | 无法解析视频流
 ❌ CCTV-2高清测试(CCTV -2财经高清) | 失败 | 无法解析视频流
@@ -222,8 +198,7 @@
 ❌ CCTV-2高清测试(CCTV -2财经高清) | 失败 | 无法解析视频流
 ❌ CCTV-2高清测试(CCTV -2财经高清) | 失败 | 无法解析视频流
 ❌ CCTV-2高清测试(CCTV -2财经高清) | 失败 | 无法解析视频流
-❌ CCTV-2高清测试(CCTV -2财经高清) | 失败 | 无法解析视频流
-❌ CCTV-2高清测试(CCTV -2财经高清) | 失败 | 无法解析视频流
+❌ CCTV-2高清测试(CCTV -2财经高清) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CCTV-2高清测试(CCTV -2财经高清) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-3超清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-3超清 (CAVS) | 失败 | 无法解析视频流
@@ -231,8 +206,7 @@
 ❌ CCTV-3超清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-3超清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-3超清 (CAVS) | 失败 | 无法解析视频流
-❌ CCTV-3超清 (CAVS) | 失败 | 无法解析视频流
-❌ CCTV-3超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.77.0.175:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef6b605b0>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
+❌ CCTV-3超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CCTV-3超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-3高清 | 失败 | 无法解析视频流
 ❌ CCTV-3高清 | 失败 | 无法解析视频流
@@ -240,8 +214,7 @@
 ❌ CCTV-3高清 | 失败 | 无法解析视频流
 ❌ CCTV-3高清 | 失败 | 无法解析视频流
 ❌ CCTV-3高清 | 失败 | 无法解析视频流
-❌ CCTV-3高清 | 失败 | 无法解析视频流
-❌ CCTV-3高清 | 失败 | 无法解析视频流
+❌ CCTV-3高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out. (read timeout=8)
 ❌ CCTV-3高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-4K 4K | 失败 | 无法解析视频流
 ❌ CCTV-4K 4K | 失败 | 无法解析视频流
@@ -249,9 +222,8 @@
 ❌ CCTV-4K 4K | 失败 | 无法解析视频流
 ❌ CCTV-4K 4K | 失败 | 无法解析视频流
 ❌ CCTV-4K 4K | 失败 | 无法解析视频流
-❌ CCTV-4K 4K | 失败 | 无法解析视频流
-❌ CCTV-4K 4K | 失败 | 无法解析视频流
-❌ CCTV-4K 4K | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.1.180:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7f0ef4796b50>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
+❌ CCTV-4K 4K | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ CCTV-4K 4K | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-4高清 | 失败 | 无法解析视频流
 ❌ CCTV-4高清 | 失败 | 无法解析视频流
 ❌ CCTV-4高清 | 失败 | 无法解析视频流
@@ -269,13 +241,10 @@
 ❌ CCTV-4高清 | 失败 | 无法解析视频流
 ❌ CCTV-4高清 | 失败 | 无法解析视频流
 ❌ CCTV-4高清 | 失败 | 无法解析视频流
-❌ CCTV-4高清 | 失败 | 无法解析视频流
-❌ CCTV-4高清 | 失败 | 无法解析视频流
-❌ CCTV-4高清 | 失败 | 无法解析视频流
-❌ CCTV-4高清 | 失败 | 无法解析视频流
-❌ CCTV-4高清 | 失败 | 连接错误: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
-❌ CCTV-4高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ CCTV-4高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ CCTV-4高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV-4高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV-4高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CCTV-4高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-4高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-4高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
@@ -285,125 +254,111 @@
 ❌ CCTV-5+高清 | 失败 | 无法解析视频流
 ❌ CCTV-5+高清 | 失败 | 无法解析视频流
 ❌ CCTV-5+高清 | 失败 | 无法解析视频流
-❌ CCTV-5+高清 | 失败 | 无法解析视频流
-❌ CCTV-5+高清 | 失败 | 无法解析视频流
-❌ CCTV-5+高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.77.1.31:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef4ac41f0>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
+❌ CCTV-5+高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV-5+高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-5超清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-5超清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-5超清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-5超清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-5超清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-5超清 (CAVS) | 失败 | 无法解析视频流
-❌ CCTV-5超清 (CAVS) | 失败 | 无法解析视频流
-❌ CCTV-5超清 (CAVS) | 失败 | 无法解析视频流
-❌ CCTV-5超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.77.0.177:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef4a2ffa0>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
+❌ CCTV-5超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV-5超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-5高清 | 失败 | 无法解析视频流
 ❌ CCTV-5高清 | 失败 | 无法解析视频流
 ❌ CCTV-5高清 | 失败 | 无法解析视频流
 ❌ CCTV-5高清 | 失败 | 无法解析视频流
 ❌ CCTV-5高清 | 失败 | 无法解析视频流
 ❌ CCTV-5高清 | 失败 | 无法解析视频流
-❌ CCTV-5高清 | 失败 | 无法解析视频流
-❌ CCTV-5高清 | 失败 | 无法解析视频流
+❌ CCTV-5高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CCTV-5高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-6超清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-6超清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-6超清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-6超清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-6超清 (CAVS) | 失败 | 无法解析视频流
-❌ CCTV-6超清 (CAVS) | 失败 | 无法解析视频流
-❌ CCTV-6超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ CCTV-6超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.77.0.178:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef4a40c10>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
 ❌ CCTV-6超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ CCTV-6超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV-6超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-6高清 | 失败 | 无法解析视频流
 ❌ CCTV-6高清 | 失败 | 无法解析视频流
 ❌ CCTV-6高清 | 失败 | 无法解析视频流
 ❌ CCTV-6高清 | 失败 | 无法解析视频流
 ❌ CCTV-6高清 | 失败 | 无法解析视频流
 ❌ CCTV-6高清 | 失败 | 无法解析视频流
-❌ CCTV-6高清 | 失败 | 无法解析视频流
-❌ CCTV-6高清 | 失败 | 无法解析视频流
-❌ CCTV-6高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ CCTV-6高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV-6高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-7高清 | 失败 | 无法解析视频流
 ❌ CCTV-7高清 | 失败 | 无法解析视频流
 ❌ CCTV-7高清 | 失败 | 无法解析视频流
 ❌ CCTV-7高清 | 失败 | 无法解析视频流
 ❌ CCTV-7高清 | 失败 | 无法解析视频流
 ❌ CCTV-7高清 | 失败 | 无法解析视频流
-❌ CCTV-7高清 | 失败 | 无法解析视频流
-❌ CCTV-7高清 | 失败 | 无法解析视频流
-❌ CCTV-7高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ CCTV-7高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV-7高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.1.159:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7fbf84ca7790>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
 ❌ CCTV-7高清测试(CCTV -7军事农业高清) | 失败 | 无法解析视频流
 ❌ CCTV-7高清测试(CCTV -7军事农业高清) | 失败 | 无法解析视频流
 ❌ CCTV-7高清测试(CCTV -7军事农业高清) | 失败 | 无法解析视频流
 ❌ CCTV-7高清测试(CCTV -7军事农业高清) | 失败 | 无法解析视频流
 ❌ CCTV-7高清测试(CCTV -7军事农业高清) | 失败 | 无法解析视频流
 ❌ CCTV-7高清测试(CCTV -7军事农业高清) | 失败 | 无法解析视频流
-❌ CCTV-7高清测试(CCTV -7军事农业高清) | 失败 | 无法解析视频流
-❌ CCTV-7高清测试(CCTV -7军事农业高清) | 失败 | 无法解析视频流
-❌ CCTV-7高清测试(CCTV -7军事农业高清) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ CCTV-7高清测试(CCTV -7军事农业高清) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV-7高清测试(CCTV -7军事农业高清) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.0.138:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7fbf84c5dfa0>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
 ❌ CCTV-8超清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-8超清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-8超清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-8超清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-8超清 (CAVS) | 失败 | 无法解析视频流
-❌ CCTV-8超清 (CAVS) | 失败 | 无法解析视频流
-❌ CCTV-8超清 (CAVS) | 失败 | 无法解析视频流
-❌ CCTV-8超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ CCTV-8超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ CCTV-8超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV-8超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-8高清 | 失败 | 无法解析视频流
 ❌ CCTV-8高清 | 失败 | 无法解析视频流
 ❌ CCTV-8高清 | 失败 | 无法解析视频流
 ❌ CCTV-8高清 | 失败 | 无法解析视频流
 ❌ CCTV-8高清 | 失败 | 无法解析视频流
 ❌ CCTV-8高清 | 失败 | 无法解析视频流
-❌ CCTV-8高清 | 失败 | 无法解析视频流
-❌ CCTV-8高清 | 失败 | 无法解析视频流
-❌ CCTV-8高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ CCTV-8高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV-8高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-9高清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-9高清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-9高清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-9高清 (CAVS) | 失败 | 无法解析视频流
 ❌ CCTV-9高清 (CAVS) | 失败 | 无法解析视频流
-❌ CCTV-9高清 (CAVS) | 失败 | 无法解析视频流
-❌ CCTV-9高清 (CAVS) | 失败 | 无法解析视频流
-❌ CCTV-9高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ CCTV-9高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ CCTV-9高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV-9高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-9高清 | 失败 | 无法解析视频流
 ❌ CCTV-9高清 | 失败 | 无法解析视频流
 ❌ CCTV-9高清 | 失败 | 无法解析视频流
 ❌ CCTV-9高清 | 失败 | 无法解析视频流
 ❌ CCTV-9高清 | 失败 | 无法解析视频流
 ❌ CCTV-9高清 | 失败 | 无法解析视频流
-❌ CCTV-9高清 | 失败 | 无法解析视频流
-❌ CCTV-9高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ CCTV-9高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out. (read timeout=8)
+❌ CCTV-9高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV-9高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV-9高清测试 | 失败 | 无法解析视频流
 ❌ CCTV-9高清测试 | 失败 | 无法解析视频流
 ❌ CCTV-9高清测试 | 失败 | 无法解析视频流
 ❌ CCTV-9高清测试 | 失败 | 无法解析视频流
 ❌ CCTV-9高清测试 | 失败 | 无法解析视频流
-❌ CCTV-9高清测试 | 失败 | 无法解析视频流
-❌ CCTV-9高清测试 | 失败 | 无法解析视频流
-❌ CCTV-9高清测试 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ CCTV-9高清测试 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ CCTV-9高清测试 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV-9高清测试 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV4K-25P | 失败 | 无法解析视频流
 ❌ CCTV4K-25P | 失败 | 无法解析视频流
 ❌ CCTV4K-25P | 失败 | 无法解析视频流
 ❌ CCTV4K-25P | 失败 | 无法解析视频流
 ❌ CCTV4K-25P | 失败 | 无法解析视频流
 ❌ CCTV4K-25P | 失败 | 无法解析视频流
-❌ CCTV4K-25P | 失败 | 无法解析视频流
-❌ CCTV4K-25P | 失败 | 无法解析视频流
-❌ CCTV4K-25P | 失败 | 无法解析视频流
-❌ CCTV4中文国际欧洲高清 | 失败 | 无法解析视频流
-❌ CCTV4中文国际欧洲高清 | 失败 | 无法解析视频流
+❌ CCTV4K-25P | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ CCTV4K-25P | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV4中文国际欧洲高清 | 失败 | 无法解析视频流
 ❌ CCTV4中文国际欧洲高清 | 失败 | 无法解析视频流
 ❌ CCTV4中文国际欧洲高清 | 失败 | 无法解析视频流
 ❌ CCTV4中文国际欧洲高清 | 失败 | 无法解析视频流
 ❌ CCTV4中文国际欧洲高清 | 失败 | 无法解析视频流
 ❌ CCTV4中文国际欧洲高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ CCTV4中文国际欧洲高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CCTV4中文国际欧洲高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV4中文国际美洲高清 | 失败 | 无法解析视频流
 ❌ CCTV4中文国际美洲高清 | 失败 | 无法解析视频流
@@ -411,8 +366,7 @@
 ❌ CCTV4中文国际美洲高清 | 失败 | 无法解析视频流
 ❌ CCTV4中文国际美洲高清 | 失败 | 无法解析视频流
 ❌ CCTV4中文国际美洲高清 | 失败 | 无法解析视频流
-❌ CCTV4中文国际美洲高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ CCTV4中文国际美洲高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.35.50.141', port=8886): Max retries exceeded with url: /rtp/239.253.43.121:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='183.35.50.141', port=8886) at 0x7f0ef490b670>, 'Connection to 183.35.50.141 timed out. (connect timeout=8)'))
+❌ CCTV4中文国际美洲高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CCTV4中文国际美洲高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CCTV5+体育高清-测试 | 失败 | 无法解析视频流
 ❌ CCTV5+体育高清-测试 | 失败 | 无法解析视频流
@@ -420,106 +374,94 @@
 ❌ CCTV5+体育高清-测试 | 失败 | 无法解析视频流
 ❌ CCTV5+体育高清-测试 | 失败 | 无法解析视频流
 ❌ CCTV5+体育高清-测试 | 失败 | 无法解析视频流
-❌ CCTV5+体育高清-测试 | 失败 | 无法解析视频流
-❌ CCTV5+体育高清-测试 | 失败 | 无法解析视频流
-❌ CCTV5+体育高清-测试 | 失败 | 无法解析视频流
+❌ CCTV5+体育高清-测试 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CCTV5+体育高清-测试 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CETV-1 | 失败 | 无法解析视频流
 ❌ CETV-1 | 失败 | 无法解析视频流
 ❌ CETV-1 | 失败 | 无法解析视频流
 ❌ CETV-1 | 失败 | 无法解析视频流
 ❌ CETV-1 | 失败 | 无法解析视频流
-❌ CETV-1 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ CETV-1 | 失败 | 无法解析视频流
 ❌ CETV-1 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CETV-1 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ CETV-1 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CETV-1 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CETV-4高清 | 失败 | 无法解析视频流
 ❌ CETV-4高清 | 失败 | 无法解析视频流
 ❌ CETV-4高清 | 失败 | 无法解析视频流
 ❌ CETV-4高清 | 失败 | 无法解析视频流
-❌ CETV-4高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ CETV-4高清 | 失败 | 无法解析视频流
+❌ CETV-4高清 | 失败 | 无法解析视频流
 ❌ CETV-4高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CETV-4高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ CETV-4高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
-❌ CETV-4高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.253.43.40:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7f0ef46e8490>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
+❌ CETV-4高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CETV4 | 失败 | 无法解析视频流
 ❌ CETV4 | 失败 | 无法解析视频流
 ❌ CETV4 | 失败 | 无法解析视频流
 ❌ CETV4 | 失败 | 无法解析视频流
 ❌ CETV4 | 失败 | 无法解析视频流
-❌ CETV4 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ CETV4 | 失败 | 无法解析视频流
 ❌ CETV4 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CETV4 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ CETV4 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ CETV4 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CGTN俄语高清 | 失败 | 无法解析视频流
 ❌ CGTN俄语高清 | 失败 | 无法解析视频流
 ❌ CGTN俄语高清 | 失败 | 无法解析视频流
 ❌ CGTN俄语高清 | 失败 | 无法解析视频流
-❌ CGTN俄语高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ CGTN俄语高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.253.43.201:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef4aae6a0>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
+❌ CGTN俄语高清 | 失败 | 无法解析视频流
 ❌ CGTN俄语高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CGTN俄语高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ CGTN俄语高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CGTN俄语高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CGTN法语高清 | 失败 | 无法解析视频流
 ❌ CGTN法语高清 | 失败 | 无法解析视频流
 ❌ CGTN法语高清 | 失败 | 无法解析视频流
 ❌ CGTN法语高清 | 失败 | 无法解析视频流
 ❌ CGTN法语高清 | 失败 | 无法解析视频流
-❌ CGTN法语高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ CGTN法语高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CGTN法语高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ CGTN法语高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CGTN法语高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CGTN英文记录高清 | 失败 | 无法解析视频流
 ❌ CGTN英文记录高清 | 失败 | 无法解析视频流
 ❌ CGTN英文记录高清 | 失败 | 无法解析视频流
 ❌ CGTN英文记录高清 | 失败 | 无法解析视频流
-❌ CGTN英文记录高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ CGTN英文记录高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.253.43.122:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef4a40220>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
+❌ CGTN英文记录高清 | 失败 | 无法解析视频流
 ❌ CGTN英文记录高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CGTN英文记录高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ CGTN英文记录高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CGTN英文记录高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CGTN英语高清 | 失败 | 无法解析视频流
 ❌ CGTN英语高清 | 失败 | 无法解析视频流
 ❌ CGTN英语高清 | 失败 | 无法解析视频流
 ❌ CGTN英语高清 | 失败 | 无法解析视频流
-❌ CGTN英语高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ CGTN英语高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.77.0.199:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef4a4b7c0>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
+❌ CGTN英语高清 | 失败 | 无法解析视频流
 ❌ CGTN英语高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CGTN英语高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ CGTN英语高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CGTN英语高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CGTN西班牙语高清 | 失败 | 无法解析视频流
 ❌ CGTN西班牙语高清 | 失败 | 无法解析视频流
 ❌ CGTN西班牙语高清 | 失败 | 无法解析视频流
 ❌ CGTN西班牙语高清 | 失败 | 无法解析视频流
 ❌ CGTN西班牙语高清 | 失败 | 无法解析视频流
-❌ CGTN西班牙语高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ CGTN西班牙语高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CGTN西班牙语高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ CGTN西班牙语高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CGTN西班牙语高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ CGTN阿拉伯语高清 | 失败 | 无法解析视频流
 ❌ CGTN阿拉伯语高清 | 失败 | 无法解析视频流
 ❌ CGTN阿拉伯语高清 | 失败 | 无法解析视频流
 ❌ CGTN阿拉伯语高清 | 失败 | 无法解析视频流
 ❌ CGTN阿拉伯语高清 | 失败 | 无法解析视频流
-❌ CGTN阿拉伯语高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ CGTN阿拉伯语高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ CGTN阿拉伯语高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ CGTN阿拉伯语高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ CGTN阿拉伯语高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ IPTV2高清 | 失败 | 无法解析视频流
 ❌ IPTV2高清 | 失败 | 无法解析视频流
 ❌ IPTV2高清 | 失败 | 无法解析视频流
 ❌ IPTV2高清 | 失败 | 无法解析视频流
-❌ IPTV2高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ IPTV2高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ IPTV2高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ IPTV2高清 | 失败 | 无法解析视频流
+❌ IPTV2高清 | 失败 | 无法解析视频流
 ❌ IPTV2高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ IPTV2高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ IPTV3高清 | 失败 | 无法解析视频流
 ❌ IPTV3高清 | 失败 | 无法解析视频流
 ❌ IPTV3高清 | 失败 | 无法解析视频流
 ❌ IPTV3高清 | 失败 | 无法解析视频流
-❌ IPTV3高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ IPTV3高清 | 失败 | 无法解析视频流
 ❌ IPTV3高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ IPTV3高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ IPTV3高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ IPTV3高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ IPTV4高清 | 失败 | 无法解析视频流
@@ -527,36 +469,32 @@
 ❌ IPTV4高清 | 失败 | 无法解析视频流
 ❌ IPTV4高清 | 失败 | 无法解析视频流
 ❌ IPTV4高清 | 失败 | 无法解析视频流
-❌ IPTV4高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ IPTV4高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ IPTV4高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.35.50.141', port=8886): Max retries exceeded with url: /rtp/239.77.1.10:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='183.35.50.141', port=8886) at 0x7f0ef48778b0>, 'Connection to 183.35.50.141 timed out. (connect timeout=8)'))
+❌ IPTV4高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ IPTV4高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ IPTV4高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ IPTV法治 | 失败 | 无法解析视频流
 ❌ IPTV法治 | 失败 | 无法解析视频流
 ❌ IPTV法治 | 失败 | 无法解析视频流
 ❌ IPTV法治 | 失败 | 无法解析视频流
-❌ IPTV法治 | 失败 | 无法解析视频流
-❌ IPTV法治 | 失败 | 无法解析视频流
-❌ IPTV法治 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ IPTV法治 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ IPTV法治 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ IPTV法治 | 失败 | 连接错误: HTTPConnectionPool(host='183.35.50.226', port=8886): Max retries exceeded with url: /rtp/239.77.0.102:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='183.35.50.226', port=8886) at 0x7fbf84db3d00>, 'Connection to 183.35.50.226 timed out. (connect timeout=8)'))
+❌ IPTV法治 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ IPTV法治 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ IPTV热播剧场 | 失败 | 无法解析视频流
 ❌ IPTV热播剧场 | 失败 | 无法解析视频流
 ❌ IPTV热播剧场 | 失败 | 无法解析视频流
 ❌ IPTV热播剧场 | 失败 | 无法解析视频流
-❌ IPTV热播剧场 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ IPTV热播剧场 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.77.1.90:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef4a5bfa0>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
+❌ IPTV热播剧场 | 失败 | 无法解析视频流
+❌ IPTV热播剧场 | 失败 | 无法解析视频流
 ❌ IPTV热播剧场 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ IPTV热播剧场 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
-❌ IPTV热播剧场 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ IPTV相声小品 | 失败 | 无法解析视频流
 ❌ IPTV相声小品 | 失败 | 无法解析视频流
 ❌ IPTV相声小品 | 失败 | 无法解析视频流
 ❌ IPTV相声小品 | 失败 | 无法解析视频流
-❌ IPTV相声小品 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ IPTV相声小品 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.77.0.100:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef49e6a00>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
-❌ IPTV相声小品 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Max retries exceeded with url: /rtp/239.77.0.100:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.21.239.209', port=4022) at 0x7f0ef498ed60>, 'Connection to 14.21.239.209 timed out. (connect timeout=8)'))
-❌ IPTV相声小品 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ IPTV相声小品 | 失败 | 无法解析视频流
+❌ IPTV相声小品 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ IPTV相声小品 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ IPTV相声小品 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ IPTV经典电影 | 失败 | 无法解析视频流
 ❌ IPTV经典电影 | 失败 | 无法解析视频流
@@ -564,9 +502,8 @@
 ❌ IPTV经典电影 | 失败 | 无法解析视频流
 ❌ IPTV经典电影 | 失败 | 无法解析视频流
 ❌ IPTV经典电影 | 失败 | 无法解析视频流
-❌ IPTV经典电影 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ IPTV经典电影 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ IPTV经典电影 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ IPTV经典电影 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ IPTV谍战剧场 | 失败 | 无法解析视频流
 ❌ IPTV谍战剧场 | 失败 | 无法解析视频流
 ❌ IPTV谍战剧场 | 失败 | 无法解析视频流
@@ -576,13 +513,11 @@
 ❌ IPTV谍战剧场 | 失败 | 无法解析视频流
 ❌ IPTV谍战剧场 | 失败 | 无法解析视频流
 ❌ IPTV谍战剧场 | 失败 | 无法解析视频流
-❌ IPTV谍战剧场 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.77.0.99:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef4a68fa0>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
-❌ IPTV谍战剧场 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ IPTV谍战剧场 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.77.0.99:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef4a9faf0>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
+❌ IPTV谍战剧场 | 失败 | 无法解析视频流
 ❌ IPTV谍战剧场 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ IPTV谍战剧场 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out. (read timeout=8)
-❌ IPTV谍战剧场 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ IPTV谍战剧场 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ IPTV谍战剧场 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ IPTV谍战剧场 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ IPTV谍战剧场 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ IPTV谍战剧场 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ IPTV谍战剧场 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ IPTV野外 | 失败 | 无法解析视频流
@@ -594,13 +529,11 @@
 ❌ IPTV野外 | 失败 | 无法解析视频流
 ❌ IPTV野外 | 失败 | 无法解析视频流
 ❌ IPTV野外 | 失败 | 无法解析视频流
-❌ IPTV野外 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ IPTV野外 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ IPTV野外 | 失败 | 无法解析视频流
 ❌ IPTV野外 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ IPTV野外 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ IPTV野外 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ IPTV野外 | 失败 | 连接错误: HTTPConnectionPool(host='183.35.50.141', port=8886): Max retries exceeded with url: /rtp/239.77.1.85:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='183.35.50.141', port=8886) at 0x7f0ef48770d0>, 'Connection to 183.35.50.141 timed out. (connect timeout=8)'))
-❌ IPTV野外 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Max retries exceeded with url: /rtp/239.77.0.101:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='183.48.240.8', port=5050) at 0x7f0ef47ffe80>, 'Connection to 183.48.240.8 timed out. (connect timeout=8)'))
+❌ IPTV野外 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ IPTV野外 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ IPTV野外 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ IPTV野外 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ IPTV野外 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ IPTV魅力时尚 | 失败 | 无法解析视频流
@@ -608,10 +541,9 @@
 ❌ IPTV魅力时尚 | 失败 | 无法解析视频流
 ❌ IPTV魅力时尚 | 失败 | 无法解析视频流
 ❌ IPTV魅力时尚 | 失败 | 无法解析视频流
-❌ IPTV魅力时尚 | 失败 | 无法解析视频流
-❌ IPTV魅力时尚 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ IPTV魅力时尚 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ IPTV魅力时尚 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.1.88:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7f0ef47e16a0>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
+❌ IPTV魅力时尚 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ IPTV魅力时尚 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ Unknown@239.77.0.218:5146 | 失败 | 无法解析视频流
 ❌ Unknown@239.77.0.218:5146 | 失败 | 无法解析视频流
 ❌ Unknown@239.77.0.218:5146 | 失败 | 无法解析视频流
@@ -619,16 +551,14 @@
 ❌ Unknown@239.77.0.218:5146 | 失败 | 无法解析视频流
 ❌ Unknown@239.77.0.218:5146 | 失败 | 无法解析视频流
 ❌ Unknown@239.77.0.218:5146 | 失败 | 无法解析视频流
-❌ Unknown@239.77.0.218:5146 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ Unknown@239.77.0.218:5146 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ Unknown@239.77.0.218:5146 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 三沙卫视 | 失败 | 无法解析视频流
 ❌ 三沙卫视 | 失败 | 无法解析视频流
 ❌ 三沙卫视 | 失败 | 无法解析视频流
 ❌ 三沙卫视 | 失败 | 无法解析视频流
 ❌ 三沙卫视 | 失败 | 无法解析视频流
-❌ 三沙卫视 | 失败 | 无法解析视频流
-❌ 三沙卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Max retries exceeded with url: /rtp/239.253.43.113:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.21.239.209', port=4022) at 0x7f0ef49b79d0>, 'Connection to 14.21.239.209 timed out. (connect timeout=8)'))
-❌ 三沙卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 三沙卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 三沙卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 三沙卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 世界地理高清 | 失败 | 无法解析视频流
 ❌ 世界地理高清 | 失败 | 无法解析视频流
@@ -640,31 +570,27 @@
 ❌ 世界地理高清 | 失败 | 无法解析视频流
 ❌ 世界地理高清 | 失败 | 无法解析视频流
 ❌ 世界地理高清 | 失败 | 无法解析视频流
-❌ 世界地理高清 | 失败 | 无法解析视频流
-❌ 世界地理高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.253.43.7:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef5af3fa0>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
-❌ 世界地理高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 世界地理高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Max retries exceeded with url: /rtp/239.253.43.24:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.21.239.209', port=4022) at 0x7f0ef49886a0>, 'Connection to 14.21.239.209 timed out. (connect timeout=8)'))
+❌ 世界地理高清 | 失败 | 连接错误: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+❌ 世界地理高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 世界地理高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 世界地理高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 世界地理高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
-❌ 世界地理高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.253.43.7:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7f0ef47e1fa0>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
+❌ 世界地理高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 东南卫视 | 失败 | 无法解析视频流
 ❌ 东南卫视 | 失败 | 无法解析视频流
 ❌ 东南卫视 | 失败 | 无法解析视频流
 ❌ 东南卫视 | 失败 | 无法解析视频流
-❌ 东南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 东南卫视 | 失败 | 无法解析视频流
 ❌ 东南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 东南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 东南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Max retries exceeded with url: /rtp/239.77.0.146:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='183.48.240.8', port=5050) at 0x7f0ef4853af0>, 'Connection to 183.48.240.8 timed out. (connect timeout=8)'))
+❌ 东南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 东南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 东南卫视高清 | 失败 | 无法解析视频流
 ❌ 东南卫视高清 | 失败 | 无法解析视频流
 ❌ 东南卫视高清 | 失败 | 无法解析视频流
 ❌ 东南卫视高清 | 失败 | 无法解析视频流
 ❌ 东南卫视高清 | 失败 | 无法解析视频流
-❌ 东南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 东南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Max retries exceeded with url: /rtp/239.77.1.104:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.21.239.209', port=4022) at 0x7f0ef498e430>, 'Connection to 14.21.239.209 timed out. (connect timeout=8)'))
-❌ 东南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 东南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 东南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 东南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 东方卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 东方卫视 4K (AVS2) | 失败 | 无法解析视频流
@@ -672,8 +598,7 @@
 ❌ 东方卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 东方卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 东方卫视 4K (AVS2) | 失败 | 无法解析视频流
-❌ 东方卫视 4K (AVS2) | 失败 | 无法解析视频流
-❌ 东方卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 东方卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 东方卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 东方卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 东方卫视4k超高清 | 失败 | 无法解析视频流
@@ -681,107 +606,95 @@
 ❌ 东方卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 东方卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 东方卫视4k超高清 | 失败 | 无法解析视频流
-❌ 东方卫视4k超高清 | 失败 | 无法解析视频流
-❌ 东方卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 东方卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 东方卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 东方卫视时移专用(东方卫视) | 失败 | 无法解析视频流
 ❌ 东方卫视时移专用(东方卫视) | 失败 | 无法解析视频流
 ❌ 东方卫视时移专用(东方卫视) | 失败 | 无法解析视频流
 ❌ 东方卫视时移专用(东方卫视) | 失败 | 无法解析视频流
 ❌ 东方卫视时移专用(东方卫视) | 失败 | 无法解析视频流
-❌ 东方卫视时移专用(东方卫视) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 东方卫视时移专用(东方卫视) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Max retries exceeded with url: /rtp/239.77.0.98:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.21.239.209', port=4022) at 0x7f0ef497daf0>, 'Connection to 14.21.239.209 timed out. (connect timeout=8)'))
-❌ 东方卫视时移专用(东方卫视) | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 东方卫视时移专用(东方卫视) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 东方卫视时移专用(东方卫视) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 东方卫视时移专用(东方卫视) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 东方卫视高清 (CAVS) | 失败 | 无法解析视频流
 ❌ 东方卫视高清 (CAVS) | 失败 | 无法解析视频流
 ❌ 东方卫视高清 (CAVS) | 失败 | 无法解析视频流
 ❌ 东方卫视高清 (CAVS) | 失败 | 无法解析视频流
 ❌ 东方卫视高清 (CAVS) | 失败 | 无法解析视频流
-❌ 东方卫视高清 (CAVS) | 失败 | 无法解析视频流
-❌ 东方卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.77.1.156:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef4ab9c40>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
-❌ 东方卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 东方卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 东方卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 东方卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 东方卫视高清 | 失败 | 无法解析视频流
 ❌ 东方卫视高清 | 失败 | 无法解析视频流
 ❌ 东方卫视高清 | 失败 | 无法解析视频流
 ❌ 东方卫视高清 | 失败 | 无法解析视频流
 ❌ 东方卫视高清 | 失败 | 无法解析视频流
-❌ 东方卫视高清 | 失败 | 无法解析视频流
-❌ 东方卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 东方卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 东方卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 东方卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 东方卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 东莞新闻综合高清 | 失败 | 无法解析视频流
 ❌ 东莞新闻综合高清 | 失败 | 无法解析视频流
 ❌ 东莞新闻综合高清 | 失败 | 无法解析视频流
 ❌ 东莞新闻综合高清 | 失败 | 无法解析视频流
-❌ 东莞新闻综合高清 | 失败 | 无法解析视频流
-❌ 东莞新闻综合高清 | 失败 | 无法解析视频流
 ❌ 东莞新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 东莞新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 东莞新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 东莞新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='59.34.28.189', port=4022): Max retries exceeded with url: /rtp/239.253.43.104:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='59.34.28.189', port=4022) at 0x7fbf84d30880>, 'Connection to 59.34.28.189 timed out. (connect timeout=8)'))
 ❌ 东莞新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 东莞生活资讯高清 | 失败 | 无法解析视频流
 ❌ 东莞生活资讯高清 | 失败 | 无法解析视频流
 ❌ 东莞生活资讯高清 | 失败 | 无法解析视频流
 ❌ 东莞生活资讯高清 | 失败 | 无法解析视频流
 ❌ 东莞生活资讯高清 | 失败 | 无法解析视频流
-❌ 东莞生活资讯高清 | 失败 | 无法解析视频流
 ❌ 东莞生活资讯高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 东莞生活资讯高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 东莞生活资讯高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 东莞生活资讯高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 中国天气高清 | 失败 | 无法解析视频流
 ❌ 中国天气高清 | 失败 | 无法解析视频流
 ❌ 中国天气高清 | 失败 | 无法解析视频流
 ❌ 中国天气高清 | 失败 | 无法解析视频流
 ❌ 中国天气高清 | 失败 | 无法解析视频流
-❌ 中国天气高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 中国天气高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 中国天气高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 中国天气高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
-❌ 中山综合高清 | 失败 | 无法解析视频流
+❌ 中国天气高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.1.2:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7fbf84c2a220>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
 ❌ 中山综合高清 | 失败 | 无法解析视频流
 ❌ 中山综合高清 | 失败 | 无法解析视频流
 ❌ 中山综合高清 | 失败 | 无法解析视频流
 ❌ 中山综合高清 | 失败 | 无法解析视频流
 ❌ 中山综合高清 | 失败 | 无法解析视频流
 ❌ 中山综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 中山综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 中山综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 中山综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 云南卫视 | 失败 | 无法解析视频流
 ❌ 云南卫视 | 失败 | 无法解析视频流
 ❌ 云南卫视 | 失败 | 无法解析视频流
 ❌ 云南卫视 | 失败 | 无法解析视频流
-❌ 云南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 云南卫视 | 失败 | 无法解析视频流
+❌ 云南卫视 | 失败 | 无法解析视频流
 ❌ 云南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 云南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 云南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.35.50.141', port=8886): Max retries exceeded with url: /rtp/239.253.43.100:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='183.35.50.141', port=8886) at 0x7f0ef4877c10>, 'Connection to 183.35.50.141 timed out. (connect timeout=8)'))
 ❌ 云南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 云南卫视高清 | 失败 | 无法解析视频流
 ❌ 云南卫视高清 | 失败 | 无法解析视频流
 ❌ 云南卫视高清 | 失败 | 无法解析视频流
 ❌ 云南卫视高清 | 失败 | 无法解析视频流
-❌ 云南卫视高清 | 失败 | 连接错误: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
-❌ 云南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 云南卫视高清 | 失败 | 无法解析视频流
+❌ 云南卫视高清 | 失败 | 无法解析视频流
 ❌ 云南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 云南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 云南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 云浮文旅高清 | 失败 | 无法解析视频流
 ❌ 云浮文旅高清 | 失败 | 无法解析视频流
 ❌ 云浮文旅高清 | 失败 | 无法解析视频流
 ❌ 云浮文旅高清 | 失败 | 无法解析视频流
 ❌ 云浮文旅高清 | 失败 | 无法解析视频流
-❌ 云浮文旅高清 | 失败 | 连接错误: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+❌ 云浮文旅高清 | 失败 | 无法解析视频流
 ❌ 云浮文旅高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 云浮文旅高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 云浮文旅高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 云浮文旅高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 云浮综合高清 | 失败 | 无法解析视频流
 ❌ 云浮综合高清 | 失败 | 无法解析视频流
 ❌ 云浮综合高清 | 失败 | 无法解析视频流
 ❌ 云浮综合高清 | 失败 | 无法解析视频流
 ❌ 云浮综合高清 | 失败 | 无法解析视频流
-❌ 云浮综合高清 | 失败 | 连接错误: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+❌ 云浮综合高清 | 失败 | 无法解析视频流
 ❌ 云浮综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 云浮综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 云浮综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 佛山公共高清 | 失败 | 无法解析视频流
 ❌ 佛山公共高清 | 失败 | 无法解析视频流
@@ -790,7 +703,6 @@
 ❌ 佛山公共高清 | 失败 | 无法解析视频流
 ❌ 佛山公共高清 | 失败 | 无法解析视频流
 ❌ 佛山公共高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 佛山公共高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 佛山公共高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 佛山南海高清 | 失败 | 无法解析视频流
 ❌ 佛山南海高清 | 失败 | 无法解析视频流
@@ -799,7 +711,6 @@
 ❌ 佛山南海高清 | 失败 | 无法解析视频流
 ❌ 佛山南海高清 | 失败 | 无法解析视频流
 ❌ 佛山南海高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 佛山南海高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 佛山南海高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 佛山综合高清 | 失败 | 无法解析视频流
 ❌ 佛山综合高清 | 失败 | 无法解析视频流
@@ -808,7 +719,6 @@
 ❌ 佛山综合高清 | 失败 | 无法解析视频流
 ❌ 佛山综合高清 | 失败 | 无法解析视频流
 ❌ 佛山综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 佛山综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 佛山综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 佛山顺德高清 | 失败 | 无法解析视频流
 ❌ 佛山顺德高清 | 失败 | 无法解析视频流
@@ -817,7 +727,6 @@
 ❌ 佛山顺德高清 | 失败 | 无法解析视频流
 ❌ 佛山顺德高清 | 失败 | 无法解析视频流
 ❌ 佛山顺德高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 佛山顺德高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 佛山顺德高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 兵器科技高清 | 失败 | 无法解析视频流
 ❌ 兵器科技高清 | 失败 | 无法解析视频流
@@ -828,32 +737,28 @@
 ❌ 兵器科技高清 | 失败 | 无法解析视频流
 ❌ 兵器科技高清 | 失败 | 无法解析视频流
 ❌ 兵器科技高清 | 失败 | 无法解析视频流
-❌ 兵器科技高清 | 失败 | 无法解析视频流
-❌ 兵器科技高清 | 失败 | 无法解析视频流
-❌ 兵器科技高清 | 失败 | 无法解析视频流
-❌ 兵器科技高清 | 失败 | 无法解析视频流
+❌ 兵器科技高清 | 失败 | 连接错误: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
 ❌ 兵器科技高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 兵器科技高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 兵器科技高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 兵器科技高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 兵器科技高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 兵器科技高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 兵器科技高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.253.43.18:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7fbf84c68880>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
 ❌ 兵器科技高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
-❌ 兵器科技高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 兵团卫视 | 失败 | 无法解析视频流
 ❌ 兵团卫视 | 失败 | 无法解析视频流
 ❌ 兵团卫视 | 失败 | 无法解析视频流
 ❌ 兵团卫视 | 失败 | 无法解析视频流
 ❌ 兵团卫视 | 失败 | 无法解析视频流
-❌ 兵团卫视 | 失败 | 无法解析视频流
-❌ 兵团卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 兵团卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 兵团卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 兵团卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 兵团卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 兵团卫视高清 | 失败 | 无法解析视频流
 ❌ 兵团卫视高清 | 失败 | 无法解析视频流
 ❌ 兵团卫视高清 | 失败 | 无法解析视频流
 ❌ 兵团卫视高清 | 失败 | 无法解析视频流
 ❌ 兵团卫视高清 | 失败 | 无法解析视频流
-❌ 兵团卫视高清 | 失败 | 无法解析视频流
-❌ 兵团卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 兵团卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 兵团卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 兵团卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 兵团卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 北京卫视 4K | 失败 | 无法解析视频流
 ❌ 北京卫视 4K | 失败 | 无法解析视频流
@@ -867,10 +772,8 @@
 ❌ 北京卫视 4K | 失败 | 无法解析视频流
 ❌ 北京卫视 4K | 失败 | 无法解析视频流
 ❌ 北京卫视 4K | 失败 | 无法解析视频流
-❌ 北京卫视 4K | 失败 | 无法解析视频流
-❌ 北京卫视 4K | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 北京卫视 4K | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 北京卫视 4K | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 北京卫视 4K | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 北京卫视 4K | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 北京卫视 4K | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 北京卫视4K超高清 | 失败 | 无法解析视频流
@@ -885,10 +788,8 @@
 ❌ 北京卫视4K超高清 | 失败 | 无法解析视频流
 ❌ 北京卫视4K超高清 | 失败 | 无法解析视频流
 ❌ 北京卫视4K超高清 | 失败 | 无法解析视频流
-❌ 北京卫视4K超高清 | 失败 | 无法解析视频流
-❌ 北京卫视4K超高清 | 失败 | 无法解析视频流
-❌ 北京卫视4K超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 北京卫视4K超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 北京卫视4K超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 北京卫视4K超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 北京卫视4K超高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 北京卫视4K超高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 北京卫视时移专用(北京卫视) | 失败 | 无法解析视频流
@@ -897,8 +798,7 @@
 ❌ 北京卫视时移专用(北京卫视) | 失败 | 无法解析视频流
 ❌ 北京卫视时移专用(北京卫视) | 失败 | 无法解析视频流
 ❌ 北京卫视时移专用(北京卫视) | 失败 | 无法解析视频流
-❌ 北京卫视时移专用(北京卫视) | 失败 | 无法解析视频流
-❌ 北京卫视时移专用(北京卫视) | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 北京卫视时移专用(北京卫视) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 北京卫视时移专用(北京卫视) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 北京卫视高清 | 失败 | 无法解析视频流
 ❌ 北京卫视高清 | 失败 | 无法解析视频流
@@ -916,17 +816,14 @@
 ❌ 北京卫视高清 | 失败 | 无法解析视频流
 ❌ 北京卫视高清 | 失败 | 无法解析视频流
 ❌ 北京卫视高清 | 失败 | 无法解析视频流
-❌ 北京卫视高清 | 失败 | 无法解析视频流
-❌ 北京卫视高清 | 失败 | 无法解析视频流
-❌ 北京卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.77.1.4:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef4a35310>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
+❌ 北京卫视高清 | 失败 | 连接错误: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
 ❌ 北京卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 北京卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 北京卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 北京卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 北京卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 北京卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.35.50.226', port=8886): Max retries exceeded with url: /rtp/239.77.1.4:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='183.35.50.226', port=8886) at 0x7fbf84d9e670>, 'Connection to 183.35.50.226 timed out. (connect timeout=8)'))
+❌ 北京卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 北京卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 北京卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 北京卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 北京卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
-❌ 北京卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 南方购物 | 失败 | 无法解析视频流
 ❌ 南方购物 | 失败 | 无法解析视频流
 ❌ 南方购物 | 失败 | 无法解析视频流
@@ -934,8 +831,7 @@
 ❌ 南方购物 | 失败 | 无法解析视频流
 ❌ 南方购物 | 失败 | 无法解析视频流
 ❌ 南方购物 | 失败 | 无法解析视频流
-❌ 南方购物 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 南方购物 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 南方购物 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 南方购物-精选 | 失败 | 无法解析视频流
 ❌ 南方购物-精选 | 失败 | 无法解析视频流
 ❌ 南方购物-精选 | 失败 | 无法解析视频流
@@ -943,34 +839,30 @@
 ❌ 南方购物-精选 | 失败 | 无法解析视频流
 ❌ 南方购物-精选 | 失败 | 无法解析视频流
 ❌ 南方购物-精选 | 失败 | 无法解析视频流
-❌ 南方购物-精选 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 南方购物-精选 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 南方购物-精选 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 卫生健康高清 | 失败 | 无法解析视频流
 ❌ 卫生健康高清 | 失败 | 无法解析视频流
 ❌ 卫生健康高清 | 失败 | 无法解析视频流
 ❌ 卫生健康高清 | 失败 | 无法解析视频流
 ❌ 卫生健康高清 | 失败 | 无法解析视频流
-❌ 卫生健康高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 卫生健康高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 卫生健康高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 卫生健康高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 卫生健康高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 吉林卫视 | 失败 | 无法解析视频流
 ❌ 吉林卫视 | 失败 | 无法解析视频流
 ❌ 吉林卫视 | 失败 | 无法解析视频流
 ❌ 吉林卫视 | 失败 | 无法解析视频流
 ❌ 吉林卫视 | 失败 | 无法解析视频流
-❌ 吉林卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 吉林卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Max retries exceeded with url: /rtp/239.77.0.150:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.21.239.209', port=4022) at 0x7f0ef49631f0>, 'Connection to 14.21.239.209 timed out. (connect timeout=8)'))
-❌ 吉林卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 吉林卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 吉林卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 吉林卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 吉林卫视高清 | 失败 | 无法解析视频流
 ❌ 吉林卫视高清 | 失败 | 无法解析视频流
 ❌ 吉林卫视高清 | 失败 | 无法解析视频流
 ❌ 吉林卫视高清 | 失败 | 无法解析视频流
 ❌ 吉林卫视高清 | 失败 | 无法解析视频流
-❌ 吉林卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 吉林卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 吉林卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 吉林卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 吉林卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 嘉佳卡通 | 失败 | 无法解析视频流
 ❌ 嘉佳卡通 | 失败 | 无法解析视频流
@@ -979,8 +871,7 @@
 ❌ 嘉佳卡通 | 失败 | 无法解析视频流
 ❌ 嘉佳卡通 | 失败 | 无法解析视频流
 ❌ 嘉佳卡通 | 失败 | 无法解析视频流
-❌ 嘉佳卡通 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 嘉佳卡通 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 嘉佳卡通 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 四川卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 四川卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 四川卫视 4K (AVS2) | 失败 | 无法解析视频流
@@ -988,8 +879,7 @@
 ❌ 四川卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 四川卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 四川卫视 4K (AVS2) | 失败 | 无法解析视频流
-❌ 四川卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 四川卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 四川卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 四川卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 四川卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 四川卫视4k超高清 | 失败 | 无法解析视频流
@@ -997,34 +887,30 @@
 ❌ 四川卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 四川卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 四川卫视4k超高清 | 失败 | 无法解析视频流
-❌ 四川卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.77.0.60:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef6b602b0>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
-❌ 四川卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 四川卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 四川卫视时移专用(四川卫视) | 失败 | 无法解析视频流
 ❌ 四川卫视时移专用(四川卫视) | 失败 | 无法解析视频流
 ❌ 四川卫视时移专用(四川卫视) | 失败 | 无法解析视频流
 ❌ 四川卫视时移专用(四川卫视) | 失败 | 无法解析视频流
 ❌ 四川卫视时移专用(四川卫视) | 失败 | 无法解析视频流
-❌ 四川卫视时移专用(四川卫视) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 四川卫视时移专用(四川卫视) | 失败 | 无法解析视频流
 ❌ 四川卫视时移专用(四川卫视) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 四川卫视时移专用(四川卫视) | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 四川卫视时移专用(四川卫视) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 四川卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 四川卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 四川卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 四川卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 四川卫视超清 (CAVS) | 失败 | 无法解析视频流
-❌ 四川卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 四川卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 四川卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 四川卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 四川卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 四川卫视高清 | 失败 | 无法解析视频流
 ❌ 四川卫视高清 | 失败 | 无法解析视频流
 ❌ 四川卫视高清 | 失败 | 无法解析视频流
 ❌ 四川卫视高清 | 失败 | 无法解析视频流
 ❌ 四川卫视高清 | 失败 | 无法解析视频流
-❌ 四川卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 四川卫视高清 | 失败 | 无法解析视频流
 ❌ 四川卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 四川卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 四川卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 大湾区卫视 | 失败 | 无法解析视频流
 ❌ 大湾区卫视 | 失败 | 无法解析视频流
@@ -1033,39 +919,31 @@
 ❌ 大湾区卫视 | 失败 | 无法解析视频流
 ❌ 大湾区卫视 | 失败 | 无法解析视频流
 ❌ 大湾区卫视 | 失败 | 无法解析视频流
-❌ 大湾区卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 大湾区卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 大湾区卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 天元围棋 | 失败 | 无法解析视频流
 ❌ 天元围棋 | 失败 | 无法解析视频流
 ❌ 天元围棋 | 失败 | 无法解析视频流
 ❌ 天元围棋 | 失败 | 无法解析视频流
-❌ 天元围棋 | 失败 | 无法解析视频流
-❌ 天元围棋 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 天元围棋 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.253.43.98:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7fbf84efef40>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
 ❌ 天元围棋 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 天元围棋 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 天元围棋 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 天元围棋 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 天津卫视 | 失败 | 无法解析视频流
 ❌ 天津卫视 | 失败 | 无法解析视频流
 ❌ 天津卫视 | 失败 | 无法解析视频流
 ❌ 天津卫视 | 失败 | 无法解析视频流
 ❌ 天津卫视 | 失败 | 无法解析视频流
 ❌ 天津卫视 | 失败 | 无法解析视频流
-❌ 天津卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 天津卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 天津卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 天津卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 天津卫视超清 | 失败 | 无法解析视频流
 ❌ 天津卫视超清 | 失败 | 无法解析视频流
 ❌ 天津卫视超清 | 失败 | 无法解析视频流
 ❌ 天津卫视超清 | 失败 | 无法解析视频流
 ❌ 天津卫视超清 | 失败 | 无法解析视频流
-❌ 天津卫视超清 | 失败 | 无法解析视频流
-❌ 天津卫视超清 | 失败 | 无法解析视频流
-❌ 天津卫视超清 | 失败 | 无法解析视频流
-❌ 天津卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 天津卫视高清 | 失败 | 无法解析视频流
-❌ 天津卫视高清 | 失败 | 无法解析视频流
-❌ 天津卫视高清 | 失败 | 无法解析视频流
-❌ 天津卫视高清 | 失败 | 无法解析视频流
+❌ 天津卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 天津卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 天津卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 天津卫视高清 | 失败 | 无法解析视频流
 ❌ 天津卫视高清 | 失败 | 无法解析视频流
 ❌ 天津卫视高清 | 失败 | 无法解析视频流
@@ -1077,8 +955,10 @@
 ❌ 天津卫视高清 | 失败 | 无法解析视频流
 ❌ 天津卫视高清 | 失败 | 无法解析视频流
 ❌ 天津卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 天津卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 天津卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 天津卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 天津卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 天津卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 天津卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 天津卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 央视台球高清 | 失败 | 无法解析视频流
 ❌ 央视台球高清 | 失败 | 无法解析视频流
@@ -1090,32 +970,28 @@
 ❌ 央视台球高清 | 失败 | 无法解析视频流
 ❌ 央视台球高清 | 失败 | 无法解析视频流
 ❌ 央视台球高清 | 失败 | 无法解析视频流
-❌ 央视台球高清 | 失败 | 无法解析视频流
-❌ 央视台球高清 | 失败 | 无法解析视频流
-❌ 央视台球高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 央视台球高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 央视台球高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 央视台球高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 央视台球高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 央视台球高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 央视台球高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 央视台球高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 央视台球高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 央视台球高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 央视文化精品高清 | 失败 | 无法解析视频流
 ❌ 央视文化精品高清 | 失败 | 无法解析视频流
 ❌ 央视文化精品高清 | 失败 | 无法解析视频流
 ❌ 央视文化精品高清 | 失败 | 无法解析视频流
 ❌ 央视文化精品高清 | 失败 | 无法解析视频流
-❌ 央视文化精品高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 央视文化精品高清 | 失败 | 无法解析视频流
 ❌ 央视文化精品高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 央视文化精品高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 央视文化精品高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 央视精品高清 | 失败 | 无法解析视频流
 ❌ 央视精品高清 | 失败 | 无法解析视频流
 ❌ 央视精品高清 | 失败 | 无法解析视频流
 ❌ 央视精品高清 | 失败 | 无法解析视频流
 ❌ 央视精品高清 | 失败 | 无法解析视频流
-❌ 央视精品高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 央视精品高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 央视精品高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 央视精品高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 央视精品高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 女性时尚高清 | 失败 | 无法解析视频流
 ❌ 女性时尚高清 | 失败 | 无法解析视频流
 ❌ 女性时尚高清 | 失败 | 无法解析视频流
@@ -1125,41 +1001,36 @@
 ❌ 女性时尚高清 | 失败 | 无法解析视频流
 ❌ 女性时尚高清 | 失败 | 无法解析视频流
 ❌ 女性时尚高清 | 失败 | 无法解析视频流
-❌ 女性时尚高清 | 失败 | 无法解析视频流
-❌ 女性时尚高清 | 失败 | 无法解析视频流
-❌ 女性时尚高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 女性时尚高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 女性时尚高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.253.43.23:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7fbf84ef2f70>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
 ❌ 女性时尚高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 女性时尚高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 女性时尚高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 女性时尚高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 女性时尚高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 女性时尚高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 女性时尚高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 宁夏卫视 | 失败 | 无法解析视频流
 ❌ 宁夏卫视 | 失败 | 无法解析视频流
 ❌ 宁夏卫视 | 失败 | 无法解析视频流
 ❌ 宁夏卫视 | 失败 | 无法解析视频流
 ❌ 宁夏卫视 | 失败 | 无法解析视频流
-❌ 宁夏卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 宁夏卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 宁夏卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 宁夏卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 宁夏卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 宁夏卫视高清 | 失败 | 无法解析视频流
 ❌ 宁夏卫视高清 | 失败 | 无法解析视频流
 ❌ 宁夏卫视高清 | 失败 | 无法解析视频流
 ❌ 宁夏卫视高清 | 失败 | 无法解析视频流
 ❌ 宁夏卫视高清 | 失败 | 无法解析视频流
-❌ 宁夏卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 宁夏卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 宁夏卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 宁夏卫视高清 | 失败 | 无法解析视频流
+❌ 宁夏卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 宁夏卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 安徽卫视 | 失败 | 无法解析视频流
 ❌ 安徽卫视 | 失败 | 无法解析视频流
 ❌ 安徽卫视 | 失败 | 无法解析视频流
 ❌ 安徽卫视 | 失败 | 无法解析视频流
 ❌ 安徽卫视 | 失败 | 无法解析视频流
-❌ 安徽卫视 | 失败 | 无法解析视频流
-❌ 安徽卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.77.0.183:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef4a89c40>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
-❌ 安徽卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 安徽卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 安徽卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 安徽卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 客家生活高清 | 失败 | 无法解析视频流
 ❌ 客家生活高清 | 失败 | 无法解析视频流
@@ -1167,26 +1038,23 @@
 ❌ 客家生活高清 | 失败 | 无法解析视频流
 ❌ 客家生活高清 | 失败 | 无法解析视频流
 ❌ 客家生活高清 | 失败 | 无法解析视频流
-❌ 客家生活高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 客家生活高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 客家生活高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 客家生活高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 少儿动画 | 失败 | 无法解析视频流
 ❌ 少儿动画 | 失败 | 无法解析视频流
 ❌ 少儿动画 | 失败 | 无法解析视频流
 ❌ 少儿动画 | 失败 | 无法解析视频流
 ❌ 少儿动画 | 失败 | 无法解析视频流
-❌ 少儿动画 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 少儿动画 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 少儿动画 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
-❌ 少儿动画 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 少儿动画 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.0.109:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7fbf84c35220>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
 ❌ 山东卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 山东卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 山东卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 山东卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 山东卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 山东卫视4k超高清 | 失败 | 无法解析视频流
-❌ 山东卫视4k超高清 | 失败 | 无法解析视频流
-❌ 山东卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 山东卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 山东卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 山东卫视时移专用(山东卫视) | 失败 | 无法解析视频流
 ❌ 山东卫视时移专用(山东卫视) | 失败 | 无法解析视频流
@@ -1194,27 +1062,24 @@
 ❌ 山东卫视时移专用(山东卫视) | 失败 | 无法解析视频流
 ❌ 山东卫视时移专用(山东卫视) | 失败 | 无法解析视频流
 ❌ 山东卫视时移专用(山东卫视) | 失败 | 无法解析视频流
-❌ 山东卫视时移专用(山东卫视) | 失败 | 无法解析视频流
-❌ 山东卫视时移专用(山东卫视) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 山东卫视时移专用(山东卫视) | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 山东卫视时移专用(山东卫视) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 山东卫视时移专用(山东卫视) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 山东卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 山东卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 山东卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 山东卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 山东卫视超清 (CAVS) | 失败 | 无法解析视频流
-❌ 山东卫视超清 (CAVS) | 失败 | 无法解析视频流
-❌ 山东卫视超清 (CAVS) | 失败 | 连接错误: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
-❌ 山东卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 山东卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.77.0.132:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef4aae1f0>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
+❌ 山东卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 山东卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 山东卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 山东卫视高清 (CAVS) | 失败 | 无法解析视频流
 ❌ 山东卫视高清 (CAVS) | 失败 | 无法解析视频流
 ❌ 山东卫视高清 (CAVS) | 失败 | 无法解析视频流
 ❌ 山东卫视高清 (CAVS) | 失败 | 无法解析视频流
 ❌ 山东卫视高清 (CAVS) | 失败 | 无法解析视频流
-❌ 山东卫视高清 (CAVS) | 失败 | 无法解析视频流
-❌ 山东卫视高清 (CAVS) | 失败 | 无法解析视频流
-❌ 山东卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 山东卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 山东卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 山东卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 山东卫视高清 | 失败 | 无法解析视频流
 ❌ 山东卫视高清 | 失败 | 无法解析视频流
 ❌ 山东卫视高清 | 失败 | 无法解析视频流
@@ -1226,40 +1091,35 @@
 ❌ 山东卫视高清 | 失败 | 无法解析视频流
 ❌ 山东卫视高清 | 失败 | 无法解析视频流
 ❌ 山东卫视高清 | 失败 | 无法解析视频流
-❌ 山东卫视高清 | 失败 | 无法解析视频流
-❌ 山东卫视高清 | 失败 | 无法解析视频流
-❌ 山东卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.77.0.8:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef4a64580>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
-❌ 山东卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 山东卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.77.1.142:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef4a891f0>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
 ❌ 山东卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 山东卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 山东卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 山东卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 山东卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 山东卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 岭南戏曲 | 失败 | 无法解析视频流
 ❌ 岭南戏曲 | 失败 | 无法解析视频流
 ❌ 岭南戏曲 | 失败 | 无法解析视频流
 ❌ 岭南戏曲 | 失败 | 无法解析视频流
 ❌ 岭南戏曲 | 失败 | 无法解析视频流
 ❌ 岭南戏曲 | 失败 | 无法解析视频流
-❌ 岭南戏曲 | 失败 | 无法解析视频流
-❌ 岭南戏曲 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 岭南戏曲 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 岭南戏曲 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 岭南戏曲 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 广东4K超高清 | 失败 | 无法解析视频流
 ❌ 广东4K超高清 | 失败 | 无法解析视频流
 ❌ 广东4K超高清 | 失败 | 无法解析视频流
 ❌ 广东4K超高清 | 失败 | 无法解析视频流
 ❌ 广东4K超高清 | 失败 | 无法解析视频流
 ❌ 广东4K超高清 | 失败 | 无法解析视频流
-❌ 广东4K超高清 | 失败 | 无法解析视频流
-❌ 广东4K超高清 | 失败 | 无法解析视频流
-❌ 广东4K超高清 | 失败 | 无法解析视频流
+❌ 广东4K超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Read timed out. (read timeout=8)
+❌ 广东4K超高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 广东4K超高清 窄色域 30 | 失败 | 无法解析视频流
 ❌ 广东4K超高清 窄色域 30 | 失败 | 无法解析视频流
 ❌ 广东4K超高清 窄色域 30 | 失败 | 无法解析视频流
 ❌ 广东4K超高清 窄色域 30 | 失败 | 无法解析视频流
 ❌ 广东4K超高清 窄色域 30 | 失败 | 无法解析视频流
 ❌ 广东4K超高清 窄色域 30 | 失败 | 无法解析视频流
-❌ 广东4K超高清 窄色域 30 | 失败 | 无法解析视频流
-❌ 广东4K超高清 窄色域 30 | 失败 | 无法解析视频流
-❌ 广东4K超高清 窄色域 30 | 失败 | 无法解析视频流
+❌ 广东4K超高清 窄色域 30 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 广东4K超高清 窄色域 30 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 广东体育 | 失败 | 无法解析视频流
 ❌ 广东体育 | 失败 | 无法解析视频流
 ❌ 广东体育 | 失败 | 无法解析视频流
@@ -1267,35 +1127,31 @@
 ❌ 广东体育 | 失败 | 无法解析视频流
 ❌ 广东体育 | 失败 | 无法解析视频流
 ❌ 广东体育 | 失败 | 无法解析视频流
-❌ 广东体育 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 广东体育 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 广东体育 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 广东体育超清 | 失败 | 无法解析视频流
 ❌ 广东体育超清 | 失败 | 无法解析视频流
 ❌ 广东体育超清 | 失败 | 无法解析视频流
 ❌ 广东体育超清 | 失败 | 无法解析视频流
 ❌ 广东体育超清 | 失败 | 无法解析视频流
 ❌ 广东体育超清 | 失败 | 无法解析视频流
-❌ 广东体育超清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.77.0.168:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef6b60fa0>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
-❌ 广东体育超清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 广东体育超清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 广东体育超清 | 失败 | 无法解析视频流
+❌ 广东体育超清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 广东卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 广东卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 广东卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 广东卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 广东卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 广东卫视 4K (AVS2) | 失败 | 无法解析视频流
-❌ 广东卫视 4K (AVS2) | 失败 | 无法解析视频流
-❌ 广东卫视 4K (AVS2) | 失败 | 无法解析视频流
-❌ 广东卫视 4K (AVS2) | 失败 | 无法解析视频流
+❌ 广东卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 广东卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 广东卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 广东卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 广东卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 广东卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 广东卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 广东卫视4k超高清 | 失败 | 无法解析视频流
-❌ 广东卫视4k超高清 | 失败 | 无法解析视频流
-❌ 广东卫视4k超高清 | 失败 | 无法解析视频流
-❌ 广东卫视4k超高清 | 失败 | 无法解析视频流
+❌ 广东卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 广东卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 广东卫视4k超高清25p | 失败 | 无法解析视频流
 ❌ 广东卫视4k超高清25p | 失败 | 无法解析视频流
 ❌ 广东卫视4k超高清25p | 失败 | 无法解析视频流
@@ -1303,26 +1159,23 @@
 ❌ 广东卫视4k超高清25p | 失败 | 无法解析视频流
 ❌ 广东卫视4k超高清25p | 失败 | 无法解析视频流
 ❌ 广东卫视4k超高清25p | 失败 | 无法解析视频流
-❌ 广东卫视4k超高清25p | 失败 | 无法解析视频流
-❌ 广东卫视4k超高清25p | 失败 | 无法解析视频流
+❌ 广东卫视4k超高清25p | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 广东卫视时移专用(广东卫视) | 失败 | 无法解析视频流
 ❌ 广东卫视时移专用(广东卫视) | 失败 | 无法解析视频流
 ❌ 广东卫视时移专用(广东卫视) | 失败 | 无法解析视频流
 ❌ 广东卫视时移专用(广东卫视) | 失败 | 无法解析视频流
 ❌ 广东卫视时移专用(广东卫视) | 失败 | 无法解析视频流
 ❌ 广东卫视时移专用(广东卫视) | 失败 | 无法解析视频流
-❌ 广东卫视时移专用(广东卫视) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 广东卫视时移专用(广东卫视) | 失败 | 无法解析视频流
 ❌ 广东卫视时移专用(广东卫视) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 广东卫视时移专用(广东卫视) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 广东卫视超清 | 失败 | 无法解析视频流
 ❌ 广东卫视超清 | 失败 | 无法解析视频流
 ❌ 广东卫视超清 | 失败 | 无法解析视频流
 ❌ 广东卫视超清 | 失败 | 无法解析视频流
 ❌ 广东卫视超清 | 失败 | 无法解析视频流
 ❌ 广东卫视超清 | 失败 | 无法解析视频流
-❌ 广东卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 广东卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 广东卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 广东卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 广东卫视高清 | 失败 | 无法解析视频流
 ❌ 广东卫视高清 | 失败 | 无法解析视频流
 ❌ 广东卫视高清 | 失败 | 无法解析视频流
@@ -1335,12 +1188,10 @@
 ❌ 广东卫视高清 | 失败 | 无法解析视频流
 ❌ 广东卫视高清 | 失败 | 无法解析视频流
 ❌ 广东卫视高清 | 失败 | 无法解析视频流
-❌ 广东卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 广东卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 广东卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 广东卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 广东卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
-❌ 广东卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 广东卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.35.50.226', port=8886): Max retries exceeded with url: /rtp/239.77.1.19:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='183.35.50.226', port=8886) at 0x7fbf84e5aaf0>, 'Connection to 183.35.50.226 timed out. (connect timeout=8)'))
+❌ 广东卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 广东少儿 | 失败 | 无法解析视频流
 ❌ 广东少儿 | 失败 | 无法解析视频流
 ❌ 广东少儿 | 失败 | 无法解析视频流
@@ -1348,17 +1199,15 @@
 ❌ 广东少儿 | 失败 | 无法解析视频流
 ❌ 广东少儿 | 失败 | 无法解析视频流
 ❌ 广东少儿 | 失败 | 无法解析视频流
-❌ 广东少儿 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 广东少儿 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 广东少儿 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 广东影视 | 失败 | 无法解析视频流
 ❌ 广东影视 | 失败 | 无法解析视频流
 ❌ 广东影视 | 失败 | 无法解析视频流
 ❌ 广东影视 | 失败 | 无法解析视频流
 ❌ 广东影视 | 失败 | 无法解析视频流
 ❌ 广东影视 | 失败 | 无法解析视频流
-❌ 广东影视 | 失败 | 无法解析视频流
-❌ 广东影视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 广东影视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 广东影视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 广东影视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.0.217:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7fbf84c53be0>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
 ❌ 广东新闻 | 失败 | 无法解析视频流
 ❌ 广东新闻 | 失败 | 无法解析视频流
 ❌ 广东新闻 | 失败 | 无法解析视频流
@@ -1366,8 +1215,7 @@
 ❌ 广东新闻 | 失败 | 无法解析视频流
 ❌ 广东新闻 | 失败 | 无法解析视频流
 ❌ 广东新闻 | 失败 | 无法解析视频流
-❌ 广东新闻 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 广东新闻 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 广东新闻 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 广东民生 | 失败 | 无法解析视频流
 ❌ 广东民生 | 失败 | 无法解析视频流
 ❌ 广东民生 | 失败 | 无法解析视频流
@@ -1375,71 +1223,63 @@
 ❌ 广东民生 | 失败 | 无法解析视频流
 ❌ 广东民生 | 失败 | 无法解析视频流
 ❌ 广东民生 | 失败 | 无法解析视频流
-❌ 广东民生 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 广东民生 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.0.225:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7f0ef478c670>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
+❌ 广东民生 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 广东珠江 | 失败 | 无法解析视频流
 ❌ 广东珠江 | 失败 | 无法解析视频流
 ❌ 广东珠江 | 失败 | 无法解析视频流
 ❌ 广东珠江 | 失败 | 无法解析视频流
 ❌ 广东珠江 | 失败 | 无法解析视频流
 ❌ 广东珠江 | 失败 | 无法解析视频流
-❌ 广东珠江 | 失败 | 无法解析视频流
-❌ 广东珠江 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 广东珠江 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 广东珠江 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 广东珠江 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 广东珠江超清 | 失败 | 无法解析视频流
 ❌ 广东珠江超清 | 失败 | 无法解析视频流
 ❌ 广东珠江超清 | 失败 | 无法解析视频流
 ❌ 广东珠江超清 | 失败 | 无法解析视频流
 ❌ 广东珠江超清 | 失败 | 无法解析视频流
 ❌ 广东珠江超清 | 失败 | 无法解析视频流
-❌ 广东珠江超清 | 失败 | 无法解析视频流
-❌ 广东珠江超清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 广东珠江超清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 广东珠江超清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 广东珠江超清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 广州新闻高清 | 失败 | 无法解析视频流
 ❌ 广州新闻高清 | 失败 | 无法解析视频流
 ❌ 广州新闻高清 | 失败 | 无法解析视频流
 ❌ 广州新闻高清 | 失败 | 无法解析视频流
 ❌ 广州新闻高清 | 失败 | 无法解析视频流
 ❌ 广州新闻高清 | 失败 | 无法解析视频流
-❌ 广州新闻高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 广州新闻高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 广州新闻高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 广州新闻高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 广州综合高清 | 失败 | 无法解析视频流
 ❌ 广州综合高清 | 失败 | 无法解析视频流
 ❌ 广州综合高清 | 失败 | 无法解析视频流
 ❌ 广州综合高清 | 失败 | 无法解析视频流
 ❌ 广州综合高清 | 失败 | 无法解析视频流
 ❌ 广州综合高清 | 失败 | 无法解析视频流
-❌ 广州综合高清 | 失败 | 无法解析视频流
-❌ 广州综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.253.43.71:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef5b23b80>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
-❌ 广州综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 广州综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 广州综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 广西卫视 | 失败 | 无法解析视频流
 ❌ 广西卫视 | 失败 | 无法解析视频流
 ❌ 广西卫视 | 失败 | 无法解析视频流
 ❌ 广西卫视 | 失败 | 无法解析视频流
-❌ 广西卫视 | 失败 | 无法解析视频流
-❌ 广西卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 广西卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 广西卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 广西卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.0.139:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7f0ef47826a0>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
+❌ 广西卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 广西卫视 | 失败 | 连接错误: HTTPConnectionPool(host='59.34.28.189', port=4022): Max retries exceeded with url: /rtp/239.77.0.139:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='59.34.28.189', port=4022) at 0x7fbf84ce6400>, 'Connection to 59.34.28.189 timed out. (connect timeout=8)'))
+❌ 广西卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 广西卫视高清 | 失败 | 无法解析视频流
 ❌ 广西卫视高清 | 失败 | 无法解析视频流
 ❌ 广西卫视高清 | 失败 | 无法解析视频流
 ❌ 广西卫视高清 | 失败 | 无法解析视频流
 ❌ 广西卫视高清 | 失败 | 无法解析视频流
-❌ 广西卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 广西卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 广西卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 广西卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 广西卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 快乐垂钓 | 失败 | 无法解析视频流
 ❌ 快乐垂钓 | 失败 | 无法解析视频流
 ❌ 快乐垂钓 | 失败 | 无法解析视频流
 ❌ 快乐垂钓 | 失败 | 无法解析视频流
 ❌ 快乐垂钓 | 失败 | 无法解析视频流
-❌ 快乐垂钓 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 快乐垂钓 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 快乐垂钓 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 快乐垂钓 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 快乐垂钓 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 怀旧剧场高清 | 失败 | 无法解析视频流
 ❌ 怀旧剧场高清 | 失败 | 无法解析视频流
 ❌ 怀旧剧场高清 | 失败 | 无法解析视频流
@@ -1451,14 +1291,11 @@
 ❌ 怀旧剧场高清 | 失败 | 无法解析视频流
 ❌ 怀旧剧场高清 | 失败 | 无法解析视频流
 ❌ 怀旧剧场高清 | 失败 | 无法解析视频流
-❌ 怀旧剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 怀旧剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 怀旧剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.253.43.25:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef49e6c40>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
 ❌ 怀旧剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 怀旧剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 怀旧剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Max retries exceeded with url: /rtp/239.253.43.5:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='183.48.240.8', port=5050) at 0x7f0ef47fa8b0>, 'Connection to 183.48.240.8 timed out. (connect timeout=8)'))
 ❌ 怀旧剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
-❌ 揭阳生活高清 | 失败 | 无法解析视频流
+❌ 怀旧剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 怀旧剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.253.43.25:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7fbf84c88400>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
 ❌ 揭阳生活高清 | 失败 | 无法解析视频流
 ❌ 揭阳生活高清 | 失败 | 无法解析视频流
 ❌ 揭阳生活高清 | 失败 | 无法解析视频流
@@ -1466,8 +1303,7 @@
 ❌ 揭阳生活高清 | 失败 | 无法解析视频流
 ❌ 揭阳生活高清 | 失败 | 无法解析视频流
 ❌ 揭阳生活高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 揭阳生活高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 揭阳综合高清 | 失败 | 无法解析视频流
+❌ 揭阳生活高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 揭阳综合高清 | 失败 | 无法解析视频流
 ❌ 揭阳综合高清 | 失败 | 无法解析视频流
 ❌ 揭阳综合高清 | 失败 | 无法解析视频流
@@ -1475,24 +1311,22 @@
 ❌ 揭阳综合高清 | 失败 | 无法解析视频流
 ❌ 揭阳综合高清 | 失败 | 无法解析视频流
 ❌ 揭阳综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 揭阳综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 揭阳综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 收视指南 | 失败 | 无法解析视频流
 ❌ 收视指南 | 失败 | 无法解析视频流
 ❌ 收视指南 | 失败 | 无法解析视频流
 ❌ 收视指南 | 失败 | 无法解析视频流
 ❌ 收视指南 | 失败 | 无法解析视频流
-❌ 收视指南 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 收视指南 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Max retries exceeded with url: /rtp/239.77.0.111:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.21.239.209', port=4022) at 0x7f0ef4994580>, 'Connection to 14.21.239.209 timed out. (connect timeout=8)'))
+❌ 收视指南 | 失败 | 无法解析视频流
+❌ 收视指南 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 收视指南 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
-❌ 收视指南 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 新疆卫视 | 失败 | 无法解析视频流
 ❌ 新疆卫视 | 失败 | 无法解析视频流
 ❌ 新疆卫视 | 失败 | 无法解析视频流
 ❌ 新疆卫视 | 失败 | 无法解析视频流
 ❌ 新疆卫视 | 失败 | 无法解析视频流
-❌ 新疆卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 新疆卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 新疆卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 新疆卫视 | 失败 | 无法解析视频流
+❌ 新疆卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 新疆卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 新疆卫视高清 | 失败 | 无法解析视频流
 ❌ 新疆卫视高清 | 失败 | 无法解析视频流
@@ -1504,12 +1338,10 @@
 ❌ 新疆卫视高清 | 失败 | 无法解析视频流
 ❌ 新疆卫视高清 | 失败 | 无法解析视频流
 ❌ 新疆卫视高清 | 失败 | 无法解析视频流
-❌ 新疆卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 新疆卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 新疆卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 新疆卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 新疆卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 新疆卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 新疆卫视高清 | 失败 | 无法解析视频流
+❌ 新疆卫视高清 | 失败 | 无法解析视频流
+❌ 新疆卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 新疆卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 新疆卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 新疆卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 早期教育高清 | 失败 | 无法解析视频流
@@ -1522,32 +1354,28 @@
 ❌ 早期教育高清 | 失败 | 无法解析视频流
 ❌ 早期教育高清 | 失败 | 无法解析视频流
 ❌ 早期教育高清 | 失败 | 无法解析视频流
-❌ 早期教育高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 早期教育高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 早期教育高清 | 失败 | 无法解析视频流
 ❌ 早期教育高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 早期教育高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 早期教育高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 早期教育高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 早期教育高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
-❌ 早期教育高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 早期教育高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 早期教育高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 梅州综合高清 | 失败 | 无法解析视频流
 ❌ 梅州综合高清 | 失败 | 无法解析视频流
 ❌ 梅州综合高清 | 失败 | 无法解析视频流
 ❌ 梅州综合高清 | 失败 | 无法解析视频流
 ❌ 梅州综合高清 | 失败 | 无法解析视频流
 ❌ 梅州综合高清 | 失败 | 无法解析视频流
-❌ 梅州综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 梅州综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 梅州综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 梅州综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 求索纪录 | 失败 | 无法解析视频流
 ❌ 求索纪录 | 失败 | 无法解析视频流
 ❌ 求索纪录 | 失败 | 无法解析视频流
 ❌ 求索纪录 | 失败 | 无法解析视频流
 ❌ 求索纪录 | 失败 | 无法解析视频流
-❌ 求索纪录 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 求索纪录 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 求索纪录 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 求索纪录 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 求索纪录 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 汕头经济生活高清 | 失败 | 无法解析视频流
 ❌ 汕头经济生活高清 | 失败 | 无法解析视频流
 ❌ 汕头经济生活高清 | 失败 | 无法解析视频流
@@ -1555,7 +1383,6 @@
 ❌ 汕头经济生活高清 | 失败 | 无法解析视频流
 ❌ 汕头经济生活高清 | 失败 | 无法解析视频流
 ❌ 汕头经济生活高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 汕头经济生活高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 汕头经济生活高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 汕头综合高清 | 失败 | 无法解析视频流
 ❌ 汕头综合高清 | 失败 | 无法解析视频流
@@ -1563,10 +1390,8 @@
 ❌ 汕头综合高清 | 失败 | 无法解析视频流
 ❌ 汕头综合高清 | 失败 | 无法解析视频流
 ❌ 汕头综合高清 | 失败 | 无法解析视频流
+❌ 汕头综合高清 | 失败 | 无法解析视频流
 ❌ 汕头综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 汕头综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 汕头综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
-❌ 汕尾文化生活高清 | 失败 | 无法解析视频流
 ❌ 汕尾文化生活高清 | 失败 | 无法解析视频流
 ❌ 汕尾文化生活高清 | 失败 | 无法解析视频流
 ❌ 汕尾文化生活高清 | 失败 | 无法解析视频流
@@ -1574,8 +1399,7 @@
 ❌ 汕尾文化生活高清 | 失败 | 无法解析视频流
 ❌ 汕尾文化生活高清 | 失败 | 无法解析视频流
 ❌ 汕尾文化生活高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 汕尾文化生活高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 汕尾新闻综合高清 | 失败 | 无法解析视频流
+❌ 汕尾文化生活高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 汕尾新闻综合高清 | 失败 | 无法解析视频流
 ❌ 汕尾新闻综合高清 | 失败 | 无法解析视频流
 ❌ 汕尾新闻综合高清 | 失败 | 无法解析视频流
@@ -1583,15 +1407,14 @@
 ❌ 汕尾新闻综合高清 | 失败 | 无法解析视频流
 ❌ 汕尾新闻综合高清 | 失败 | 无法解析视频流
 ❌ 汕尾新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 汕尾新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 汕尾新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 江苏卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 江苏卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 江苏卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 江苏卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 江苏卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 江苏卫视 4K (AVS2) | 失败 | 无法解析视频流
-❌ 江苏卫视 4K (AVS2) | 失败 | 无法解析视频流
-❌ 江苏卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 江苏卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 江苏卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 江苏卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 江苏卫视4k超高清 | 失败 | 无法解析视频流
@@ -1599,26 +1422,23 @@
 ❌ 江苏卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 江苏卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 江苏卫视4k超高清 | 失败 | 无法解析视频流
-❌ 江苏卫视4k超高清 | 失败 | 无法解析视频流
-❌ 江苏卫视4k超高清 | 失败 | 连接错误: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
-❌ 江苏卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 江苏卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 江苏卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 江苏卫视时移专用(江苏卫视) | 失败 | 无法解析视频流
 ❌ 江苏卫视时移专用(江苏卫视) | 失败 | 无法解析视频流
 ❌ 江苏卫视时移专用(江苏卫视) | 失败 | 无法解析视频流
 ❌ 江苏卫视时移专用(江苏卫视) | 失败 | 无法解析视频流
 ❌ 江苏卫视时移专用(江苏卫视) | 失败 | 无法解析视频流
-❌ 江苏卫视时移专用(江苏卫视) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 江苏卫视时移专用(江苏卫视) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 江苏卫视时移专用(江苏卫视) | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 江苏卫视时移专用(江苏卫视) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 江苏卫视时移专用(江苏卫视) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Read timed out.
+❌ 江苏卫视时移专用(江苏卫视) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 江苏卫视时移专用(江苏卫视) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.0.90:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7fbf84c6de20>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
 ❌ 江苏卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 江苏卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 江苏卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 江苏卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 江苏卫视超清 (CAVS) | 失败 | 无法解析视频流
-❌ 江苏卫视超清 (CAVS) | 失败 | 无法解析视频流
-❌ 江苏卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 江苏卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 江苏卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Read timed out.
+❌ 江苏卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 江苏卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 江苏卫视高清 | 失败 | 无法解析视频流
 ❌ 江苏卫视高清 | 失败 | 无法解析视频流
@@ -1626,19 +1446,16 @@
 ❌ 江苏卫视高清 | 失败 | 无法解析视频流
 ❌ 江苏卫视高清 | 失败 | 无法解析视频流
 ❌ 江苏卫视高清 | 失败 | 无法解析视频流
-❌ 江苏卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 江苏卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 江苏卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 江苏卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 江西卫视 | 失败 | 无法解析视频流
 ❌ 江西卫视 | 失败 | 无法解析视频流
 ❌ 江西卫视 | 失败 | 无法解析视频流
 ❌ 江西卫视 | 失败 | 无法解析视频流
 ❌ 江西卫视 | 失败 | 无法解析视频流
-❌ 江西卫视 | 失败 | 无法解析视频流
-❌ 江西卫视 | 失败 | 无法解析视频流
-❌ 江西卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 江西卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 江门综合高清 | 失败 | 无法解析视频流
+❌ 江西卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 江西卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 江门综合高清 | 失败 | 无法解析视频流
 ❌ 江门综合高清 | 失败 | 无法解析视频流
 ❌ 江门综合高清 | 失败 | 无法解析视频流
@@ -1646,34 +1463,31 @@
 ❌ 江门综合高清 | 失败 | 无法解析视频流
 ❌ 江门综合高清 | 失败 | 无法解析视频流
 ❌ 江门综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 江门综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 江门综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 河北卫视 | 失败 | 无法解析视频流
 ❌ 河北卫视 | 失败 | 无法解析视频流
 ❌ 河北卫视 | 失败 | 无法解析视频流
 ❌ 河北卫视 | 失败 | 无法解析视频流
 ❌ 河北卫视 | 失败 | 无法解析视频流
-❌ 河北卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 河北卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 河北卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 河北卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 河北卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 河南卫视 | 失败 | 无法解析视频流
 ❌ 河南卫视 | 失败 | 无法解析视频流
 ❌ 河南卫视 | 失败 | 无法解析视频流
 ❌ 河南卫视 | 失败 | 无法解析视频流
 ❌ 河南卫视 | 失败 | 无法解析视频流
-❌ 河南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 河南卫视 | 失败 | 无法解析视频流
 ❌ 河南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 河南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 河南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 河源公共高清 | 失败 | 无法解析视频流
 ❌ 河源公共高清 | 失败 | 无法解析视频流
 ❌ 河源公共高清 | 失败 | 无法解析视频流
 ❌ 河源公共高清 | 失败 | 无法解析视频流
 ❌ 河源公共高清 | 失败 | 无法解析视频流
-❌ 河源公共高清 | 失败 | 无法解析视频流
 ❌ 河源公共高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 河源公共高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 河源公共高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.253.43.214:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7f0ef472c370>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
+❌ 河源公共高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 河源公共高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.253.43.214:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7fbf84c53ac0>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
 ❌ 河源综合高清 | 失败 | 无法解析视频流
 ❌ 河源综合高清 | 失败 | 无法解析视频流
 ❌ 河源综合高清 | 失败 | 无法解析视频流
@@ -1681,52 +1495,46 @@
 ❌ 河源综合高清 | 失败 | 无法解析视频流
 ❌ 河源综合高清 | 失败 | 无法解析视频流
 ❌ 河源综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 河源综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 河源综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 河源综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 浙江卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 浙江卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 浙江卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 浙江卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 浙江卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 浙江卫视 4K (AVS2) | 失败 | 无法解析视频流
-❌ 浙江卫视 4K (AVS2) | 失败 | 无法解析视频流
-❌ 浙江卫视 4K (AVS2) | 失败 | 无法解析视频流
-❌ 浙江卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 浙江卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 浙江卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 浙江卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 浙江卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 浙江卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 浙江卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 浙江卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 浙江卫视4k超高清 | 失败 | 无法解析视频流
-❌ 浙江卫视4k超高清 | 失败 | 无法解析视频流
-❌ 浙江卫视4k超高清 | 失败 | 无法解析视频流
-❌ 浙江卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.77.0.58:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef4aae130>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
+❌ 浙江卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 浙江卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 浙江卫视时移专用(浙江卫视) | 失败 | 无法解析视频流
 ❌ 浙江卫视时移专用(浙江卫视) | 失败 | 无法解析视频流
 ❌ 浙江卫视时移专用(浙江卫视) | 失败 | 无法解析视频流
 ❌ 浙江卫视时移专用(浙江卫视) | 失败 | 无法解析视频流
 ❌ 浙江卫视时移专用(浙江卫视) | 失败 | 无法解析视频流
-❌ 浙江卫视时移专用(浙江卫视) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 浙江卫视时移专用(浙江卫视) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 浙江卫视时移专用(浙江卫视) | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 浙江卫视时移专用(浙江卫视) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 浙江卫视时移专用(浙江卫视) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 浙江卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 浙江卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 浙江卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 浙江卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 浙江卫视超清 (CAVS) | 失败 | 无法解析视频流
-❌ 浙江卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 浙江卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 浙江卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 浙江卫视超清 (CAVS) | 失败 | 无法解析视频流
+❌ 浙江卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 浙江卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 浙江卫视高清 (CAVS) | 失败 | 无法解析视频流
 ❌ 浙江卫视高清 (CAVS) | 失败 | 无法解析视频流
 ❌ 浙江卫视高清 (CAVS) | 失败 | 无法解析视频流
 ❌ 浙江卫视高清 (CAVS) | 失败 | 无法解析视频流
-❌ 浙江卫视高清 (CAVS) | 失败 | 连接错误: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
-❌ 浙江卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 浙江卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 浙江卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 浙江卫视高清 (CAVS) | 失败 | 无法解析视频流
+❌ 浙江卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Read timed out.
+❌ 浙江卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 浙江卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 浙江卫视高清 | 失败 | 无法解析视频流
 ❌ 浙江卫视高清 | 失败 | 无法解析视频流
@@ -1738,31 +1546,27 @@
 ❌ 浙江卫视高清 | 失败 | 无法解析视频流
 ❌ 浙江卫视高清 | 失败 | 无法解析视频流
 ❌ 浙江卫视高清 | 失败 | 无法解析视频流
-❌ 浙江卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 浙江卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 浙江卫视高清 | 失败 | 无法解析视频流
 ❌ 浙江卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 浙江卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 浙江卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 浙江卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 浙江卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 浙江卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 浙江卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 浙江卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.0.12:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7fbf84c531c0>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
 ❌ 浙江卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 海南卫视 | 失败 | 无法解析视频流
 ❌ 海南卫视 | 失败 | 无法解析视频流
 ❌ 海南卫视 | 失败 | 无法解析视频流
 ❌ 海南卫视 | 失败 | 无法解析视频流
 ❌ 海南卫视 | 失败 | 无法解析视频流
-❌ 海南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 海南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 海南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 海南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 海南卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 海南卫视高清 | 失败 | 无法解析视频流
 ❌ 海南卫视高清 | 失败 | 无法解析视频流
 ❌ 海南卫视高清 | 失败 | 无法解析视频流
 ❌ 海南卫视高清 | 失败 | 无法解析视频流
 ❌ 海南卫视高清 | 失败 | 无法解析视频流
-❌ 海南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.253.43.35:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef5b23df0>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
 ❌ 海南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 海南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 海南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 海南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 深圳卫视 25p 4K | 失败 | 无法解析视频流
 ❌ 深圳卫视 25p 4K | 失败 | 无法解析视频流
@@ -1771,8 +1575,7 @@
 ❌ 深圳卫视 25p 4K | 失败 | 无法解析视频流
 ❌ 深圳卫视 25p 4K | 失败 | 无法解析视频流
 ❌ 深圳卫视 25p 4K | 失败 | 无法解析视频流
-❌ 深圳卫视 25p 4K | 失败 | 无法解析视频流
-❌ 深圳卫视 25p 4K | 失败 | 无法解析视频流
+❌ 深圳卫视 25p 4K | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 深圳卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 深圳卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 深圳卫视 4K (AVS2) | 失败 | 无法解析视频流
@@ -1785,30 +1588,26 @@
 ❌ 深圳卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 深圳卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 深圳卫视 4K (AVS2) | 失败 | 无法解析视频流
-❌ 深圳卫视 4K (AVS2) | 失败 | 无法解析视频流
-❌ 深圳卫视 4K (AVS2) | 失败 | 无法解析视频流
-❌ 深圳卫视 4K (AVS2) | 失败 | 无法解析视频流
-❌ 深圳卫视 4K (AVS2) | 失败 | 无法解析视频流
-❌ 深圳卫视 4K (AVS2) | 失败 | 无法解析视频流
-❌ 深圳卫视 4K (AVS2) | 失败 | 无法解析视频流
+❌ 深圳卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 深圳卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 深圳卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 深圳卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 深圳卫视 4K | 失败 | 无法解析视频流
 ❌ 深圳卫视 4K | 失败 | 无法解析视频流
 ❌ 深圳卫视 4K | 失败 | 无法解析视频流
 ❌ 深圳卫视 4K | 失败 | 无法解析视频流
 ❌ 深圳卫视 4K | 失败 | 无法解析视频流
 ❌ 深圳卫视 4K | 失败 | 无法解析视频流
-❌ 深圳卫视 4K | 失败 | 无法解析视频流
-❌ 深圳卫视 4K | 失败 | 无法解析视频流
-❌ 深圳卫视 4K | 失败 | 无法解析视频流
+❌ 深圳卫视 4K | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 深圳卫视 4K | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 深圳卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 深圳卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 深圳卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 深圳卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 深圳卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 深圳卫视4k超高清 | 失败 | 无法解析视频流
-❌ 深圳卫视4k超高清 | 失败 | 无法解析视频流
-❌ 深圳卫视4k超高清 | 失败 | 无法解析视频流
-❌ 深圳卫视4k超高清 | 失败 | 无法解析视频流
+❌ 深圳卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 深圳卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 深圳卫视时移专用(深圳卫视) | 失败 | 无法解析视频流
 ❌ 深圳卫视时移专用(深圳卫视) | 失败 | 无法解析视频流
 ❌ 深圳卫视时移专用(深圳卫视) | 失败 | 无法解析视频流
@@ -1816,8 +1615,7 @@
 ❌ 深圳卫视时移专用(深圳卫视) | 失败 | 无法解析视频流
 ❌ 深圳卫视时移专用(深圳卫视) | 失败 | 无法解析视频流
 ❌ 深圳卫视时移专用(深圳卫视) | 失败 | 无法解析视频流
-❌ 深圳卫视时移专用(深圳卫视) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 深圳卫视时移专用(深圳卫视) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 深圳卫视时移专用(深圳卫视) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 深圳卫视超清 | 失败 | 无法解析视频流
 ❌ 深圳卫视超清 | 失败 | 无法解析视频流
 ❌ 深圳卫视超清 | 失败 | 无法解析视频流
@@ -1825,8 +1623,7 @@
 ❌ 深圳卫视超清 | 失败 | 无法解析视频流
 ❌ 深圳卫视超清 | 失败 | 无法解析视频流
 ❌ 深圳卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 深圳卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 深圳卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 深圳卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 深圳卫视高清 | 失败 | 无法解析视频流
 ❌ 深圳卫视高清 | 失败 | 无法解析视频流
 ❌ 深圳卫视高清 | 失败 | 无法解析视频流
@@ -1849,20 +1646,16 @@
 ❌ 深圳卫视高清 | 失败 | 无法解析视频流
 ❌ 深圳卫视高清 | 失败 | 无法解析视频流
 ❌ 深圳卫视高清 | 失败 | 无法解析视频流
-❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 深圳卫视高清 | 失败 | 无法解析视频流
+❌ 深圳卫视高清 | 失败 | 无法解析视频流
 ❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='59.34.28.189', port=4022): Max retries exceeded with url: /rtp/239.77.0.9:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='59.34.28.189', port=4022) at 0x7f0ef47ff8e0>, 'Connection to 59.34.28.189 timed out. (connect timeout=8)'))
-❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
-❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
-❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
-❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out. (read timeout=8)
+❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 深圳卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 深圳宜和购物高清 | 失败 | 无法解析视频流
 ❌ 深圳宜和购物高清 | 失败 | 无法解析视频流
 ❌ 深圳宜和购物高清 | 失败 | 无法解析视频流
@@ -1870,8 +1663,7 @@
 ❌ 深圳宜和购物高清 | 失败 | 无法解析视频流
 ❌ 深圳宜和购物高清 | 失败 | 无法解析视频流
 ❌ 深圳宜和购物高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 深圳宜和购物高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 深圳宜和购物高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 深圳宜和购物高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 深圳少儿频道高清 | 失败 | 无法解析视频流
 ❌ 深圳少儿频道高清 | 失败 | 无法解析视频流
 ❌ 深圳少儿频道高清 | 失败 | 无法解析视频流
@@ -1879,8 +1671,7 @@
 ❌ 深圳少儿频道高清 | 失败 | 无法解析视频流
 ❌ 深圳少儿频道高清 | 失败 | 无法解析视频流
 ❌ 深圳少儿频道高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 深圳少儿频道高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 深圳少儿频道高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 深圳少儿频道高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 深圳电视剧频道高清 | 失败 | 无法解析视频流
 ❌ 深圳电视剧频道高清 | 失败 | 无法解析视频流
 ❌ 深圳电视剧频道高清 | 失败 | 无法解析视频流
@@ -1888,8 +1679,7 @@
 ❌ 深圳电视剧频道高清 | 失败 | 无法解析视频流
 ❌ 深圳电视剧频道高清 | 失败 | 无法解析视频流
 ❌ 深圳电视剧频道高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 深圳电视剧频道高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 深圳电视剧频道高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 深圳电视剧频道高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 深圳都市频道高清 | 失败 | 无法解析视频流
 ❌ 深圳都市频道高清 | 失败 | 无法解析视频流
 ❌ 深圳都市频道高清 | 失败 | 无法解析视频流
@@ -1897,35 +1687,31 @@
 ❌ 深圳都市频道高清 | 失败 | 无法解析视频流
 ❌ 深圳都市频道高清 | 失败 | 无法解析视频流
 ❌ 深圳都市频道高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 深圳都市频道高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 深圳都市频道高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
-❌ 清远新闻综合高清 | 失败 | 无法解析视频流
+❌ 深圳都市频道高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 清远新闻综合高清 | 失败 | 无法解析视频流
 ❌ 清远新闻综合高清 | 失败 | 无法解析视频流
 ❌ 清远新闻综合高清 | 失败 | 无法解析视频流
 ❌ 清远新闻综合高清 | 失败 | 无法解析视频流
 ❌ 清远新闻综合高清 | 失败 | 无法解析视频流
 ❌ 清远新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 清远新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 清远新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 清远新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 湖北卫视 | 失败 | 无法解析视频流
 ❌ 湖北卫视 | 失败 | 无法解析视频流
 ❌ 湖北卫视 | 失败 | 无法解析视频流
 ❌ 湖北卫视 | 失败 | 无法解析视频流
 ❌ 湖北卫视 | 失败 | 无法解析视频流
-❌ 湖北卫视 | 失败 | 无法解析视频流
-❌ 湖北卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 湖北卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 湖北卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Max retries exceeded with url: /rtp/239.77.0.95:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='183.48.240.8', port=5050) at 0x7f0ef4849c40>, 'Connection to 183.48.240.8 timed out. (connect timeout=8)'))
+❌ 湖北卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 湖北卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 湖北卫视超清 | 失败 | 无法解析视频流
 ❌ 湖北卫视超清 | 失败 | 无法解析视频流
 ❌ 湖北卫视超清 | 失败 | 无法解析视频流
 ❌ 湖北卫视超清 | 失败 | 无法解析视频流
 ❌ 湖北卫视超清 | 失败 | 无法解析视频流
 ❌ 湖北卫视超清 | 失败 | 无法解析视频流
-❌ 湖北卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 湖北卫视超清 | 失败 | 无法解析视频流
 ❌ 湖北卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 湖北卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 湖北卫视高清 | 失败 | 无法解析视频流
 ❌ 湖北卫视高清 | 失败 | 无法解析视频流
 ❌ 湖北卫视高清 | 失败 | 无法解析视频流
@@ -1937,57 +1723,50 @@
 ❌ 湖北卫视高清 | 失败 | 无法解析视频流
 ❌ 湖北卫视高清 | 失败 | 无法解析视频流
 ❌ 湖北卫视高清 | 失败 | 无法解析视频流
-❌ 湖北卫视高清 | 失败 | 无法解析视频流
-❌ 湖北卫视高清 | 失败 | 无法解析视频流
-❌ 湖北卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 湖北卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 湖北卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 湖北卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 湖北卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 湖北卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 湖北卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 湖北卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.1.174:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7fbf84c8d520>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
 ❌ 湖南卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 湖南卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 湖南卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 湖南卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 湖南卫视 4K (AVS2) | 失败 | 无法解析视频流
 ❌ 湖南卫视 4K (AVS2) | 失败 | 无法解析视频流
-❌ 湖南卫视 4K (AVS2) | 失败 | 连接错误: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
-❌ 湖南卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 湖南卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='183.35.50.141', port=8886): Max retries exceeded with url: /rtp/239.77.1.30:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='183.35.50.141', port=8886) at 0x7f0ef4955310>, 'Connection to 183.35.50.141 timed out. (connect timeout=8)'))
+❌ 湖南卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 湖南卫视 4K (AVS2) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 湖南卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 湖南卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 湖南卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 湖南卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 湖南卫视4k超高清 | 失败 | 无法解析视频流
 ❌ 湖南卫视4k超高清 | 失败 | 无法解析视频流
-❌ 湖南卫视4k超高清 | 失败 | 无法解析视频流
-❌ 湖南卫视4k超高清 | 失败 | 无法解析视频流
-❌ 湖南卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 湖南卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 湖南卫视4k超高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 湖南卫视时移专用(湖南卫视) | 失败 | 无法解析视频流
 ❌ 湖南卫视时移专用(湖南卫视) | 失败 | 无法解析视频流
 ❌ 湖南卫视时移专用(湖南卫视) | 失败 | 无法解析视频流
-❌ 湖南卫视时移专用(湖南卫视) | 失败 | 连接错误: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
-❌ 湖南卫视时移专用(湖南卫视) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 湖南卫视时移专用(湖南卫视) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Read timed out.
+❌ 湖南卫视时移专用(湖南卫视) | 失败 | 无法解析视频流
+❌ 湖南卫视时移专用(湖南卫视) | 失败 | 无法解析视频流
 ❌ 湖南卫视时移专用(湖南卫视) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 湖南卫视时移专用(湖南卫视) | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 湖南卫视时移专用(湖南卫视) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 湖南卫视时移专用(湖南卫视) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 湖南卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 湖南卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 湖南卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 湖南卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 湖南卫视超清 (CAVS) | 失败 | 无法解析视频流
-❌ 湖南卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 湖南卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 湖南卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 湖南卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 湖南卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 湖南卫视高清 (CAVS) | 失败 | 无法解析视频流
 ❌ 湖南卫视高清 (CAVS) | 失败 | 无法解析视频流
 ❌ 湖南卫视高清 (CAVS) | 失败 | 无法解析视频流
 ❌ 湖南卫视高清 (CAVS) | 失败 | 无法解析视频流
-❌ 湖南卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.77.1.129:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef5af3430>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
-❌ 湖南卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Read timed out.
+❌ 湖南卫视高清 (CAVS) | 失败 | 无法解析视频流
 ❌ 湖南卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 湖南卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 湖南卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 湖南卫视高清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 湖南卫视高清 | 失败 | 无法解析视频流
 ❌ 湖南卫视高清 | 失败 | 无法解析视频流
@@ -1998,16 +1777,13 @@
 ❌ 湖南卫视高清 | 失败 | 无法解析视频流
 ❌ 湖南卫视高清 | 失败 | 无法解析视频流
 ❌ 湖南卫视高清 | 失败 | 无法解析视频流
-❌ 湖南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 湖南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 湖南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Read timed out.
 ❌ 湖南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 湖南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 湖南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 湖南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 湖南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.35.50.226', port=8886): Max retries exceeded with url: /rtp/239.77.1.5:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='183.35.50.226', port=8886) at 0x7fbf84db3f40>, 'Connection to 183.35.50.226 timed out. (connect timeout=8)'))
+❌ 湖南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 湖南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 湖南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 湖南卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
-❌ 湛江公共高清 | 失败 | 无法解析视频流
 ❌ 湛江公共高清 | 失败 | 无法解析视频流
 ❌ 湛江公共高清 | 失败 | 无法解析视频流
 ❌ 湛江公共高清 | 失败 | 无法解析视频流
@@ -2015,8 +1791,7 @@
 ❌ 湛江公共高清 | 失败 | 无法解析视频流
 ❌ 湛江公共高清 | 失败 | 无法解析视频流
 ❌ 湛江公共高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 湛江公共高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 湛江新闻综合高清 | 失败 | 无法解析视频流
+❌ 湛江公共高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 湛江新闻综合高清 | 失败 | 无法解析视频流
 ❌ 湛江新闻综合高清 | 失败 | 无法解析视频流
 ❌ 湛江新闻综合高清 | 失败 | 无法解析视频流
@@ -2024,43 +1799,39 @@
 ❌ 湛江新闻综合高清 | 失败 | 无法解析视频流
 ❌ 湛江新闻综合高清 | 失败 | 无法解析视频流
 ❌ 湛江新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 湛江新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 潮州民生高清 | 失败 | 无法解析视频流
+❌ 湛江新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 潮州民生高清 | 失败 | 无法解析视频流
 ❌ 潮州民生高清 | 失败 | 无法解析视频流
 ❌ 潮州民生高清 | 失败 | 无法解析视频流
 ❌ 潮州民生高清 | 失败 | 无法解析视频流
 ❌ 潮州民生高清 | 失败 | 无法解析视频流
 ❌ 潮州民生高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 潮州民生高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 潮州民生高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 潮州民生高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 潮州综合高清 | 失败 | 无法解析视频流
 ❌ 潮州综合高清 | 失败 | 无法解析视频流
 ❌ 潮州综合高清 | 失败 | 无法解析视频流
 ❌ 潮州综合高清 | 失败 | 无法解析视频流
 ❌ 潮州综合高清 | 失败 | 无法解析视频流
-❌ 潮州综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.253.43.70:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef6b604c0>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
 ❌ 潮州综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 潮州综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 潮州综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.253.43.70:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7f0ef472c130>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
+❌ 潮州综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 潮州综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 热播剧场 | 失败 | 无法解析视频流
 ❌ 热播剧场 | 失败 | 无法解析视频流
 ❌ 热播剧场 | 失败 | 无法解析视频流
 ❌ 热播剧场 | 失败 | 无法解析视频流
 ❌ 热播剧场 | 失败 | 无法解析视频流
-❌ 热播剧场 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 热播剧场 | 失败 | 无法解析视频流
 ❌ 热播剧场 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 热播剧场 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
-❌ 热播剧场 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 爱体育 | 失败 | 无法解析视频流
 ❌ 爱体育 | 失败 | 无法解析视频流
 ❌ 爱体育 | 失败 | 无法解析视频流
 ❌ 爱体育 | 失败 | 无法解析视频流
 ❌ 爱体育 | 失败 | 无法解析视频流
 ❌ 爱体育 | 失败 | 无法解析视频流
-❌ 爱体育 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 爱体育 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 爱体育 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 爱体育 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.0.108:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7fbf84c6d220>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
 ❌ 爱体育高清 | 失败 | 无法解析视频流
 ❌ 爱体育高清 | 失败 | 无法解析视频流
 ❌ 爱体育高清 | 失败 | 无法解析视频流
@@ -2072,12 +1843,10 @@
 ❌ 爱体育高清 | 失败 | 无法解析视频流
 ❌ 爱体育高清 | 失败 | 无法解析视频流
 ❌ 爱体育高清 | 失败 | 无法解析视频流
-❌ 爱体育高清 | 失败 | 无法解析视频流
-❌ 爱体育高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 爱体育高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 爱体育高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 爱体育高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 爱体育高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 爱体育高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 爱体育高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 爱体育高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 爱大剧 | 失败 | 无法解析视频流
 ❌ 爱大剧 | 失败 | 无法解析视频流
@@ -2089,21 +1858,18 @@
 ❌ 爱大剧 | 失败 | 无法解析视频流
 ❌ 爱大剧 | 失败 | 无法解析视频流
 ❌ 爱大剧 | 失败 | 无法解析视频流
-❌ 爱大剧 | 失败 | 无法解析视频流
-❌ 爱大剧 | 失败 | 无法解析视频流
-❌ 爱大剧 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Max retries exceeded with url: /rtp/239.77.0.105:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.21.239.209', port=4022) at 0x7f0ef494a8b0>, 'Connection to 14.21.239.209 timed out. (connect timeout=8)'))
+❌ 爱大剧 | 失败 | 连接错误: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
 ❌ 爱大剧 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 爱大剧 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 爱大剧 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 爱大剧 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.0.105:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7f0ef46f85b0>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
+❌ 爱大剧 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 爱大剧 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 爱大剧 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.1.82:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7fbf84c2e310>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
 ❌ 爱大剧 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 爱电影 | 失败 | 无法解析视频流
 ❌ 爱电影 | 失败 | 无法解析视频流
 ❌ 爱电影 | 失败 | 无法解析视频流
 ❌ 爱电影 | 失败 | 无法解析视频流
 ❌ 爱电影 | 失败 | 无法解析视频流
-❌ 爱电影 | 失败 | 无法解析视频流
-❌ 爱电影 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 爱电影 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 爱电影 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 爱电影 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 爱电影高清 | 失败 | 无法解析视频流
@@ -2111,17 +1877,15 @@
 ❌ 爱电影高清 | 失败 | 无法解析视频流
 ❌ 爱电影高清 | 失败 | 无法解析视频流
 ❌ 爱电影高清 | 失败 | 无法解析视频流
-❌ 爱电影高清 | 失败 | 无法解析视频流
-❌ 爱电影高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 爱电影高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 爱电影高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 爱电影高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 爱综艺 | 失败 | 无法解析视频流
 ❌ 爱综艺 | 失败 | 无法解析视频流
 ❌ 爱综艺 | 失败 | 无法解析视频流
 ❌ 爱综艺 | 失败 | 无法解析视频流
-❌ 爱综艺 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.77.0.107:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef4adea00>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
-❌ 爱综艺 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Max retries exceeded with url: /rtp/239.77.0.107:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.21.239.209', port=4022) at 0x7f0ef49b7580>, 'Connection to 14.21.239.209 timed out. (connect timeout=8)'))
-❌ 爱综艺 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 爱综艺 | 失败 | 无法解析视频流
+❌ 爱综艺 | 失败 | 无法解析视频流
 ❌ 爱综艺 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 爱综艺 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 现代教育 | 失败 | 无法解析视频流
@@ -2130,26 +1894,23 @@
 ❌ 现代教育 | 失败 | 无法解析视频流
 ❌ 现代教育 | 失败 | 无法解析视频流
 ❌ 现代教育 | 失败 | 无法解析视频流
-❌ 现代教育 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 现代教育 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 现代教育 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 现代教育 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 珠海高清 | 失败 | 无法解析视频流
 ❌ 珠海高清 | 失败 | 无法解析视频流
 ❌ 珠海高清 | 失败 | 无法解析视频流
 ❌ 珠海高清 | 失败 | 无法解析视频流
 ❌ 珠海高清 | 失败 | 无法解析视频流
-❌ 珠海高清 | 失败 | 连接错误: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+❌ 珠海高清 | 失败 | 无法解析视频流
 ❌ 珠海高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 珠海高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 珠海高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 珠海高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 甘肃卫视 | 失败 | 无法解析视频流
 ❌ 甘肃卫视 | 失败 | 无法解析视频流
 ❌ 甘肃卫视 | 失败 | 无法解析视频流
 ❌ 甘肃卫视 | 失败 | 无法解析视频流
 ❌ 甘肃卫视 | 失败 | 无法解析视频流
-❌ 甘肃卫视 | 失败 | 连接错误: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
-❌ 甘肃卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 甘肃卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.77.0.189:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef4a4b430>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
+❌ 甘肃卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 甘肃卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 甘肃卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 电视指南高清 | 失败 | 无法解析视频流
 ❌ 电视指南高清 | 失败 | 无法解析视频流
@@ -2160,13 +1921,11 @@
 ❌ 电视指南高清 | 失败 | 无法解析视频流
 ❌ 电视指南高清 | 失败 | 无法解析视频流
 ❌ 电视指南高清 | 失败 | 无法解析视频流
-❌ 电视指南高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.253.43.10:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef4a64550>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
+❌ 电视指南高清 | 失败 | 无法解析视频流
 ❌ 电视指南高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 电视指南高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 电视指南高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 电视指南高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 电视指南高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
-❌ 电视指南高清 | 失败 | 连接错误: HTTPConnectionPool(host='59.34.28.189', port=4022): Max retries exceeded with url: /rtp/239.253.43.10:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='59.34.28.189', port=4022) at 0x7f0ef47c18b0>, 'Connection to 59.34.28.189 timed out. (connect timeout=8)'))
+❌ 电视指南高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 电视指南高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 电视指南高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 睛彩广场舞高清 | 失败 | 无法解析视频流
@@ -2174,37 +1933,33 @@
 ❌ 睛彩广场舞高清 | 失败 | 无法解析视频流
 ❌ 睛彩广场舞高清 | 失败 | 无法解析视频流
 ❌ 睛彩广场舞高清 | 失败 | 无法解析视频流
-❌ 睛彩广场舞高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 睛彩广场舞高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 睛彩广场舞高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 睛彩广场舞高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 睛彩广场舞高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 睛彩竞技高清 | 失败 | 无法解析视频流
 ❌ 睛彩竞技高清 | 失败 | 无法解析视频流
 ❌ 睛彩竞技高清 | 失败 | 无法解析视频流
 ❌ 睛彩竞技高清 | 失败 | 无法解析视频流
-❌ 睛彩竞技高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 睛彩竞技高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 睛彩竞技高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 睛彩竞技高清 | 失败 | 无法解析视频流
+❌ 睛彩竞技高清 | 失败 | 无法解析视频流
 ❌ 睛彩竞技高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
-❌ 睛彩竞技高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.1.20:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7f0ef46f3b50>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
+❌ 睛彩竞技高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 睛彩篮球高清 | 失败 | 无法解析视频流
 ❌ 睛彩篮球高清 | 失败 | 无法解析视频流
 ❌ 睛彩篮球高清 | 失败 | 无法解析视频流
 ❌ 睛彩篮球高清 | 失败 | 无法解析视频流
-❌ 睛彩篮球高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 睛彩篮球高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.77.1.21:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef4a95c10>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
-❌ 睛彩篮球高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Max retries exceeded with url: /rtp/239.77.1.21:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.21.239.209', port=4022) at 0x7f0ef49d39d0>, 'Connection to 14.21.239.209 timed out. (connect timeout=8)'))
-❌ 睛彩篮球高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 睛彩篮球高清 | 失败 | 无法解析视频流
+❌ 睛彩篮球高清 | 失败 | 无法解析视频流
 ❌ 睛彩篮球高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 睛彩篮球高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 睛彩青少高清 | 失败 | 无法解析视频流
 ❌ 睛彩青少高清 | 失败 | 无法解析视频流
 ❌ 睛彩青少高清 | 失败 | 无法解析视频流
 ❌ 睛彩青少高清 | 失败 | 无法解析视频流
 ❌ 睛彩青少高清 | 失败 | 无法解析视频流
-❌ 睛彩青少高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 睛彩青少高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 睛彩青少高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 睛彩青少高清 | 失败 | 无法解析视频流
 ❌ 睛彩青少高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 睛彩青少高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 第一剧场高清 | 失败 | 无法解析视频流
 ❌ 第一剧场高清 | 失败 | 无法解析视频流
 ❌ 第一剧场高清 | 失败 | 无法解析视频流
@@ -2215,29 +1970,25 @@
 ❌ 第一剧场高清 | 失败 | 无法解析视频流
 ❌ 第一剧场高清 | 失败 | 无法解析视频流
 ❌ 第一剧场高清 | 失败 | 无法解析视频流
-❌ 第一剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 第一剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 第一剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Max retries exceeded with url: /rtp/239.253.43.28:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.21.239.209', port=4022) at 0x7f0ef4983670>, 'Connection to 14.21.239.209 timed out. (connect timeout=8)'))
 ❌ 第一剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 第一剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 第一剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 第一剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 第一剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
-❌ 第一剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 第一剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out. (read timeout=8)
+❌ 第一剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 第一剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 精选4k频道3 | 失败 | 无法解析视频流
 ❌ 精选4k频道3 | 失败 | 无法解析视频流
 ❌ 精选4k频道3 | 失败 | 无法解析视频流
 ❌ 精选4k频道3 | 失败 | 无法解析视频流
 ❌ 精选4k频道3 | 失败 | 无法解析视频流
-❌ 精选4k频道3 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 精选4k频道3 | 失败 | 无法解析视频流
 ❌ 精选4k频道3 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 精选4k频道3 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
-❌ 精选4k频道3 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 精选频道2 | 失败 | 无法解析视频流
 ❌ 精选频道2 | 失败 | 无法解析视频流
 ❌ 精选频道2 | 失败 | 无法解析视频流
 ❌ 精选频道2 | 失败 | 无法解析视频流
 ❌ 精选频道2 | 失败 | 无法解析视频流
-❌ 精选频道2 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 精选频道2 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 精选频道2 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 精选频道2 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
@@ -2245,10 +1996,9 @@
 ❌ 经典电影 | 失败 | 无法解析视频流
 ❌ 经典电影 | 失败 | 无法解析视频流
 ❌ 经典电影 | 失败 | 无法解析视频流
-❌ 经典电影 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 经典电影 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.187.24', port=4022): Read timed out.
 ❌ 经典电影 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 经典电影 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 经典电影 | 失败 | 连接错误: HTTPConnectionPool(host='59.34.28.189', port=4022): Max retries exceeded with url: /rtp/239.77.0.104:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='59.34.28.189', port=4022) at 0x7f0ef47cbe80>, 'Connection to 59.34.28.189 timed out. (connect timeout=8)'))
+❌ 经典电影 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 经典电影 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 经济科教 | 失败 | 无法解析视频流
 ❌ 经济科教 | 失败 | 无法解析视频流
@@ -2256,18 +2006,16 @@
 ❌ 经济科教 | 失败 | 无法解析视频流
 ❌ 经济科教 | 失败 | 无法解析视频流
 ❌ 经济科教 | 失败 | 无法解析视频流
-❌ 经济科教 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 经济科教 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 经济科教 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 经济科教 | 失败 | 无法解析视频流
+❌ 经济科教 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 经济科教超清 | 失败 | 无法解析视频流
 ❌ 经济科教超清 | 失败 | 无法解析视频流
 ❌ 经济科教超清 | 失败 | 无法解析视频流
 ❌ 经济科教超清 | 失败 | 无法解析视频流
 ❌ 经济科教超清 | 失败 | 无法解析视频流
 ❌ 经济科教超清 | 失败 | 无法解析视频流
-❌ 经济科教超清 | 失败 | 连接错误: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
-❌ 经济科教超清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 经济科教超清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 经济科教超清 | 失败 | 无法解析视频流
+❌ 经济科教超清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 肇庆生活服务高清 | 失败 | 无法解析视频流
 ❌ 肇庆生活服务高清 | 失败 | 无法解析视频流
 ❌ 肇庆生活服务高清 | 失败 | 无法解析视频流
@@ -2275,17 +2023,16 @@
 ❌ 肇庆生活服务高清 | 失败 | 无法解析视频流
 ❌ 肇庆生活服务高清 | 失败 | 无法解析视频流
 ❌ 肇庆生活服务高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 肇庆生活服务高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 肇庆生活服务高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 肇庆生活服务高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 肇庆综合高清 | 失败 | 无法解析视频流
 ❌ 肇庆综合高清 | 失败 | 无法解析视频流
 ❌ 肇庆综合高清 | 失败 | 无法解析视频流
 ❌ 肇庆综合高清 | 失败 | 无法解析视频流
 ❌ 肇庆综合高清 | 失败 | 无法解析视频流
-❌ 肇庆综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.253.43.1:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef4a75fa0>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
 ❌ 肇庆综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 肇庆综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 肇庆综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 肇庆综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 肇庆综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.253.43.1:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7fbf84c5da00>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
+❌ 茂名公共高清 | 失败 | 无法解析视频流
 ❌ 茂名公共高清 | 失败 | 无法解析视频流
 ❌ 茂名公共高清 | 失败 | 无法解析视频流
 ❌ 茂名公共高清 | 失败 | 无法解析视频流
@@ -2293,43 +2040,37 @@
 ❌ 茂名公共高清 | 失败 | 无法解析视频流
 ❌ 茂名公共高清 | 失败 | 无法解析视频流
 ❌ 茂名公共高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 茂名公共高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 茂名公共高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 茂名综合高清 | 失败 | 无法解析视频流
 ❌ 茂名综合高清 | 失败 | 无法解析视频流
 ❌ 茂名综合高清 | 失败 | 无法解析视频流
 ❌ 茂名综合高清 | 失败 | 无法解析视频流
 ❌ 茂名综合高清 | 失败 | 无法解析视频流
-❌ 茂名综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.77.0.206:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef5b16c40>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
+❌ 茂名综合高清 | 失败 | 无法解析视频流
+❌ 茂名综合高清 | 失败 | 无法解析视频流
 ❌ 茂名综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 茂名综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 茂名综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 茶 | 失败 | 无法解析视频流
 ❌ 茶 | 失败 | 无法解析视频流
 ❌ 茶 | 失败 | 无法解析视频流
 ❌ 茶 | 失败 | 无法解析视频流
 ❌ 茶 | 失败 | 无法解析视频流
-❌ 茶 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 茶 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Max retries exceeded with url: /rtp/239.77.0.15:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.21.239.209', port=4022) at 0x7f0ef494ac10>, 'Connection to 14.21.239.209 timed out. (connect timeout=8)'))
-❌ 茶 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 茶 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 茶 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 茶 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 西藏卫视 | 失败 | 无法解析视频流
 ❌ 西藏卫视 | 失败 | 无法解析视频流
 ❌ 西藏卫视 | 失败 | 无法解析视频流
 ❌ 西藏卫视 | 失败 | 无法解析视频流
-❌ 西藏卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 西藏卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.77.0.46:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef4a4ba00>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
-❌ 西藏卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 西藏卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 西藏卫视 | 失败 | 无法解析视频流
+❌ 西藏卫视 | 失败 | 无法解析视频流
+❌ 西藏卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 西藏卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 贵州卫视 | 失败 | 无法解析视频流
 ❌ 贵州卫视 | 失败 | 无法解析视频流
 ❌ 贵州卫视 | 失败 | 无法解析视频流
 ❌ 贵州卫视 | 失败 | 无法解析视频流
 ❌ 贵州卫视 | 失败 | 无法解析视频流
-❌ 贵州卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 贵州卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Max retries exceeded with url: /rtp/239.77.0.230:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.21.239.209', port=4022) at 0x7f0ef4924100>, 'Connection to 14.21.239.209 timed out. (connect timeout=8)'))
-❌ 贵州卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 贵州卫视 | 失败 | 无法解析视频流
+❌ 贵州卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 贵州卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 辽宁卫视 | 失败 | 无法解析视频流
 ❌ 辽宁卫视 | 失败 | 无法解析视频流
@@ -2337,80 +2078,71 @@
 ❌ 辽宁卫视 | 失败 | 无法解析视频流
 ❌ 辽宁卫视 | 失败 | 无法解析视频流
 ❌ 辽宁卫视 | 失败 | 无法解析视频流
-❌ 辽宁卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 辽宁卫视 | 失败 | 无法解析视频流
 ❌ 辽宁卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 辽宁卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 辽宁卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 辽宁卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 辽宁卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 辽宁卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 辽宁卫视超清 (CAVS) | 失败 | 无法解析视频流
-❌ 辽宁卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.77.0.161:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef4a68c40>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
+❌ 辽宁卫视超清 (CAVS) | 失败 | 无法解析视频流
+❌ 辽宁卫视超清 (CAVS) | 失败 | 无法解析视频流
 ❌ 辽宁卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 辽宁卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 辽宁卫视超清 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 辽宁卫视高清 | 失败 | 无法解析视频流
 ❌ 辽宁卫视高清 | 失败 | 无法解析视频流
 ❌ 辽宁卫视高清 | 失败 | 无法解析视频流
 ❌ 辽宁卫视高清 | 失败 | 无法解析视频流
 ❌ 辽宁卫视高清 | 失败 | 无法解析视频流
 ❌ 辽宁卫视高清 | 失败 | 无法解析视频流
-❌ 辽宁卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 辽宁卫视高清 | 失败 | 无法解析视频流
 ❌ 辽宁卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 辽宁卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 重庆卫视 | 失败 | 无法解析视频流
 ❌ 重庆卫视 | 失败 | 无法解析视频流
 ❌ 重庆卫视 | 失败 | 无法解析视频流
 ❌ 重庆卫视 | 失败 | 无法解析视频流
-❌ 重庆卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 重庆卫视 | 失败 | 无法解析视频流
+❌ 重庆卫视 | 失败 | 无法解析视频流
 ❌ 重庆卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 重庆卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 重庆卫视 | 失败 | 连接错误: HTTPConnectionPool(host='59.34.28.189', port=4022): Max retries exceeded with url: /rtp/239.77.0.182:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='59.34.28.189', port=4022) at 0x7f0ef476b8e0>, 'Connection to 59.34.28.189 timed out. (connect timeout=8)'))
 ❌ 重庆卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 重庆卫视高清 | 失败 | 无法解析视频流
 ❌ 重庆卫视高清 | 失败 | 无法解析视频流
 ❌ 重庆卫视高清 | 失败 | 无法解析视频流
 ❌ 重庆卫视高清 | 失败 | 无法解析视频流
 ❌ 重庆卫视高清 | 失败 | 无法解析视频流
-❌ 重庆卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.77.1.162:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef5af3820>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
+❌ 重庆卫视高清 | 失败 | 无法解析视频流
 ❌ 重庆卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 重庆卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 重庆卫视高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 金鹰卡通 | 失败 | 无法解析视频流
 ❌ 金鹰卡通 | 失败 | 无法解析视频流
 ❌ 金鹰卡通 | 失败 | 无法解析视频流
 ❌ 金鹰卡通 | 失败 | 无法解析视频流
-❌ 金鹰卡通 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 金鹰卡通 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.77.0.164:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef4a606a0>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
+❌ 金鹰卡通 | 失败 | 无法解析视频流
+❌ 金鹰卡通 | 失败 | 无法解析视频流
 ❌ 金鹰卡通 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 金鹰卡通 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 金鹰卡通 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 金鹰卡通 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 金鹰纪实超清测试 (CAVS) | 失败 | 无法解析视频流
 ❌ 金鹰纪实超清测试 (CAVS) | 失败 | 无法解析视频流
 ❌ 金鹰纪实超清测试 (CAVS) | 失败 | 无法解析视频流
 ❌ 金鹰纪实超清测试 (CAVS) | 失败 | 无法解析视频流
 ❌ 金鹰纪实超清测试 (CAVS) | 失败 | 无法解析视频流
-❌ 金鹰纪实超清测试 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 金鹰纪实超清测试 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 金鹰纪实超清测试 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 金鹰纪实超清测试 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 金鹰纪实超清测试 (CAVS) | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 金鹰纪实高清测试 | 失败 | 无法解析视频流
 ❌ 金鹰纪实高清测试 | 失败 | 无法解析视频流
 ❌ 金鹰纪实高清测试 | 失败 | 无法解析视频流
 ❌ 金鹰纪实高清测试 | 失败 | 无法解析视频流
 ❌ 金鹰纪实高清测试 | 失败 | 无法解析视频流
-❌ 金鹰纪实高清测试 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.77.0.160:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef4a79e50>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
 ❌ 金鹰纪实高清测试 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 金鹰纪实高清测试 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 金鹰纪实高清测试 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 金鹰纪实高清测试 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 阳江-1高清 | 失败 | 无法解析视频流
 ❌ 阳江-1高清 | 失败 | 无法解析视频流
 ❌ 阳江-1高清 | 失败 | 无法解析视频流
 ❌ 阳江-1高清 | 失败 | 无法解析视频流
 ❌ 阳江-1高清 | 失败 | 无法解析视频流
 ❌ 阳江-1高清 | 失败 | 无法解析视频流
-❌ 阳江-1高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 阳江-1高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 阳江-1高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 阳江-1高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 阳江-2高清 | 失败 | 无法解析视频流
 ❌ 阳江-2高清 | 失败 | 无法解析视频流
@@ -2418,17 +2150,15 @@
 ❌ 阳江-2高清 | 失败 | 无法解析视频流
 ❌ 阳江-2高清 | 失败 | 无法解析视频流
 ❌ 阳江-2高清 | 失败 | 无法解析视频流
-❌ 阳江-2高清 | 失败 | 无法解析视频流
-❌ 阳江-2高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 阳江-2高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 阳江-2高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 青海卫视 | 失败 | 无法解析视频流
 ❌ 青海卫视 | 失败 | 无法解析视频流
 ❌ 青海卫视 | 失败 | 无法解析视频流
 ❌ 青海卫视 | 失败 | 无法解析视频流
 ❌ 青海卫视 | 失败 | 无法解析视频流
-❌ 青海卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 青海卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 青海卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 青海卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 青海卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 韶关新闻综合高清 | 失败 | 无法解析视频流
 ❌ 韶关新闻综合高清 | 失败 | 无法解析视频流
@@ -2436,9 +2166,8 @@
 ❌ 韶关新闻综合高清 | 失败 | 无法解析视频流
 ❌ 韶关新闻综合高清 | 失败 | 无法解析视频流
 ❌ 韶关新闻综合高清 | 失败 | 无法解析视频流
-❌ 韶关新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.77.0.117:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef5b23be0>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
 ❌ 韶关新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 韶关新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 韶关新闻综合高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 风云剧场高清 | 失败 | 无法解析视频流
 ❌ 风云剧场高清 | 失败 | 无法解析视频流
 ❌ 风云剧场高清 | 失败 | 无法解析视频流
@@ -2450,11 +2179,9 @@
 ❌ 风云剧场高清 | 失败 | 无法解析视频流
 ❌ 风云剧场高清 | 失败 | 无法解析视频流
 ❌ 风云剧场高清 | 失败 | 无法解析视频流
-❌ 风云剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 风云剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
+❌ 风云剧场高清 | 失败 | 无法解析视频流
 ❌ 风云剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 风云剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 风云剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 风云剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out. (read timeout=8)
 ❌ 风云剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 风云剧场高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 风云足球高清 | 失败 | 无法解析视频流
@@ -2467,13 +2194,11 @@
 ❌ 风云足球高清 | 失败 | 无法解析视频流
 ❌ 风云足球高清 | 失败 | 无法解析视频流
 ❌ 风云足球高清 | 失败 | 无法解析视频流
-❌ 风云足球高清 | 失败 | 无法解析视频流
-❌ 风云足球高清 | 失败 | 无法解析视频流
-❌ 风云足球高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 风云足球高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 风云足球高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 风云足球高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 风云足球高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 风云足球高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
-❌ 风云足球高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.253.43.14:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7f0ef46e3910>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
+❌ 风云足球高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 风云足球高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 风云足球高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 风云音乐高清 | 失败 | 无法解析视频流
 ❌ 风云音乐高清 | 失败 | 无法解析视频流
@@ -2485,22 +2210,19 @@
 ❌ 风云音乐高清 | 失败 | 无法解析视频流
 ❌ 风云音乐高清 | 失败 | 无法解析视频流
 ❌ 风云音乐高清 | 失败 | 无法解析视频流
-❌ 风云音乐高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Max retries exceeded with url: /rtp/239.253.43.29:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.131.110', port=8000) at 0x7f0ef5af3b50>, 'Connection to 14.145.131.110 timed out. (connect timeout=8)'))
-❌ 风云音乐高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
 ❌ 风云音乐高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 风云音乐高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 风云音乐高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 风云音乐高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
 ❌ 风云音乐高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 风云音乐高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
-❌ 香山文化高清 | 失败 | 无法解析视频流
+❌ 风云音乐高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 风云音乐高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 香山文化高清 | 失败 | 无法解析视频流
 ❌ 香山文化高清 | 失败 | 无法解析视频流
 ❌ 香山文化高清 | 失败 | 无法解析视频流
 ❌ 香山文化高清 | 失败 | 无法解析视频流
 ❌ 香山文化高清 | 失败 | 无法解析视频流
 ❌ 香山文化高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 香山文化高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 香山文化高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
 ❌ 香山文化高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 高尔夫网球高清 | 失败 | 无法解析视频流
 ❌ 高尔夫网球高清 | 失败 | 无法解析视频流
@@ -2512,38 +2234,33 @@
 ❌ 高尔夫网球高清 | 失败 | 无法解析视频流
 ❌ 高尔夫网球高清 | 失败 | 无法解析视频流
 ❌ 高尔夫网球高清 | 失败 | 无法解析视频流
-❌ 高尔夫网球高清 | 失败 | 无法解析视频流
-❌ 高尔夫网球高清 | 失败 | 无法解析视频流
-❌ 高尔夫网球高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 高尔夫网球高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 高尔夫网球高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.253.43.12:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef4a9ff70>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
-❌ 高尔夫网球高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 高尔夫网球高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out. (read timeout=8)
+❌ 高尔夫网球高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 高尔夫网球高清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 高尔夫网球高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 高尔夫网球高清 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 高尔夫网球高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 高尔夫网球高清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
 ❌ 魅力时尚 | 失败 | 无法解析视频流
 ❌ 魅力时尚 | 失败 | 无法解析视频流
 ❌ 魅力时尚 | 失败 | 无法解析视频流
 ❌ 魅力时尚 | 失败 | 无法解析视频流
 ❌ 魅力时尚 | 失败 | 无法解析视频流
-❌ 魅力时尚 | 失败 | 无法解析视频流
-❌ 魅力时尚 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 魅力时尚 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 魅力时尚 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 魅力时尚 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
+❌ 魅力时尚 | 失败 | 连接错误: HTTPConnectionPool(host='183.48.240.8', port=5050): Read timed out.
+❌ 魅力时尚 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.0.110:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7fbf84c2aa00>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
 ❌ 黑龙江卫视 | 失败 | 无法解析视频流
 ❌ 黑龙江卫视 | 失败 | 无法解析视频流
 ❌ 黑龙江卫视 | 失败 | 无法解析视频流
 ❌ 黑龙江卫视 | 失败 | 无法解析视频流
-❌ 黑龙江卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 黑龙江卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.163.82', port=8000): Max retries exceeded with url: /rtp/239.77.0.93:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.145.163.82', port=8000) at 0x7f0ef4a35580>, 'Connection to 14.145.163.82 timed out. (connect timeout=8)'))
+❌ 黑龙江卫视 | 失败 | 无法解析视频流
+❌ 黑龙江卫视 | 失败 | 连接错误: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
 ❌ 黑龙江卫视 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
-❌ 黑龙江卫视 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
-❌ 黑龙江卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
+❌ 黑龙江卫视 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Max retries exceeded with url: /rtp/239.77.0.93:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='61.142.117.179', port=500) at 0x7fbf84c8daf0>, 'Connection to 61.142.117.179 timed out. (connect timeout=8)'))
 ❌ 黑龙江卫视超清 | 失败 | 无法解析视频流
 ❌ 黑龙江卫视超清 | 失败 | 无法解析视频流
 ❌ 黑龙江卫视超清 | 失败 | 无法解析视频流
 ❌ 黑龙江卫视超清 | 失败 | 无法解析视频流
 ❌ 黑龙江卫视超清 | 失败 | 无法解析视频流
-❌ 黑龙江卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='14.145.131.110', port=8000): Read timed out.
-❌ 黑龙江卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Max retries exceeded with url: /rtp/239.77.0.124:5146 (Caused by ConnectTimeoutError(<HTTPConnection(host='14.21.239.209', port=4022) at 0x7f0ef49241f0>, 'Connection to 14.21.239.209 timed out. (connect timeout=8)'))
-❌ 黑龙江卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='183.31.11.209', port=8000): Read timed out.
+❌ 黑龙江卫视超清 | 失败 | 无法解析视频流
+❌ 黑龙江卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='14.21.239.209', port=4022): Read timed out.
 ❌ 黑龙江卫视超清 | 失败 | 连接错误: HTTPConnectionPool(host='61.142.117.179', port=500): Read timed out.
