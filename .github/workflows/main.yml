@@ -44,6 +44,6 @@ jobs:
           git add .
           
           # 即使只有计数器变化也提交
-          git commit -m "Auto Update: $(date +'%Y-%m-%d %H:%M:%S') [skip ci]" || exit 0
+          git commit -m "Auto Update: $(date +'%Y-%m-%d %H:%M:%S') " || exit 0
           
           git push origin main
