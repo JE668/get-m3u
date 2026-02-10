@@ -38,10 +38,10 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # 使用 git add . 自动添加所有新增和修改的文件
+          # 使用 git add . 包含所有 txt 文件（包括 trigger_counter.txt）
           git add .
           
-          # 检查是否有变化，有则提交，无则跳过
-          git commit -m "Auto Update: $(date +'%Y-%m-%d %H:%M:%S')" || exit 0
+          # 即使只有计数器变化也提交
+          git commit -m "Auto Update: $(date +'%Y-%m-%d %H:%M:%S') [skip ci]" || exit 0
           
           git push origin main
