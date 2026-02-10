@@ -91,74 +91,58 @@ def check_status(ip_port):
         except: continue
     return False
 
+# ... (前面的配置区和解析函数保持不变) ...
+
 if __name__ == "__main__":
     start_total = time.time()
     update_rtp_template()
 
+    # 1. 抓取 FOFA (增加 Cookie 失效检测)
     log_section("1. 抓取 FOFA 资源")
     unique_raw = []
     try:
         if not HEADERS["Cookie"]:
             print("❌ 错误: 未配置 FOFA_COOKIE 环境变量！")
-        
         r = requests.get(FOFA_URL, headers=HEADERS, timeout=15)
-        
-        # --- 增加 Cookie 失效检测逻辑 ---
-        if r.status_code == 401:
-            print("❌ 错误: FOFA 提示未经授权 (401)。请检查 Cookie 是否填写正确！")
-        elif "账号登录" in r.text or "登录后可见" in r.text or "Account Login" in r.text:
-            print("❌ 警告: FOFA Cookie 已失效或已过期，当前获取的是登录页面！")
-        elif r.status_code != 200:
-            print(f"❌ 错误: FOFA 响应异常，状态码: {r.status_code}")
-        else:
+        if "账号登录" in r.text or "登录后可见" in r.text:
+            print("❌ 警告: FOFA Cookie 已失效！")
+        elif r.status_code == 200:
             raw_list = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+)', r.text)
-            if not raw_list:
-                if "如果您看到此页面，说明您的请求频率过快" in r.text:
-                    print("⚠️ 提醒: FOFA 提示请求频率过快，IP 已被临时限制。")
-                else:
-                    print("⚠️ 提醒: FOFA 响应成功但未找到 IP。请确认 Cookie 是否有效，或搜索条件是否有结果。")
-            else:
-                unique_raw = sorted(list(set(raw_list)))
-                print(f"🔎 FOFA 发现: 去重后 {len(unique_raw)} 个 IP")
-                
-    except Exception as e:
-        print(f"❌ FOFA 抓取异常: {e}")
+            unique_raw = sorted(list(set(raw_list)))
+            print(f"🔎 FOFA 发现: 去重后 {len(unique_raw)} 个 IP")
+    except: print("❌ FOFA 抓取异常")
 
-    log_section("2. 地理归属地校验 (广东电信)")
+    # 2. 地理校验
+    log_section("2. 地理归属地校验")
     geo_ips = []
     if unique_raw:
-        total = len(unique_raw)
         for idx, ip_port in enumerate(unique_raw, 1):
-            host = ip_port.split(":")[0]
-            ok, reason = verify_geo(host)
-            if ok:
-                print(f"   [{idx}/{total}] ✅ {ip_port} -> 匹配")
+            if verify_geo(ip_port.split(":")[0])[0]:
                 geo_ips.append(ip_port)
-            else:
-                print(f"   [{idx}/{total}] ⏭️  {ip_port} -> 跳过 ({reason})")
             time.sleep(1.2)
-    else:
-        print("⏭️  由于未获取到原始 IP，跳过归属地校验。")
-
+    
+    # 3. 接口在线检测
     log_section("3. Web 接口在线检测")
     online_ips = []
     if geo_ips:
         with concurrent.futures.ThreadPoolExecutor(max_workers=15) as ex:
             futures = {ex.submit(check_status, ip): ip for ip in geo_ips}
             for f in concurrent.futures.as_completed(futures):
-                ip_found = futures[f]
-                if f.result():
-                    print(f"   🟢 在线: {ip_found}")
-                    online_ips.append(ip_found)
-                else:
-                    print(f"   🔴 离线: {ip_found}")
+                if f.result(): online_ips.append(futures[f])
 
+    # --- 核心改进：只有发现新数据才写入 ---
     if online_ips:
-        online_ips.sort()
-        with open(SOURCE_IP_FILE, "w", encoding="utf-8") as f: f.write("\n".join(online_ips))
+        # 强制排序
+        online_ips = sorted(list(set(online_ips)))
+        
+        print(f"💾 正在更新数据文件 (有效 IP: {len(online_ips)} 个)...")
+        with open(SOURCE_IP_FILE, "w", encoding="utf-8") as f: 
+            f.write("\n".join(online_ips))
+        
         if os.path.exists(RTP_FILE):
             with open(RTP_FILE, encoding="utf-8") as f: 
                 rtp_data = [x.strip() for x in f if "," in x]
+            
             m3u_all = []
             for ip in online_ips:
                 for r in rtp_data:
@@ -166,10 +150,14 @@ if __name__ == "__main__":
                     suffix = r_url.split("://")[1]
                     m3u_all.append(f"{name},http://{ip}/rtp/{suffix}")
             
-            with open(SOURCE_NONCHECK_FILE, "w", encoding="utf-8") as f: f.write("\n".join(m3u_all))
-            with open(SOURCE_M3U_FILE, "w", encoding="utf-8") as f: f.write("\n".join(m3u_all))
-            print(f"\n✨ 最终结果: 在线服务器 {len(online_ips)} 个，拼装链接 {len(m3u_all)} 条")
+            # 写入拼装文件
+            with open(SOURCE_NONCHECK_FILE, "w", encoding="utf-8") as f: 
+                f.write("\n".join(m3u_all))
+            with open(SOURCE_M3U_FILE, "w", encoding="utf-8") as f: 
+                f.write("\n".join(m3u_all))
+                
+            print(f"✨ 最终结果: 已生成 {SOURCE_IP_FILE} 和 M3U 文件")
     else:
-        print("❌ 流程中断: 无在线 UDPXY 接口。")
+        print("❌ 流程中断: 本次运行未发现任何在线 IP，不执行文件写入。")
     
-    print(f"\n⏱️  总耗时: {round(time.time() - start_total, 2)}s")
+    print(f"\n⏱️ 总耗时: {round(time.time() - start_total, 2)}s")
