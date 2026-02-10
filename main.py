@@ -8,7 +8,7 @@ from datetime import datetime
 # FOFA_URL = "https://fofa.info/result?qbase64=IlVEUFhZIiAmJiBjb3VudHJ5PSJDTiIgJiYgcmVnaW9uPSJHdWFuZ2RvbmciICYmIGNpdHk9Ilpob25nc2hhbiI%3D"
 
 # 不带城市筛选
-FOFA_URL = "https://fofa.info/result?qbase64=IlVEUFhZIiAmJiBjb3VudHJ5PSJDTiIgJiYgcmVnaW9uPSJHdWFuZ2Rvbmci"
+FOFA_URL = "https://fofa.info/result?qbase64=IlVEUFhZIiAmJiBjb3VudHJ5PSJDTiIgJiYgcmVnaW9uPSJHdWFuZ2RvbmciICYmIGNpdHk9Ilpob25nc2hhbiI="
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     "Cookie": os.environ.get("FOFA_COOKIE", "") 
@@ -18,7 +18,6 @@ RTP_SOURCES = [
     "https://raw.githubusercontent.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List/refs/heads/master/GuangdongIPTV_rtp_hd.m3u"
 ]
 
-# 文件名配置
 RTP_DIR = "rtp"
 RTP_FILENAME = "ChinaTelecom-Guangdong.txt"
 RTP_FILE = os.path.join(RTP_DIR, RTP_FILENAME)
@@ -33,9 +32,7 @@ def log_section(name):
 def update_rtp_template():
     log_section("0. 同步并更新 RTP 模板")
     os.makedirs(RTP_DIR, exist_ok=True)
-    
-    unique_rtp = {} # { "rtp://地址": "频道名" }
-    
+    unique_rtp = {}
     for url in RTP_SOURCES:
         fname = url.split('/')[-1]
         try:
@@ -43,16 +40,13 @@ def update_rtp_template():
             r = requests.get(url, timeout=15)
             r.encoding = 'utf-8'
             if r.status_code == 200:
-                # 稳健的逐行解析算法
                 lines = r.text.splitlines()
                 count = 0
                 for i in range(len(lines)):
                     line = lines[i].strip()
                     if line.startswith("#EXTINF"):
-                        # 提取最后一个逗号后的内容作为频道名
                         try:
                             name = line.split(',')[-1].strip()
-                            # 查找下一行非空的 URL
                             for j in range(i + 1, min(i + 5, len(lines))):
                                 next_line = lines[j].strip()
                                 if next_line.startswith("rtp://"):
@@ -66,18 +60,13 @@ def update_rtp_template():
             print(f"   ❌ 同步失败 {fname}: {e}")
 
     if unique_rtp:
-        # 将字典转换回 TXT 格式并写入
-        print(f"💾 正在写入文件: {RTP_FILE}...")
         with open(RTP_FILE, "w", encoding="utf-8") as f:
             for r_url, name in unique_rtp.items():
                 f.write(f"{name},{r_url}\n")
         print(f"📊 统计: RTP 模板已更新，总计 {len(unique_rtp)} 个独立频道")
     else:
-        print(f"⚠️ 警告: 未能从线上获取到数据。")
         if os.path.exists(RTP_FILE):
-            print(f"   ℹ️ 将继续使用本地现有的 {RTP_FILENAME}")
-        else:
-            print(f"   ❌ 错误: 本地也不存在 {RTP_FILENAME}，程序将无法拼装链接！")
+            print(f"   ℹ️ 使用本地缓存 {RTP_FILENAME}")
 
 def verify_geo(ip):
     try:
@@ -103,31 +92,52 @@ def check_status(ip_port):
 
 if __name__ == "__main__":
     start_total = time.time()
-    
-    # 1. 优先更新 RTP 模板文件
     update_rtp_template()
 
     log_section("1. 抓取 FOFA 资源")
+    unique_raw = []
     try:
+        if not HEADERS["Cookie"]:
+            print("❌ 错误: 未配置 FOFA_COOKIE 环境变量！")
+        
         r = requests.get(FOFA_URL, headers=HEADERS, timeout=15)
-        raw_list = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+)', r.text)
-        unique_raw = sorted(list(set(raw_list)))
-        print(f"🔎 FOFA 发现: 去重后 {len(unique_raw)} 个 IP")
+        
+        # --- 增加 Cookie 失效检测逻辑 ---
+        if r.status_code == 401:
+            print("❌ 错误: FOFA 提示未经授权 (401)。请检查 Cookie 是否填写正确！")
+        elif "账号登录" in r.text or "登录后可见" in r.text or "Account Login" in r.text:
+            print("❌ 警告: FOFA Cookie 已失效或已过期，当前获取的是登录页面！")
+        elif r.status_code != 200:
+            print(f"❌ 错误: FOFA 响应异常，状态码: {r.status_code}")
+        else:
+            raw_list = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+)', r.text)
+            if not raw_list:
+                if "如果您看到此页面，说明您的请求频率过快" in r.text:
+                    print("⚠️ 提醒: FOFA 提示请求频率过快，IP 已被临时限制。")
+                else:
+                    print("⚠️ 提醒: FOFA 响应成功但未找到 IP。请确认 Cookie 是否有效，或搜索条件是否有结果。")
+            else:
+                unique_raw = sorted(list(set(raw_list)))
+                print(f"🔎 FOFA 发现: 去重后 {len(unique_raw)} 个 IP")
+                
     except Exception as e:
-        print(f"❌ FOFA 抓取异常: {e}"); unique_raw = []
+        print(f"❌ FOFA 抓取异常: {e}")
 
     log_section("2. 地理归属地校验 (广东电信)")
     geo_ips = []
-    total = len(unique_raw)
-    for idx, ip_port in enumerate(unique_raw, 1):
-        host = ip_port.split(":")[0]
-        ok, reason = verify_geo(host)
-        if ok:
-            print(f"   [{idx}/{total}] ✅ {ip_port} -> 匹配")
-            geo_ips.append(ip_port)
-        else:
-            print(f"   [{idx}/{total}] ⏭️  {ip_port} -> 跳过 ({reason})")
-        time.sleep(1.2)
+    if unique_raw:
+        total = len(unique_raw)
+        for idx, ip_port in enumerate(unique_raw, 1):
+            host = ip_port.split(":")[0]
+            ok, reason = verify_geo(host)
+            if ok:
+                print(f"   [{idx}/{total}] ✅ {ip_port} -> 匹配")
+                geo_ips.append(ip_port)
+            else:
+                print(f"   [{idx}/{total}] ⏭️  {ip_port} -> 跳过 ({reason})")
+            time.sleep(1.2)
+    else:
+        print("⏭️  由于未获取到原始 IP，跳过归属地校验。")
 
     log_section("3. Web 接口在线检测")
     online_ips = []
@@ -145,25 +155,20 @@ if __name__ == "__main__":
     if online_ips:
         online_ips.sort()
         with open(SOURCE_IP_FILE, "w", encoding="utf-8") as f: f.write("\n".join(online_ips))
-        
-        # 使用刚刚更新完的 RTP_FILE 进行拼装
         if os.path.exists(RTP_FILE):
             with open(RTP_FILE, encoding="utf-8") as f: 
                 rtp_data = [x.strip() for x in f if "," in x]
-            
             m3u_all = []
             for ip in online_ips:
                 for r in rtp_data:
                     name, r_url = r.split(",", 1)
-                    # 可选使用 /udp/或/rtp/ 路径
                     suffix = r_url.split("://")[1]
                     m3u_all.append(f"{name},http://{ip}/rtp/{suffix}")
             
             with open(SOURCE_NONCHECK_FILE, "w", encoding="utf-8") as f: f.write("\n".join(m3u_all))
             with open(SOURCE_M3U_FILE, "w", encoding="utf-8") as f: f.write("\n".join(m3u_all))
-                
-            print(f"\n✨ 最终结果:")
-            print(f"   - 在线服务器: {len(online_ips)} 个")
-            print(f"   - 拼装链接: {len(m3u_all)} ")
+            print(f"\n✨ 最终结果: 在线服务器 {len(online_ips)} 个，拼装链接 {len(m3u_all)} 条")
+    else:
+        print("❌ 流程中断: 无在线 UDPXY 接口。")
     
     print(f"\n⏱️  总耗时: {round(time.time() - start_total, 2)}s")
