@@ -12,8 +12,10 @@ jobs:
   run_all:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # <--- 必须设为 0，否则无法比对远程 master 分支的文件
 
       - name: Set up Python
         uses: actions/setup-python@v4
