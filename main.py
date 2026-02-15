@@ -1,10 +1,9 @@
-import os, re, requests, time, concurrent.futures, subprocess, tarfile
+import os, re, requests, time, concurrent.futures, subprocess
 from datetime import datetime
 
 # ===============================
 # 1. 配置区
 # ===============================
-# 精准 C 段狙击
 TARGET_C_SEGMENTS = [
     "106.111.127.0/24", "113.95.140.0/24", "116.30.197.0/24",
     "121.33.112.0/24", "14.145.163.0/24", "183.30.202.0/24",
@@ -29,37 +28,23 @@ def log_section(name, icon="🔹"):
 # ===============================
 
 def setup_dismap():
-    """Dismap 安装逻辑 - 使用更稳健的下载链接"""
+    """下载 v0.4 版本的二进制文件"""
     if os.path.exists("./dismap"): return True
-    log_section("安装 Dismap 扫描引擎", "🛠️")
+    log_section("安装 Dismap v0.4 扫描引擎", "🛠️")
     
-    # 重新校验后的下载地址
-    url = "https://github.com/zhzyker/dismap/releases/download/v0.3.8/dismap_0.3.8_linux_amd64.tar.gz"
+    # 使用你提供的最新 v0.4 二进制链接
+    url = "https://github.com/zhzyker/dismap/releases/download/v0.4/dismap-0.4-linux-amd64"
     try:
-        print("  📥 正在尝试从 GitHub 下载 Dismap...")
-        r = requests.get(url, stream=True, timeout=60, allow_redirects=True)
-        if r.status_code == 200:
-            with open("dismap.tar.gz", "wb") as f:
-                for chunk in r.iter_content(chunk_size=8192):
-                    f.write(chunk)
-            
-            if os.path.getsize("dismap.tar.gz") < 100000:
-                print("  ❌ 下载文件过小，可能是错误的 HTML 页面。")
-                return False
-
-            with tarfile.open("dismap.tar.gz", "r:gz") as tar:
-                tar.extractall()
-            
-            # 部分压缩包解压后可能在子目录，这里做个移动处理
-            if not os.path.exists("./dismap") and os.path.exists("./dismap_0.3.8_linux_amd64/dismap"):
-                os.rename("./dismap_0.3.8_linux_amd64/dismap", "./dismap")
-
-            os.chmod("dismap", 0o755)
-            print("  ✅ Dismap 安装成功")
+        print(f"  📥 正在通过 wget 下载二进制文件: {url}")
+        # 直接下载并命名为 dismap
+        ret = os.system(f'wget -q -U "Mozilla/5.0" -O dismap {url}')
+        
+        if ret == 0 and os.path.exists("./dismap"):
+            os.chmod("./dismap", 0o755)
+            print("  ✅ Dismap v0.4 二进制文件配置成功")
             return True
-        else:
-            print(f"  ❌ 下载失败，HTTP 状态码: {r.status_code} (请检查仓库 releases 是否变动)")
-            return False
+        print("  ❌ 下载失败: wget 返回码非0")
+        return False
     except Exception as e:
         print(f"  ❌ 安装异常: {e}")
         return False
@@ -80,38 +65,41 @@ def scrape_fofa():
         raw_list = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+)', r.text)
         
         if raw_list:
-            print(f"  ✅ 成功获取原始数据 | 共找到 {len(raw_list)} 条记录")
-            print("  📜 [详细抓取列表]:")
-            unique_in_step = sorted(list(set(raw_list)))
-            for ip in unique_in_step:
-                # 统计该 IP 出现的次数
-                count = raw_list.count(ip)
-                print(f"    - {ip} (出现 {count} 次)")
-            return unique_in_step
-        else:
-            print("  ⚠️  页面请求成功，但未匹配到任何 IP:端口。")
-            return []
+            print(f"  ✅ FOFA 原始数据: 共抓取到 {len(raw_list)} 条记录")
+            print("  📜 [详细原始列表 (已排序)]:")
+            for item in sorted(raw_list):
+                print(f"    - {item}")
+            
+            unique_ips = sorted(list(set(raw_list)))
+            print(f"\n  📊 去重结论: 实际独立服务器共 {len(unique_ips)} 个")
+            return unique_ips
+        return []
     except Exception as e:
         print(f"  ❌ FOFA 请求异常: {e}")
         return []
 
 def run_dismap_scan():
-    """定向扫描"""
-    log_section("启动定向 C 段扫描", "🚀")
+    """利用 v0.4 版本执行定向扫描"""
+    log_section("启动定向 C 段狙击扫描", "🚀")
     found_ips = []
     targets = ",".join(TARGET_C_SEGMENTS)
+    
+    # 命令保持不变
     cmd = ["./dismap", "-i", targets, "-p", SCAN_PORTS, "--level", "1", "--thread", "500", "--timeout", "2"]
     
     try:
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
         for line in process.stdout:
+            # v0.4 的输出中，找到资产通常带有 [+]
             if "[+]" in line:
                 print(f"    {line.strip()}")
                 match = re.search(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+)', line)
                 if match: found_ips.append(match.group(1))
         process.wait()
-    except: pass
-    print(f"  ✅ 扫描结束 | 发现 {len(found_ips)} 个潜在节点")
+    except Exception as e:
+        print(f"  ❌ 扫描执行异常: {e}")
+        
+    print(f"  ✅ 扫描结束 | 发现 {len(found_ips)} 个在线 udpxy 节点")
     return list(set(found_ips))
 
 # ===============================
@@ -132,17 +120,13 @@ def update_rtp_template():
             r.encoding = 'utf-8'
             if r.status_code == 200:
                 lines = r.text.splitlines()
-                count = 0
                 for i in range(len(lines)):
                     if lines[i].startswith("#EXTINF"):
                         name = lines[i].split(',')[-1].strip()
                         for j in range(i + 1, min(i + 5, len(lines))):
                             if lines[j].strip().startswith("rtp://"):
-                                if lines[j].strip() not in unique_rtp:
-                                    unique_rtp[lines[j].strip()] = name
-                                    count += 1
+                                unique_rtp[lines[j].strip()] = name
                                 break
-                print(f"  📥 {url.split('/')[-1]} | 解析成功 | 提取 {count} 条")
         except: pass
     if unique_rtp:
         with open(RTP_FILE, "w", encoding="utf-8") as f:
@@ -150,12 +134,12 @@ def update_rtp_template():
         print(f"📊 统计: RTP 模板更新完毕 | 共 {len(unique_rtp)} 个频道")
 
 def verify_geo(ip_port):
-    """地理校验: 优化格式"""
+    """地理校验: IP:端口 | 地区 | 运营商"""
     try:
         ip = ip_port.split(":")[0]
         res = requests.get(f"http://ip-api.com/json/{ip}?lang=zh-CN", timeout=10).json()
-        if res.get("status") != "success": return False, f"{ip_port} | 接口限制"
-        reg, city, isp = res.get("regionName","未知"), res.get("city","未知"), res.get("isp","未知")
+        if res.get("status") != "success": return False, f"{ip_port} | 查询受限"
+        reg, city, isp = res.get("regionName","未知省份"), res.get("city","未知城市"), res.get("isp","未知ISP")
         is_gd = "广东" in reg
         is_tel = any(kw in isp.lower() for kw in ["电信", "telecom", "chinanet"])
         # 修正格式：IP:端口 | 地区 | 运营商
@@ -167,14 +151,14 @@ if __name__ == "__main__":
     start_time = time.time()
     update_rtp_template()
 
-    # 1. 获取全量 IP
+    # 1. 抓取与扫描
     fofa_ips = scrape_fofa()
     scanned_ips = []
     if setup_dismap():
         scanned_ips = run_dismap_scan()
     
     unique_raw = sorted(list(set(fofa_ips + scanned_ips)))
-    print(f"\n📊 汇总统计: FOFA ({len(fofa_ips)}) + 扫描 ({len(scanned_ips)}) -> 去重后总计 {len(unique_raw)} 个 IP")
+    print(f"\n📊 汇总统计: FOFA ({len(fofa_ips)}) + 扫描 ({len(scanned_ips)}) -> 总计 {len(unique_raw)} 个独立 IP")
 
     # 2. 地理校验
     log_section("地理归属地校验 (广东电信)", "🌍")
@@ -184,7 +168,7 @@ if __name__ == "__main__":
         status = "✅ 匹配" if ok else "⏭️ 跳过"
         print(f"  [{idx:02d}/{len(unique_raw):02d}] {status} | {desc}")
         if ok: geo_ips.append(ip_port)
-        time.sleep(1.3) # API 频率限制保护
+        time.sleep(1.2)
 
     # 3. 结果保存
     log_section("数据归档与拼装", "💾")
@@ -198,6 +182,6 @@ if __name__ == "__main__":
                 with open(fpath, "w", encoding="utf-8") as f: f.write("\n".join(m3u))
             print(f"✨ 报告: 在线 IP {len(geo_ips)} 个 | 拼装链接 {len(m3u)} 条")
     else:
-        print("❌ 终止: 未发现符合条件的节点")
+        print("❌ 终止: 本次运行未发现任何符合条件的节点")
     
     print(f"\n⏱️ 总耗时: {round(time.time() - start_time, 2)}s")
