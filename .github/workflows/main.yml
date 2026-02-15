@@ -1,6 +1,8 @@
 name: IPTV Discovery and Probe
 
 on:
+  push:
+    branches: [ "main" ]  # 当你推送代码到 main 分支时触发
   schedule:
     - cron: '0 */2 * * *'
   workflow_dispatch:
