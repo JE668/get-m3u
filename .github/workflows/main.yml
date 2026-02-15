@@ -1,23 +1,23 @@
-name: IPTV Discovery and Probe
+name: IPTV Update and API Trigger
 
 on:
   push:
     branches: [ "main" ]  # 当你推送代码到 main 分支时触发
   schedule:
-    - cron: '0 */2 * * *'
+    - cron: '0 23 * * *'
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  run_all:
+  run-service:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # <--- 必须设为 0，否则无法比对远程 master 分支的文件
+          fetch-depth: 0 # 必须为0以支持 git show HEAD 进行内容比对
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -27,25 +27,23 @@ jobs:
       - name: Install Dependencies
         run: pip install requests
 
-      - name: Discovery (main.py)
+      - name: Run Discovery and Probe
         env:
           FOFA_COOKIE: ${{ secrets.FOFA_COOKIE }}
-        run: python main.py
-
-      - name: Quality Probe (probe.py)
-        env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: python probe.py
+          PYTHONUNBUFFERED: 1 # 禁用 Python 缓冲区，实现实时日志
+        run: |
+          python main.py
+          python probe.py
 
-      - name: Commit and Push
+      - name: Commit and Push Changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # 使用 git add . 包含所有 txt 文件（包括 trigger_counter.txt）
-          git add .
+          # 添加所有生成的文件，包括自动进化的发现库
+          git add source-ip.txt source-m3u.txt source-m3u-noncheck.txt log.txt discovery.txt trigger_counter.txt rtp/*.txt || true
           
-          # 即使只有计数器变化也提交
-          git commit -m "Auto Update: $(date +'%Y-%m-%d %H:%M:%S') " || exit 0
-          
+          # 即使只有计数器变化也提交，防止联动逻辑在下一次运行中出错
+          git commit -m "Auto Sync: $(date +'%Y-%m-%d %H:%M:%S') [skip ci]" || exit 0
           git push origin main
