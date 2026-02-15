@@ -1,9 +1,11 @@
 import os, re, requests, time, concurrent.futures, subprocess
 from datetime import datetime
+from collections import Counter
 
 # ===============================
 # 1. 配置区
 # ===============================
+# 精准 C 段狙击
 TARGET_C_SEGMENTS = [
     "106.111.127.0/24", "113.95.140.0/24", "116.30.197.0/24",
     "121.33.112.0/24", "14.145.163.0/24", "183.30.202.0/24",
@@ -28,29 +30,20 @@ def log_section(name, icon="🔹"):
 # ===============================
 
 def setup_dismap():
-    """下载 v0.4 版本的二进制文件"""
     if os.path.exists("./dismap"): return True
-    log_section("安装 Dismap v0.4 扫描引擎", "🛠️")
-    
-    # 使用你提供的最新 v0.4 二进制链接
+    log_section("安装 Dismap v0.4 引擎", "🛠️")
     url = "https://github.com/zhzyker/dismap/releases/download/v0.4/dismap-0.4-linux-amd64"
     try:
-        print(f"  📥 正在通过 wget 下载二进制文件: {url}")
-        # 直接下载并命名为 dismap
-        ret = os.system(f'wget -q -U "Mozilla/5.0" -O dismap {url}')
-        
+        print(f"  📥 正在通过 wget 下载: {url}")
+        ret = os.system(f'wget -q -O dismap {url}')
         if ret == 0 and os.path.exists("./dismap"):
             os.chmod("./dismap", 0o755)
-            print("  ✅ Dismap v0.4 二进制文件配置成功")
+            print("  ✅ Dismap 配置成功")
             return True
-        print("  ❌ 下载失败: wget 返回码非0")
         return False
-    except Exception as e:
-        print(f"  ❌ 安装异常: {e}")
-        return False
+    except: return False
 
 def scrape_fofa():
-    """抓取并详细输出 FOFA 资源"""
     log_section("抓取 FOFA 资源", "📡")
     if not HEADERS["Cookie"]: 
         print("  ⏭️  未配置 Cookie，跳过。")
@@ -58,19 +51,19 @@ def scrape_fofa():
     try:
         r = requests.get(FOFA_URL, headers=HEADERS, timeout=15)
         if "账号登录" in r.text:
-            print("  ❌ FOFA Cookie 已失效，请及时更新 Secret！")
+            print("  ❌ FOFA Cookie 已失效！")
             return []
         
-        # 提取所有匹配的 IP:端口
         raw_list = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+)', r.text)
-        
         if raw_list:
-            print(f"  ✅ FOFA 原始数据: 共抓取到 {len(raw_list)} 条记录")
-            print("  📜 [详细原始列表 (已排序)]:")
-            for item in sorted(raw_list):
-                print(f"    - {item}")
+            # 统计并合并显示
+            counts = Counter(raw_list)
+            print(f"  ✅ FOFA 原始数据: 找到 {len(raw_list)} 条记录")
+            print("  📜 [唯一 IP 列表及出现次数]:")
+            unique_ips = sorted(counts.keys())
+            for ip in unique_ips:
+                print(f"    - {ip} (出现 {counts[ip]} 次)")
             
-            unique_ips = sorted(list(set(raw_list)))
             print(f"\n  📊 去重结论: 实际独立服务器共 {len(unique_ips)} 个")
             return unique_ips
         return []
@@ -79,25 +72,41 @@ def scrape_fofa():
         return []
 
 def run_dismap_scan():
-    """利用 v0.4 版本执行定向扫描"""
     log_section("启动定向 C 段狙击扫描", "🚀")
     found_ips = []
     targets = ",".join(TARGET_C_SEGMENTS)
     
-    # 命令保持不变
-    cmd = ["./dismap", "-i", targets, "-p", SCAN_PORTS, "--level", "1", "--thread", "500", "--timeout", "2"]
+    # 优化参数：增加超时到 5s，降低线程到 200 确保扫描稳定性，提升识别等级
+    cmd = [
+        "./dismap", 
+        "-i", targets, 
+        "-p", SCAN_PORTS, 
+        "--level", "2", 
+        "--thread", "200", 
+        "--timeout", "5"
+    ]
+    
+    print(f"  📡 扫描指令: ./dismap -i [TARGETS] -p {SCAN_PORTS}")
     
     try:
+        # 实时读取输出
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        
+        line_count = 0
         for line in process.stdout:
-            # v0.4 的输出中，找到资产通常带有 [+]
+            line_count += 1
+            # 打印前 5 行原始输出，确认程序是否正常工作
+            if line_count <= 5:
+                print(f"    [Dismap Output] {line.strip()}")
+            
             if "[+]" in line:
-                print(f"    {line.strip()}")
+                print(f"    🌟 发现目标: {line.strip()}")
                 match = re.search(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+)', line)
                 if match: found_ips.append(match.group(1))
+        
         process.wait()
     except Exception as e:
-        print(f"  ❌ 扫描执行异常: {e}")
+        print(f"  ❌ 扫描运行异常: {e}")
         
     print(f"  ✅ 扫描结束 | 发现 {len(found_ips)} 个在线 udpxy 节点")
     return list(set(found_ips))
@@ -134,31 +143,29 @@ def update_rtp_template():
         print(f"📊 统计: RTP 模板更新完毕 | 共 {len(unique_rtp)} 个频道")
 
 def verify_geo(ip_port):
-    """地理校验: IP:端口 | 地区 | 运营商"""
     try:
         ip = ip_port.split(":")[0]
         res = requests.get(f"http://ip-api.com/json/{ip}?lang=zh-CN", timeout=10).json()
-        if res.get("status") != "success": return False, f"{ip_port} | 查询受限"
-        reg, city, isp = res.get("regionName","未知省份"), res.get("city","未知城市"), res.get("isp","未知ISP")
+        if res.get("status") != "success": return False, f"{ip_port} | 接口限制"
+        reg, city, isp = res.get("regionName","未知省份"), res.get("city","未知城市"), res.get("isp","未知")
         is_gd = "广东" in reg
         is_tel = any(kw in isp.lower() for kw in ["电信", "telecom", "chinanet"])
-        # 修正格式：IP:端口 | 地区 | 运营商
         info = f"{ip_port} | {reg} - {city} | {isp}"
         return (is_gd and is_tel), info
-    except: return False, f"{ip_port} | 异常"
+    except: return False, f"{ip_port} | 查询异常"
 
 if __name__ == "__main__":
     start_time = time.time()
     update_rtp_template()
 
-    # 1. 抓取与扫描
+    # 1. 资源采集
     fofa_ips = scrape_fofa()
     scanned_ips = []
     if setup_dismap():
         scanned_ips = run_dismap_scan()
     
     unique_raw = sorted(list(set(fofa_ips + scanned_ips)))
-    print(f"\n📊 汇总统计: FOFA ({len(fofa_ips)}) + 扫描 ({len(scanned_ips)}) -> 总计 {len(unique_raw)} 个独立 IP")
+    print(f"\n📊 汇总统计: FOFA ({len(fofa_ips)}) + 扫描 ({len(scanned_ips)}) -> 去重后总计 {len(unique_raw)} 个独立 IP")
 
     # 2. 地理校验
     log_section("地理归属地校验 (广东电信)", "🌍")
@@ -182,6 +189,6 @@ if __name__ == "__main__":
                 with open(fpath, "w", encoding="utf-8") as f: f.write("\n".join(m3u))
             print(f"✨ 报告: 在线 IP {len(geo_ips)} 个 | 拼装链接 {len(m3u)} 条")
     else:
-        print("❌ 终止: 本次运行未发现任何符合条件的节点")
+        print("❌ 终止: 未发现符合条件的节点")
     
     print(f"\n⏱️ 总耗时: {round(time.time() - start_time, 2)}s")
