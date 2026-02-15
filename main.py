@@ -2,60 +2,67 @@ import os, re, requests, time, concurrent.futures, subprocess, tarfile
 from datetime import datetime
 
 # ===============================
-# 1. 定向扫描配置 (根据你的 FOFA 结果整合)
+# 1. 配置区
 # ===============================
-# 我们将你提供的 IP 转化为 /16 或 /24 网段，缩小范围以提高速度
-IP_SEGMENTS = [
-    "106.111.0.0/16",
-    "113.95.0.0/16",
-    "116.30.0.0/16",
-    "121.33.0.0/16",
-    "14.145.0.0/16",
-    "183.30.0.0/16",
-    "183.31.0.0/16",
-    "59.35.0.0/16",
-    "61.146.0.0/16",
-    "113.102.0.0/16"
+# 将你提供的有效 IP 转化为精准的 /24 C段，扫描速度提升 256 倍
+TARGET_C_SEGMENTS = [
+    "106.111.127.0/24", "113.95.140.0/24", "116.30.197.0/24",
+    "121.33.112.0/24", "14.145.163.0/24", "183.30.202.0/24",
+    "183.31.11.0/24", "59.35.244.0/24", "61.146.190.0/24",
+    "113.102.18.0/24"
 ]
+SCAN_PORTS = "4022,8000,8686,55555,54321,1024,10001,8888,8889,55555,54321,5000"
 
-# 整合有效端口
-SCAN_PORTS = "4022,8000,8686,55555,54321,1024,10001,1024,500,8888,8889,8686,7788"
-
-SCAN_TARGETS = ",".join(IP_SEGMENTS)
-
-HEADERS = {"User-Agent": "Mozilla/5.0"}
-RTP_SOURCES = [
-    "https://raw.githubusercontent.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List/refs/heads/master/GuangdongIPTV_rtp_4k.m3u",
-    "https://raw.githubusercontent.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List/refs/heads/master/GuangdongIPTV_rtp_hd.m3u"
-]
+FOFA_URL = "https://fofa.info/result?qbase64=IlVEUFhZIiAmJiBjb3VudHJ5PSJDTiIgJiYgcmVnaW9uPSJHdWFuZ2Rvbmci"
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "Cookie": os.environ.get("FOFA_COOKIE", "") 
+}
 RTP_FILE = os.path.join("rtp", "ChinaTelecom-Guangdong.txt")
 SOURCE_IP_FILE, SOURCE_M3U_FILE, SOURCE_NONCHECK_FILE = "source-ip.txt", "source-m3u.txt", "source-m3u-noncheck.txt"
 
 def log_section(name, icon="🔹"):
     print(f"\n{icon} {'='*15} {name} {'='*15}")
 
+# ===============================
+# 2. 资源获取模块
+# ===============================
+
+def scrape_fofa():
+    """保底手段：FOFA 爬取"""
+    if not HEADERS["Cookie"]: 
+        print("  ⏭️  FOFA 跳过 | 未配置 Cookie")
+        return []
+    print("  📡 正在通过 FOFA 获取保底数据...")
+    try:
+        r = requests.get(FOFA_URL, headers=HEADERS, timeout=15)
+        ips = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+)', r.text)
+        print(f"  ✅ FOFA 完成 | 抓取到 {len(ips)} 个 IP")
+        return ips
+    except: return []
+
 def setup_dismap():
+    """安装扫描引擎"""
     if os.path.exists("./dismap"): return True
-    log_section("安装 Dismap 引擎", "🛠️")
+    print("  📥 正在下载 Dismap 扫描引擎...")
     url = "https://github.com/zhzyker/dismap/releases/download/v0.3.8/dismap_0.3.8_linux_amd64.tar.gz"
     try:
-        r = requests.get(url, stream=True)
+        r = requests.get(url, timeout=30)
         with open("dismap.tar.gz", "wb") as f: f.write(r.content)
         with tarfile.open("dismap.tar.gz", "r:gz") as tar: tar.extractall()
         os.chmod("dismap", 0o755)
-        print("  ✅ Dismap 安装成功")
         return True
-    except: return False
+    except Exception as e:
+        print(f"  ❌ 安装失败: {e}")
+        return False
 
 def run_dismap_scan():
-    log_section("主动探测阶段 (Dismap)", "🚀")
+    """精准 C 段扫描"""
+    print("  🚀 启动定向 C 段扫描 (狙击模式)...")
     found_ips = []
-    # 命令说明：-i 目标, -p 端口, --level 1 识别, --thread 1000 提高速度
-    # GitHub Runner 性能不错，可以开到 1000 线程
-    cmd = ["./dismap", "-i", SCAN_TARGETS, "-p", SCAN_PORTS, "--level", "1", "--thread", "1000", "--timeout", "2"]
-    
-    print(f"  📡 目标网段: {len(IP_SEGMENTS)} 个")
-    print(f"  🔌 监控端口: {SCAN_PORTS}")
+    targets = ",".join(TARGET_C_SEGMENTS)
+    # -i 目标, -p 端口, --level 1 识别, --thread 500
+    cmd = ["./dismap", "-i", targets, "-p", SCAN_PORTS, "--level", "1", "--thread", "500", "--timeout", "2"]
     
     try:
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
@@ -65,14 +72,23 @@ def run_dismap_scan():
                 match = re.search(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+)', line)
                 if match: found_ips.append(match.group(1))
         process.wait()
-    except Exception as e: print(f"  ❌ 扫描异常: {e}")
-    return list(set(found_ips))
+    except: pass
+    print(f"  ✅ 扫描结束 | 发现 {len(found_ips)} 个存活 udpxy")
+    return found_ips
+
+# ===============================
+# 3. 校验与持久化模块
+# ===============================
 
 def update_rtp_template():
-    log_section("同步 RTP 模板", "🔄")
+    log_section("同步并更新 RTP 模板", "🔄")
     os.makedirs("rtp", exist_ok=True)
     unique_rtp = {}
-    for url in RTP_SOURCES:
+    sources = [
+        "https://raw.githubusercontent.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List/refs/heads/master/GuangdongIPTV_rtp_4k.m3u",
+        "https://raw.githubusercontent.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List/refs/heads/master/GuangdongIPTV_rtp_hd.m3u"
+    ]
+    for url in sources:
         try:
             r = requests.get(url, timeout=15)
             r.encoding = 'utf-8'
@@ -81,7 +97,7 @@ def update_rtp_template():
                 for i in range(len(lines)):
                     if lines[i].startswith("#EXTINF"):
                         name = lines[i].split(',')[-1].strip()
-                        for j in range(i+1, min(i+5, len(lines))):
+                        for j in range(i + 1, min(i + 5, len(lines))):
                             if lines[j].strip().startswith("rtp://"):
                                 unique_rtp[lines[j].strip()] = name
                                 break
@@ -94,41 +110,40 @@ def update_rtp_template():
 def verify_geo(ip_port):
     try:
         ip = ip_port.split(":")[0]
-        url = f"http://ip-api.com/json/{ip}?lang=zh-CN"
-        res = requests.get(url, timeout=10).json()
-        if res.get("status") != "success": return False, f"{ip_port} | 查询受限"
-        reg, city, isp = res.get("regionName","未知"), res.get("city","未知"), res.get("isp","未知")
-        is_gd = "广东" in reg
-        is_tel = any(kw in isp.lower() for kw in ["电信", "telecom", "chinanet"])
-        # 统一输出格式: IP:端口 | 地区 | 运营商
-        info = f"{ip_port} | {reg} - {city} | {isp}"
-        return (is_gd and is_tel), info
-    except: return False, f"{ip_port} | 网络异常"
+        res = requests.get(f"http://ip-api.com/json/{ip}?lang=zh-CN", timeout=10).json()
+        if res.get("status") != "success": return False, f"{ip_port} | 接口限制"
+        region, city, isp = res.get("regionName","未知"), res.get("city","未知"), res.get("isp","未知")
+        is_gd = "广东" in region
+        is_telecom = any(kw in isp.lower() for kw in ["电信", "telecom", "chinanet"])
+        return (is_gd and is_telecom), f"{ip_port} | {region} - {city} | {isp}"
+    except: return False, f"{ip_port} | 异常"
 
 if __name__ == "__main__":
     start_time = time.time()
     update_rtp_template()
 
-    # 1. 获取资源 (Dismap)
+    # 第一阶段：混合抓取
+    log_section("多模式资源抓取", "📡")
+    fofa_ips = scrape_fofa()
+    
     if setup_dismap():
-        scanned = run_dismap_scan()
+        scanned_ips = run_dismap_scan()
     else:
-        scanned = []
+        scanned_ips = []
+    
+    unique_raw = sorted(list(set(fofa_ips + scanned_ips)))
+    print(f"\n📊 汇总结果: 发现 {len(unique_raw)} 个唯一 IP")
 
-    # 2. 地理校验
+    # 第二阶段：地理过滤
     log_section("地理归属地校验 (广东电信)", "🌍")
     geo_ips = []
-    unique_raw = sorted(list(set(scanned)))
-    total = len(unique_raw)
-    
-    for idx, ip_port in enumerate(unique_raw, 1):
-        ok, desc = verify_geo(ip_port)
-        status = "✅ 匹配" if ok else "⏭️ 跳过"
-        print(f"  [{idx:02d}/{total:02d}] {status} | {desc}")
-        if ok: geo_ips.append(ip_port)
+    for idx, ip in enumerate(unique_raw, 1):
+        ok, desc = verify_geo(ip)
+        print(f"  [{idx:02d}/{len(unique_raw):02d}] {'✅ 匹配' if ok else '⏭️ 跳过'} | {desc}")
+        if ok: geo_ips.append(ip)
         time.sleep(1.2)
 
-    # 3. 归档
+    # 第三阶段：持久化
     log_section("数据归档与拼装", "💾")
     if geo_ips:
         geo_ips.sort()
@@ -138,8 +153,8 @@ if __name__ == "__main__":
             m3u = [f"{r.split(',')[0]},http://{ip}/rtp/{r.split('://')[1]}" for ip in geo_ips for r in rtps]
             for fpath in [SOURCE_NONCHECK_FILE, SOURCE_M3U_FILE]:
                 with open(fpath, "w", encoding="utf-8") as f: f.write("\n".join(m3u))
-            print(f"✨ 报告: 在线 IP {len(geo_ips)} 个 | 播放链接 {len(m3u)} 条")
+            print(f"✨ 报告: 有效服务器 {len(geo_ips)} 个 | 播放链接 {len(m3u)} 条")
     else:
-        print("❌ 终止: 本次扫描未发现符合条件的 udpxy 节点")
+        print("❌ 终止: 未发现符合条件的节点")
     
     print(f"\n⏱️ 总耗时: {round(time.time() - start_time, 2)}s")
