@@ -4,6 +4,13 @@ from datetime import datetime
 # ===============================
 # 配置区
 # ===============================
+# 搜索关键词
+SEARCH_KEYWORD = "广东电信"
+
+# 免登录搜索引擎配置 (Tonkiang)
+TONKIANG_URL = "https://tonkiang.us/?i=" + SEARCH_KEYWORD
+
+# FOFA 配置 (保留作为备选，若Cookie失效会自动跳过)
 # 带城市筛选
 # FOFA_URL = "https://fofa.info/result?qbase64=IlVEUFhZIiAmJiBjb3VudHJ5PSJDTiIgJiYgcmVnaW9uPSJHdWFuZ2RvbmciICYmIGNpdHk9Ilpob25nc2hhbiI%3D"
 
@@ -11,9 +18,11 @@ from datetime import datetime
 FOFA_URL = "https://fofa.info/result?qbase64=IlVEUFhZIiAmJiBjb3VudHJ5PSJDTiIgJiYgcmVnaW9uPSJHdWFuZ2Rvbmci&filter_type=last_month"
 # FOFA_URL = "https://fofa.info/result?qbase64=IlVEUFhZIiAmJiBjb3VudHJ5PSJDTiIgJiYgcmVnaW9uPSJHdWFuZ2RvbmciICYmIGNpdHk9Ilpob25nc2hhbiI="
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-    "Cookie": os.environ.get("FOFA_COOKIE", "") 
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Cookie": os.environ.get("FOFA_COOKIE", ""),
+    "Referer": "https://tonkiang.us/"
 }
+
 RTP_SOURCES = [
     "https://raw.githubusercontent.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List/refs/heads/master/GuangdongIPTV_rtp_4k.m3u",
     "https://raw.githubusercontent.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List/refs/heads/master/GuangdongIPTV_rtp_hd.m3u"
@@ -51,6 +60,39 @@ def update_rtp_template():
             for url, name in unique_rtp.items(): f.write(f"{name},{url}\n")
         print(f"📊 统计: RTP 模板更新完毕 | 共 {len(unique_rtp)} 个频道")
 
+def scrape_tonkiang():
+    """免登录从 Tonkiang 爬取 IP"""
+    log_section("从 Tonkiang 检索资源 (免登录)", "🔍")
+    found_ips = []
+    try:
+        r = requests.get(TONKIANG_URL, headers=HEADERS, timeout=15)
+        if r.status_code == 200:
+            # 匹配 IP:端口 格式
+            found_ips = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+)', r.text)
+            print(f"  ✅ Tonkiang 响应成功 | 提取到 {len(found_ips)} 个潜在 IP")
+        else:
+            print(f"  ❌ Tonkiang 访问失败 | 状态码: {r.status_code}")
+    except Exception as e:
+        print(f"  ❌ Tonkiang 异常: {e}")
+    return found_ips
+
+def scrape_fofa():
+    """从 FOFA 爬取 IP"""
+    if not HEADERS["Cookie"]:
+        return []
+    log_section("从 FOFA 检索资源", "📡")
+    found_ips = []
+    try:
+        r = requests.get(FOFA_URL, headers=HEADERS, timeout=15)
+        if "账号登录" in r.text or "登录后可见" in r.text:
+            print("  ⚠️ FOFA Cookie 已失效，跳过此源。")
+            return []
+        found_ips = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+)', r.text)
+        print(f"  ✅ FOFA 响应成功 | 提取到 {len(found_ips)} 个潜在 IP")
+    except:
+        print("  ❌ FOFA 访问异常")
+    return found_ips
+
 def verify_geo(ip_port):
     try:
         ip = ip_port.split(":")[0]
@@ -77,15 +119,13 @@ if __name__ == "__main__":
     start_time = time.time()
     update_rtp_template()
 
-    log_section("抓取 FOFA 资源", "📡")
-    try:
-        r = requests.get(FOFA_URL, headers=HEADERS, timeout=15)
-        if "账号登录" in r.text: print("❌ 错误: FOFA Cookie 已失效！")
-        raw_list = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+)', r.text)
-        unique_raw = sorted(list(set(raw_list)))
-        print(f"🔎 结果: 原始 {len(raw_list)} 条 | 去重后 {len(unique_raw)} 条 IP")
-    except: unique_raw = []
+    # 1. 汇总多源数据
+    ips_tonkiang = scrape_tonkiang()
+    ips_fofa = scrape_fofa()
+    unique_raw = sorted(list(set(ips_tonkiang + ips_fofa)))
+    print(f"\n📊 资源汇总: 总共获取到 {len(unique_raw)} 个唯一 IP")
 
+    # 2. 地理校验
     log_section("地理归属地校验 (广东电信)", "🌍")
     geo_ips = []
     total = len(unique_raw)
@@ -96,6 +136,7 @@ if __name__ == "__main__":
         if ok: geo_ips.append(ip_port)
         time.sleep(1.2)
 
+    # 3. Web 状态探测
     log_section("Web 接口在线检测 (UDPXY)", "🔍")
     online_ips = []
     if geo_ips:
@@ -107,6 +148,7 @@ if __name__ == "__main__":
                     print(f"  🟢 在线 | {ip}"); online_ips.append(ip)
                 else: print(f"  🔴 离线 | {ip}")
 
+    # 4. 数据保存
     log_section("数据归档与拼装", "💾")
     if online_ips:
         online_ips.sort()
