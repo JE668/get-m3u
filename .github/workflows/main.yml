@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main" ]  # 当你推送代码到 main 分支时触发
   schedule:
-    - cron: '0 0/3 * * *'
+    - cron: '0 0/6 * * *'
   workflow_dispatch:
 
 permissions:
@@ -41,9 +41,13 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # 添加所有生成的文件，包括自动进化的发现库
-          git add source-ip.txt source-m3u.txt source-m3u-noncheck.txt log.txt discovery.txt trigger_counter.txt rtp/*.txt || true
+          # 设置 pull 策略为 rebase，避免产生多余的合并节点
+          git config --global pull.rebase true
           
-          # 即使只有计数器变化也提交，防止联动逻辑在下一次运行中出错
-          git commit -m "Auto Sync: $(date +'%Y-%m-%d %H:%M:%S') [skip ci]" || exit 0
+          git add source-ip.txt source-m3u.txt source-m3u-noncheck.txt log.txt discovery.txt trigger_counter.txt rtp/*.txt || true
+          git commit -m "Auto Sync: $(date +'%Y-%m-%d %H:%M:%S')[skip ci]" || exit 0
+          
+          # 【关键修复】：在推之前先拉取并合并远程的变更
+          git pull origin main || true
+          
           git push origin main
