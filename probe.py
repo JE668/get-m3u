@@ -101,18 +101,15 @@ if __name__ == "__main__":
             lines = [l.strip() for l in f if "," in l]
         
         if lines:
-            # 1. 将海量链接按 IP 分组
             ip_to_lines = {}
             ip_to_urls = {}
             for line in lines:
                 try:
                     url = line.split(",", 1)[1]
-                    ip_port = url.split("/")[2] # 提取 http://[ip_port]/rtp/... 中的 IP
-                    
+                    ip_port = url.split("/")[2]
                     if ip_port not in ip_to_lines:
                         ip_to_lines[ip_port] = []
                         ip_to_urls[ip_port] =[]
-                    
                     ip_to_lines[ip_port].append(line)
                     ip_to_urls[ip_port].append(url)
                 except: pass
@@ -122,8 +119,8 @@ if __name__ == "__main__":
             valid_ips = set()
             logs =[]
             
-            # 并发对每个 IP 发起代表测试
-            with concurrent.futures.ThreadPoolExecutor(max_workers=20) as ex:
+            # 提升多线程并发到 50，加快探测速度
+            with concurrent.futures.ThreadPoolExecutor(max_workers=50) as ex:
                 futures =[ex.submit(fast_ip_probe, ip, urls) for ip, urls in ip_to_urls.items()]
                 for f in concurrent.futures.as_completed(futures):
                     ok, ip, msg = f.result()
@@ -132,28 +129,32 @@ if __name__ == "__main__":
                     if ok:
                         valid_ips.add(ip)
             
-            # 2. 重建 M3U 文件 (只保留存活 IP 的行)
+            # 重建 M3U 文件 (只保留存活 IP 的行)
             valid_m3u_lines =[]
             for ip in valid_ips:
                 valid_m3u_lines.extend(ip_to_lines[ip])
             
+            # --- 新增日志：明确告知写入成功 ---
             with open(LOG_FILE, "w", encoding="utf-8") as f:
                 f.write(f"服务器抽测报告 | 时间: {datetime.now()}\n" + "\n".join(sorted(logs)))
+            live_print(f"\n  📝 成功覆写日志: {LOG_FILE}")
+            
             with open(SOURCE_M3U_FILE, "w", encoding="utf-8") as f:
                 f.write("\n".join(sorted(valid_m3u_lines)))
+            live_print(f"  📝 成功覆写纯净版链接: {SOURCE_M3U_FILE} (最终保留 {len(valid_m3u_lines)} 条)")
                 
-            live_print(f"✅ 抽测结束: 存活服务器 {len(valid_ips)} 个 | 写入链接 {len(valid_m3u_lines)} 条")
+            live_print(f"\n✅ 抽测结束: 存活服务器 {len(valid_ips)} 个 | 过滤掉失效服务器 {len(ip_to_lines) - len(valid_ips)} 个")
             live_print("::endgroup::")
 
     # --- 联动处理 ---
     live_print("\n⚖️  ========== 联动决策报告 ==========")
-    if is_forced: live_print(f"🚨 [强制模式] 已连续 3 次未更新，执行周期性联动。")
+    if is_forced: live_print(f"🚨[强制模式] 已连续 3 次未更新，执行周期性联动。")
     elif changed: live_print(f"✨ [更新模式] 检测到数据变动，执行联动推送。")
-    else: live_print(f"⏭️[跳过模式] 内容一致 (当前计数: {current_count}/3)。")
+    else: live_print(f"⏭️  [跳过模式] 内容一致 (当前计数: {current_count}/3)。")
 
     if should_trigger and TRIGGER_TOKEN:
         live_print(f"::group::🔗 触发远程联动: {TARGET_REPO}")
-        url = f"https://api.github.com/repos/{TARGET_REPO}/actions/workflows/main.yml/dispatches"
+        url = f"https://api.github.com/repos/{TARGET_REPO}/actions/workflows/{TARGET_WORKFLOW}/dispatches"
         headers = {"Authorization": f"token {TRIGGER_TOKEN}", "Accept": "application/vnd.github.v3+json"}
         try:
             r = requests.post(url, headers=headers, json={"ref": TARGET_BRANCH}, timeout=10)
