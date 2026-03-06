@@ -27,14 +27,17 @@ jobs:
       - name: Install Dependencies
         run: pip install requests
 
-      - name: Run Discovery and Probe
+      - name: 1. Discovery (main.py)
         env:
           FOFA_COOKIE: ${{ secrets.FOFA_COOKIE }}
+          PYTHONUNBUFFERED: 1 # 禁用 Python 缓冲区，实现实时日志
+        run: python main.py
+
+      - name: 2. Quality Probe (probe.py)
+        env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
           PYTHONUNBUFFERED: 1 # 禁用 Python 缓冲区，实现实时日志
-        run: |
-          python main.py
-          python probe.py
+        run: python probe.py
 
       - name: Commit and Push Changes
         run: |
