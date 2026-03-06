@@ -43,14 +43,11 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # 设置 pull 策略为 rebase，避免产生多余的合并节点
           git config --global pull.rebase true
           
-          git add source-ip.txt source-m3u.txt source-m3u-noncheck.txt log.txt discovery.txt trigger_counter.txt rtp/*.txt || true
-          git commit -m "Auto Sync: $(date +'%Y-%m-%d %H:%M:%S')[skip ci]" || exit 0
+          # 添加 data 和 output 目录下的所有文件
+          git add data/ output/ || true
           
-          # 【关键修复】：在推之前先拉取并合并远程的变更
+          git commit -m "Auto Sync: $(date +'%Y-%m-%d %H:%M:%S') [skip ci]" || exit 0
           git pull origin main || true
-          
           git push origin main
