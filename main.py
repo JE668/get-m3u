@@ -123,23 +123,46 @@ def check_udpxy(ip_port):
         except: continue
     return False
 
-def run_native_scan(segs, ports):
-    log_group_start("🚀 启动矩阵扫描 (实时发现)")
-    if not segs or not ports:
-        live_print("⚠️ 库为空，跳过扫描。"); log_group_end(); return []
+def run_native_scan(segments, ports):
+    log_section("🚀 启动深度地毯式扫描", "⚡")
+    found_ips = []
     
-    tasks = [f"{s}.{i}:{p}" for s in segs for i in range(1, 255) for p in ports]
-    found = []
-    live_print(f"⚡ 任务规模: {len(tasks)} 次探测...")
-    with concurrent.futures.ThreadPoolExecutor(max_workers=250) as ex:
-        futures = {ex.submit(check_udpxy, ip): ip for ip in tasks}
-        for f in concurrent.futures.as_completed(futures):
-            if f.result():
-                res = futures[f]
-                live_print(f"  🌟 发现目标: {res}")
-                found.append(res)
-    live_print(f"✅ 扫描结束 | 新发现 {len(found)} 个节点")
-    log_group_end(); return found
+    # 1. 构建全量任务列表 (去重并展平)
+    tasks = []
+    # 优先扫描 discovery.txt 中已有的网段
+    for seg in segments:
+        for i in range(1, 255):
+            for port in ports:
+                tasks.append(f"{seg}.{i}:{port}")
+    
+    # 2. 随机打乱任务（如果任务过大，避免总是前几个段扫完后 Action 超时）
+    random.shuffle(tasks)
+    total_tasks = len(tasks)
+    
+    live_print(f"  ⚡ 任务总规模: {total_tasks} 个探测点")
+    live_print(f"  ⏳ 正在进行全量地毯式搜索 (并发: 300)...")
+    
+    # 3. 执行全量扫描
+    # 增加 timeout 到 3s，提高弱网环境下的响应确认率
+    with concurrent.futures.ThreadPoolExecutor(max_workers=300) as executor:
+        future_to_ip = {executor.submit(check_udpxy, ip): ip for ip in tasks}
+        
+        # 使用 as_completed 来显示进度
+        for i, future in enumerate(concurrent.futures.as_completed(future_to_ip)):
+            ip_port = future_to_ip[future]
+            try:
+                if future.result():
+                    live_print(f"    🌟 [发现目标] {ip_port}")
+                    found_ips.append(ip_port)
+            except: pass
+            
+            # 每 5000 个任务汇报一次进度，避免日志爆炸
+            if (i + 1) % 5000 == 0:
+                live_print(f"  📊 进度: {i+1}/{total_tasks} | 累计发现: {len(found_ips)}")
+                
+    live_print(f"✅ 全网段扫描结束 | 发现 {len(found_ips)} 个有效 udpxy 节点")
+    log_group_end()
+    return list(set(found_ips))
 
 def verify_geo(ip_port):
     try:
