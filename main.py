@@ -177,13 +177,23 @@ if __name__ == "__main__":
     if geo_ips:
         log_group_start("💾 数据归档与拼装")
         geo_ips.sort()
-        with open(SOURCE_IP_FILE, "w", encoding="utf-8") as f: f.write("\n".join(geo_ips))
+        
+        # 写入 source-ip.txt
+        with open(SOURCE_IP_FILE, "w", encoding="utf-8") as f: 
+            f.write("\n".join(geo_ips))
+        live_print(f"  📝 成功写入文件: {SOURCE_IP_FILE} (包含 {len(geo_ips)} 个有效IP)")
+        
         if os.path.exists(RTP_FILE):
             with open(RTP_FILE, encoding="utf-8") as f: rtps = [x.strip() for x in f if "," in x]
             m3u = [f"{r.split(',')[0]},http://{ip}/rtp/{r.split('://')[1]}" for ip in geo_ips for r in rtps]
-            for p in [SOURCE_NONCHECK_FILE, SOURCE_M3U_FILE]:
-                with open(p, "w", encoding="utf-8") as f: f.write("\n".join(m3u))
-            live_print(f"✨ 报告: 服务器 {len(geo_ips)} 个 | 链接 {len(m3u)} 条")
+            
+            # 写入 noncheck 和 m3u (初始版)
+            for p in[SOURCE_NONCHECK_FILE, SOURCE_M3U_FILE]:
+                with open(p, "w", encoding="utf-8") as f: 
+                    f.write("\n".join(m3u))
+                live_print(f"  📝 成功写入文件: {p} (拼装 {len(m3u)} 条初始链接)")
+                
+            live_print(f"✨ 基础阶段报告: 服务器 {len(geo_ips)} 个 | 链接 {len(m3u)} 条")
         log_group_end()
     
     live_print(f"\n⏱️ 总耗时: {round(time.time() - start_total, 2)}s")
