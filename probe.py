@@ -12,7 +12,7 @@ TRIGGER_COUNTER_FILE = "data/trigger_counter.txt"
 RTP_FILE = "data/rtp/ChinaTelecom-Guangdong.txt"  # 新增：用于重新拼装的模板路径
 
 TARGET_REPO = "JE668/iptv-api"
-TARGET_WORKFLOW = "main.yml"
+TARGET_WORKFLOW = "linkage.yml"
 TARGET_BRANCH = "master"
 TRIGGER_TOKEN = os.environ.get("PAT_TOKEN", "")
 
