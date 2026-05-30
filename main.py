@@ -288,10 +288,10 @@ if __name__ == "__main__":
     high_ports = [p for p in all_ports if int(p) in high_set]
     ext_ports = [p for p in all_ports if int(p) not in high_set]
 
-    # 先扫高优先端口
+    # 先扫高优先端口（高频端口命中率高，优先扫可快速出结果）
     sips_high = run_native_scan(valid_segs, high_ports) if high_ports else []
-    # 若命中不足，补充扩展端口
-    sips_ext = run_native_scan(valid_segs, ext_ports) if ext_ports and len(sips_high) < 5 else []
+    # 扩展端口始终扫（避免漏扫只开放冷门端口的独立服务器）
+    sips_ext = run_native_scan(valid_segs, ext_ports) if ext_ports else []
     sips = list(set(sips_high + sips_ext))
     stats["scan_found"] = len(sips)
 
