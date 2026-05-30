@@ -34,17 +34,28 @@ DEFAULT_PORTS = [4022, 8000, 8686, 55555, 54321, 1024, 10001, 8443, 8888]
 # ===============================
 # 2. 基础工具函数
 # ===============================
+SUMMARY_FILE = os.environ.get("GITHUB_STEP_SUMMARY", "")
+
 def live_print(content):
-    print(content, flush=True)
+ print(content, flush=True)
+
+def write_summary(content):
+ """写入 GitHub Actions Job Summary（Markdown 格式，仅 GitHub 环境生效）"""
+ if SUMMARY_FILE:
+  try:
+   with open(SUMMARY_FILE, "a", encoding="utf-8") as f:
+    f.write(content + "\n")
+  except OSError:
+   pass
 
 def log_group_start(name):
-    live_print(f"\n::group::{name}")
+ live_print(f"\n::group::{name}")
 
 def log_group_end():
-    live_print("::endgroup::")
+ live_print("\n::endgroup::")
 
 def log_section(name, icon="🔹"):
-    live_print(f"\n{icon} {'='*15} {name} {'='*15}")
+ live_print(f"\n{icon} {'='*15} {name} {'='*15}")
 
 # ===============================
 # 3. 核心功能函数
@@ -370,3 +381,16 @@ if __name__ == "__main__":
     live_print(f"├── 归属复核: ✅{stats['geo_pass']} / ⏭️{stats['geo_fail']}")
     live_print(f"└── M3U 生成: {stats.get('m3u_count', 0)} 条")
     live_print(f"\n⏱️ 总耗时: {elapsed}s")
+
+    # 6. 写入 GitHub Actions Job Summary
+    write_summary("### 📊 运行统计摘要\n")
+    write_summary("| 指标 | 数值 |")
+    write_summary("|------|------|")
+    write_summary(f"| 🛰️ FOFA 获取 | {stats['fofa']} 个 IP |")
+    write_summary(f"| 🛡️ C段过滤 | {stats['segments_total']}→{stats['segments_valid']} 个有效 |")
+    write_summary(f"| 🚀 矩阵扫描 | {stats['scan_found']} 个存活 |")
+    write_summary(f"| 🌍 归属复核 | ✅ {stats['geo_pass']} / ⏭️ {stats['geo_fail']} |")
+    write_summary(f"| 📺 M3U 生成 | {stats.get('m3u_count', 0)} 条 |")
+    write_summary(f"| 🖥️ 有效服务器 | {len(geo_ips)} 个 |")
+    write_summary(f"| 📺 RTP 频道 | {stats.get('rtp_count', 0)} 个 |")
+    write_summary(f"| ⏱️ 总耗时 | {elapsed}s |")

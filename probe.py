@@ -19,7 +19,17 @@ TARGET_BRANCH = "master"
 TRIGGER_TOKEN = os.environ.get("PAT_TOKEN", "")
 
 def live_print(content):
-    print(content, flush=True)
+ print(content, flush=True)
+
+def write_summary(content):
+ """写入 GitHub Actions Job Summary（Markdown 格式，仅 GitHub 环境生效）"""
+ summary_file = os.environ.get("GITHUB_STEP_SUMMARY", "")
+ if summary_file:
+  try:
+   with open(summary_file, "a", encoding="utf-8") as f:
+    f.write(content + "\n")
+  except OSError:
+   pass
 
 # ===============================
 # 2. 基础工具函数
@@ -213,6 +223,20 @@ if __name__ == "__main__":
     if is_forced: live_print(f"🚨 强制触发")
     elif changed: live_print(f"✨ 更新触发")
     else: live_print(f"⏭️ 跳过 (计数: {current_count}/3)")
+
+    # 写入 Job Summary
+    write_summary("### 🎬 测速与联动摘要\n")
+    write_summary("| 指标 | 数值 |")
+    write_summary("|------|------|")
+    write_summary(f"| 🧪 抽样 IP | {len(ip_map)} 个 |")
+    write_summary(f"| ✅ 存活 IP | {len(valid_hostports)} 个 |")
+    write_summary(f"| ❌ 无流 IP | {len(ip_map) - len(valid_hostports)} 个 |")
+    if is_forced:
+     write_summary("| ⚖️ 联动决策 | 🚨 强制触发 |")
+    elif changed:
+     write_summary("| ⚖️ 联动决策 | ✨ 更新触发 |")
+    else:
+     write_summary(f"| ⚖️ 联动决策 | ⏭️ 跳过 ({current_count}/3) |")
 
     if should_trigger and TRIGGER_TOKEN:
         live_print(f"::group::🔗 远程联动: {TARGET_REPO}")
