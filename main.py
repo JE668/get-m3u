@@ -235,12 +235,27 @@ def update_rtp_template():
   log_group_end()
 
 def _channel_quality(name):
-  """频道名称质量评分（用于去重时保留更高质量名称）"""
-  name_lower = name.lower()
-  if "4k" in name_lower or "超高清" in name: return 4
-  if "超清" in name or "uhd" in name_lower: return 3
-  if "高清" in name or "hd" in name_lower: return 2
-  return 1
+    """频道名称质量评分（用于去重时保留更高质量名称）"""
+    name_lower = name.lower()
+    if "4k" in name_lower or "超高清" in name: return 4
+    if "超清" in name or "uhd" in name_lower: return 3
+    if "高清" in name or "hd" in name_lower: return 2
+    return 1
+
+def _atomic_write(filepath, content):
+    """原子化写入：先写临时文件再 rename，防止中途崩溃产生残缺文件"""
+    import tempfile
+    dir_path = os.path.dirname(filepath) or '.'
+    tmp = tempfile.NamedTemporaryFile(mode='w', encoding='utf-8',
+                                       dir=dir_path, delete=False, suffix='.tmp')
+    try:
+        tmp.write(content)
+        tmp.close()
+        os.replace(tmp.name, filepath)
+    except Exception:
+        try: os.unlink(tmp.name)
+        except OSError: pass
+        raise
 
 # ===============================
 # 4. 主程序入口
@@ -338,17 +353,4 @@ if __name__ == "__main__":
   live_print(f"└── M3U 生成: {stats.get('m3u_count', 0)} 条")
   live_print(f"\n⏱️ 总耗时: {elapsed}s")
 
-def _atomic_write(filepath, content):
-  """原子化写入：先写临时文件再 rename，防止中途崩溃产生残缺文件"""
-  import tempfile
-  dir_path = os.path.dirname(filepath)
-  tmp = tempfile.NamedTemporaryFile(mode='w', encoding='utf-8', 
-                                     dir=dir_path, delete=False, suffix='.tmp')
-  try:
-    tmp.write(content)
-    tmp.close()
-    os.replace(tmp.name, filepath)
-  except Exception:
-    try: os.unlink(tmp.name)
-    except OSError: pass
-    raise
+
