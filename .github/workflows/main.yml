@@ -1,11 +1,13 @@
 name: 📡 IPTV Discovery & Probe
 
 on:
-  push:
-    branches: ["main"]
   schedule:
     - cron: '0 0/4 * * *'
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -42,21 +44,13 @@ jobs:
         env:
           FOFA_COOKIE: ${{ secrets.FOFA_COOKIE }}
           PYTHONUNBUFFERED: 1
-        run: |
-          echo "## 🔍 资源发现报告" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          python main.py 2>&1 | tee /tmp/discovery.log
-          echo '```' >> $GITHUB_STEP_SUMMARY
+        run: python main.py 2>&1 | tee /tmp/discovery.log
 
       - name: 🎬 Phase 2 — 质量探测 (probe.py)
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
           PYTHONUNBUFFERED: 1
-        run: |
-          echo "## 🎬 质量探测报告" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          python probe.py 2>&1 | tee /tmp/probe.log
-          echo '```' >> $GITHUB_STEP_SUMMARY
+        run: python probe.py 2>&1 | tee /tmp/probe.log
 
       # ──── 结果统计 ────
       - name: 📊 运行统计
@@ -88,6 +82,16 @@ jobs:
           if [ -f data/blacklist.txt ]; then
             bl_count=$(grep -c . data/blacklist.txt 2>/dev/null || echo "0")
             echo "| 🚫 黑名单 C段 | ${bl_count} |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # 日志尾部错误（失败时辅助诊断）
+          if [ -f /tmp/discovery.log ]; then
+            disc_lines=$(wc -l < /tmp/discovery.log)
+            echo "| 📝 发现日志行数 | ${disc_lines} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f /tmp/probe.log ]; then
+            probe_lines=$(wc -l < /tmp/probe.log)
+            echo "| 📝 探测日志行数 | ${probe_lines} |" >> $GITHUB_STEP_SUMMARY
           fi
 
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -123,11 +127,28 @@ jobs:
             echo "✅ 已提交并推送 **${FILE_COUNT}** 个文件变更" >> $GITHUB_STEP_SUMMARY
           fi
 
-      # ──── 失败通知 ────
+      # ──── 失败告警 ────
       - name: 🚨 运行异常告警
         if: failure()
         run: |
           echo "## 🚨 运行异常" >> $GITHUB_STEP_SUMMARY
           echo "❌ 本次运行出现错误，请检查上方日志！" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "> 🔍 [查看完整日志](/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)" >> $GITHUB_STEP_SUMMARY
+
+          # 输出日志尾部辅助诊断
+          echo "<details><summary>📋 Discovery 日志尾部</summary>" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          tail -30 /tmp/discovery.log 2>/dev/null || echo "(无日志)"
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "</details>" >> $GITHUB_STEP_SUMMARY
+
+          echo "<details><summary>📋 Probe 日志尾部</summary>" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          tail -30 /tmp/probe.log 2>/dev/null || echo "(无日志)"
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "</details>" >> $GITHUB_STEP_SUMMARY
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "> 🔍 [查看完整日志](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
