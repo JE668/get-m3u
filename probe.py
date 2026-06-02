@@ -1,6 +1,7 @@
-import os, subprocess, time, concurrent.futures, tempfile
+import os, subprocess, time, concurrent.futures
 import requests
 from datetime import datetime
+from utils import live_print, write_summary, atomic_write
 
 # ===============================
 # 1. 配置区 (目录结构优化)
@@ -13,40 +14,10 @@ TRIGGER_COUNTER_FILE = "data/trigger_counter.txt"
 RTP_FILE = "data/rtp/ChinaTelecom-Guangdong.txt"
 SNAPSHOT_DIR = "data/.last_snapshot" # 变动比对快照目录
 
-TARGET_REPO = "JE668/iptv-api"
-TARGET_WORKFLOW = "main.yml"
-TARGET_BRANCH = "master"
+TARGET_REPO = "JE668/m3u-checker-max"
+TARGET_WORKFLOW = "update.yml"
+TARGET_BRANCH = "main"
 TRIGGER_TOKEN = os.environ.get("PAT_TOKEN", "")
-
-def live_print(content):
- print(content, flush=True)
-
-def write_summary(content):
- """写入 GitHub Actions Job Summary（Markdown 格式，仅 GitHub 环境生效）"""
- summary_file = os.environ.get("GITHUB_STEP_SUMMARY", "")
- if summary_file:
-  try:
-   with open(summary_file, "a", encoding="utf-8") as f:
-    f.write(content + "\n")
-  except OSError:
-   pass
-
-# ===============================
-# 2. 基础工具函数
-# ===============================
-def _atomic_write(filepath, content):
-    """原子化写入：先写临时文件再 rename，防止中途崩溃产生残缺文件"""
-    dir_path = os.path.dirname(filepath) or '.'
-    tmp = tempfile.NamedTemporaryFile(mode='w', encoding='utf-8',
-                                       dir=dir_path, delete=False, suffix='.tmp')
-    try:
-        tmp.write(content)
-        tmp.close()
-        os.replace(tmp.name, filepath)
-    except Exception:
-        try: os.unlink(tmp.name)
-        except OSError: pass
-        raise
 
 # ===============================
 # 3. 比对与联动逻辑
@@ -200,18 +171,18 @@ if __name__ == "__main__":
                                 m3u_lines.append(f"http://{hp}/rtp/{suffix}")
                             except (ValueError, IndexError): continue
 
-                    _atomic_write(SOURCE_M3U_FILE, "\n".join(m3u_lines))
+                    atomic_write(SOURCE_M3U_FILE, "\n".join(m3u_lines))
 
                     live_print(f" 📝 成功重组纯净版: {SOURCE_M3U_FILE} (标准M3U)")
                     live_print(f"✨ 测速结束: 存活 {len(valid_hostports)} 个 IP | 生成 {len(m3u_lines)-1} 条纯净链接")
                 else:
                     live_print(f" ❌ 找不到 RTP 模板 {RTP_FILE}，无法重组！")
                     # 无 RTP 模板时写入空 M3U 头，避免下游使用过期数据
-                    _atomic_write(SOURCE_M3U_FILE, "#EXTM3U\n")
+                    atomic_write(SOURCE_M3U_FILE, "#EXTM3U\n")
                     live_print(f" 📝 已写入空 M3U 头: {SOURCE_M3U_FILE}")
             else:
                 # 如果没有存活IP，清空文件
-                _atomic_write(SOURCE_M3U_FILE, "")
+                atomic_write(SOURCE_M3U_FILE, "")
                 live_print(f" 📝 存活 IP 为 0，已清空 {SOURCE_M3U_FILE}")
 
             live_print("::endgroup::")

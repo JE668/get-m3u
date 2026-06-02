@@ -1,5 +1,22 @@
-import os, re, requests, time, concurrent.futures, random, threading, tempfile
+import os, re, requests, time, concurrent.futures, random, threading, io
 from collections import Counter
+import ip2region.util as ip2region_util
+import ip2region.searcher as ip2region_searcher
+from utils import live_print, write_summary, log_group_start, log_group_end, log_section, atomic_write
+
+# --- 初始化离线 IP 归属地查询（ip2region xdb，零网络延迟） ---
+_ip2region_searcher = None
+def _get_ip2region():
+    global _ip2region_searcher
+    if _ip2region_searcher is None:
+        db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "ip2region.xdb")
+        handle = io.open(db_path, "rb")
+        header = ip2region_util.load_header(handle)
+        version = ip2region_util.version_from_header(header)
+        v_index = ip2region_util.load_vector_index(handle)
+        _ip2region_searcher = ip2region_searcher.new_with_vector_index(version, db_path, v_index)
+        handle.close()
+    return _ip2region_searcher
 
 # ===============================
 # 1. 配置区 (目录结构优化版)
@@ -32,54 +49,31 @@ SOURCE_NONCHECK_FILE = "output/source-m3u-noncheck.txt"
 DEFAULT_PORTS = [4022, 8000, 8686, 55555, 54321, 1024, 10001, 8443, 8888]
 
 # ===============================
-# 2. 基础工具函数
+# 2. 核心功能函数（工具函数已迁移至 utils.py）
 # ===============================
-SUMMARY_FILE = os.environ.get("GITHUB_STEP_SUMMARY", "")
-
-def live_print(content):
- print(content, flush=True)
-
-def write_summary(content):
- """写入 GitHub Actions Job Summary（Markdown 格式，仅 GitHub 环境生效）"""
- if SUMMARY_FILE:
-  try:
-   with open(SUMMARY_FILE, "a", encoding="utf-8") as f:
-    f.write(content + "\n")
-  except OSError:
-   pass
-
-def log_group_start(name):
- live_print(f"\n::group::{name}")
-
-def log_group_end():
- live_print("\n::endgroup::")
-
-def log_section(name, icon="🔹"):
- live_print(f"\n{icon} {'='*15} {name} {'='*15}")
 
 # ===============================
 # 3. 核心功能函数
 # ===============================
 
 def get_geo_info(ip, session=None):
-    """查询 IP 归属地（含限速容错）"""
-    s = session or requests
-    for attempt in range(3):
-        try:
-            r = s.get(f"http://ip-api.com/json/{ip}?lang=zh-CN", timeout=5)
-            if r.status_code == 429:
-                wait = 5 * (attempt + 1)
-                live_print(f"  ⏳ ip-api 限速，等待 {wait}s 后重试...")
-                time.sleep(wait); continue
-            res = r.json()
-            if res.get("status") != "success": return False, "API查询失败"
-            region, city, isp = res.get("regionName", "未知"), res.get("city", "未知"), res.get("isp", "未知").lower()
-            is_gd = "广东" in region
-            is_tel = any(k in isp for k in ["电信", "telecom", "chinanet"])
-            return (is_gd and is_tel), f"{region}-{city} | {res.get('isp')}"
-        except (requests.RequestException, ValueError) as e:
-            return False, f"查询异常: {e}"
-    return False, "ip-api 限速重试耗尽"
+    """查询 IP 归属地（离线 ip2region，零延迟无限速）"""
+    try:
+        region = _get_ip2region().search(ip)
+        if not region:
+            return False, "无归属数据"
+        # ip2region v3 返回格式: "国家|省份|城市|ISP|iso-alpha2-Code"
+        parts = region.split("|")
+        province = parts[1] if len(parts) > 1 else "未知"
+        city = parts[2] if len(parts) > 2 else "未知"
+        isp = parts[3].lower() if len(parts) > 3 and parts[3] else "未知"
+        is_gd = "广东" in province
+        is_tel = any(k in isp for k in ["电信", "telecom", "chinanet"])
+        isp_display = parts[3] if len(parts) > 3 and parts[3] else "未知"
+        desc = f"{province}-{city} | {isp_display}"
+        return (is_gd and is_tel), desc
+    except Exception as e:
+        return False, f"查询异常: {e}"
 
 def filter_segments(segments):
     """C段 预校验与清洗"""
@@ -107,7 +101,6 @@ def filter_segments(segments):
             live_print(f"  [{idx}/{total}] ❌ 拉黑: {seg} ({desc})")
             new_black_segments.append(seg)
             blacklist.add(seg)
-        time.sleep(2.0)  # API 频率保护（ip-api 限45次/分钟，2s间隔≈30次/分钟）
 
     if new_black_segments:
         with open(BLACKLIST_FILE, "a", encoding="utf-8") as f:
@@ -166,32 +159,62 @@ def check_udpxy(ip_port, scanned_set, lock):
     return False, None
 
 def run_native_scan(segments, ports):
-    """全量矩阵扫描"""
-    log_group_start("🚀 启动全量矩阵扫描")
+    """增量 + 全量混合扫描（优先验证已知 IP，减少无效探测）"""
+    log_group_start("🚀 启动扫描 (增量优先)")
     if not segments:
         live_print("⚠️ 无有效网段"); log_group_end(); return []
 
     scan_workers = int(os.environ.get("SCAN_WORKERS", "100"))
-    tasks = [f"{s}.{i}:{p}" for s in segments for i in range(1, 255) for p in ports]
+
+    # --- 增量阶段: 先验证上次已知存活的 IP ---
+    known_alive = []
+    if os.path.exists(SOURCE_IP_FILE):
+        with open(SOURCE_IP_FILE, "r", encoding="utf-8") as f:
+            known_alive = [line.strip() for line in f if line.strip()]
+    
+    alive_ips = []
+    if known_alive:
+        live_print(f"🔄 增量验证: {len(known_alive)} 个已知 IP...")
+        scanned_set = set()
+        lock = threading.Lock()
+        with concurrent.futures.ThreadPoolExecutor(max_workers=scan_workers) as ex:
+            futures = {ex.submit(check_udpxy, ip, scanned_set, lock): ip for ip in known_alive}
+            for f in concurrent.futures.as_completed(futures):
+                ok, matched = f.result()
+                if ok and matched:
+                    alive_ips.append(matched)
+        live_print(f"✅ 存活: {len(alive_ips)}/{len(known_alive)} 个")
+
+    # 计算已知存活 IP 所在的 C段，跳过全量扫描
+    alive_segs = set()
+    for ip_port in alive_ips:
+        seg = ".".join(ip_port.split(":")[0].split(".")[:3])
+        alive_segs.add(seg)
+
+    # 全量阶段: 只扫描无已知存活的 C段
+    cold_segments = [s for s in segments if s not in alive_segs]
+    tasks = [f"{s}.{i}:{p}" for s in cold_segments for i in range(1, 255) for p in ports]
     random.shuffle(tasks)
-    live_print(f"⚡ 任务规模: {len(tasks)} 次探测 (并发: {scan_workers})")
 
-    found_ips = []
-    scanned_ips_set = set()
-    lock = threading.Lock()
-    with concurrent.futures.ThreadPoolExecutor(max_workers=scan_workers) as ex:
-        futures = {ex.submit(check_udpxy, ip, scanned_ips_set, lock): ip for ip in tasks}
-        for i, f in enumerate(concurrent.futures.as_completed(futures)):
-            ok, matched_ip = f.result()
-            if ok:
-                live_print(f"  🌟 [发现] {matched_ip}")
-                found_ips.append(matched_ip)
-            if (i+1)%5000==0:
-                live_print(f"  📊 进度: {i+1}/{len(tasks)} | 存活: {len(found_ips)}")
+    if tasks:
+        live_print(f"⚡ 全量扫描: {len(cold_segments)} 个冷C段, {len(tasks)} 次探测 (并发: {scan_workers})")
+        scanned_ips_set = set()
+        lock = threading.Lock()
+        with concurrent.futures.ThreadPoolExecutor(max_workers=scan_workers) as ex:
+            futures = {ex.submit(check_udpxy, ip, scanned_ips_set, lock): ip for ip in tasks}
+            for i, f in enumerate(concurrent.futures.as_completed(futures)):
+                ok, matched_ip = f.result()
+                if ok and matched_ip:
+                    live_print(f" 🌟 [发现] {matched_ip}")
+                    alive_ips.append(matched_ip)
+                if (i+1)%5000==0:
+                    live_print(f" 📊 进度: {i+1}/{len(tasks)} | 存活: {len(alive_ips)}")
+    else:
+        live_print(f"⏭️ 所有C段均有已知存活IP，跳过全量扫描")
 
-    live_print(f"✅ 扫描结束 | 发现 {len(found_ips)} 个")
+    live_print(f"✅ 扫描结束 | 总发现 {len(set(alive_ips))} 个")
     log_group_end()
-    return list(set(found_ips))
+    return list(set(alive_ips))
 
 def scrape_fofa():
     """FOFA 抓取"""
@@ -260,20 +283,6 @@ def _channel_quality(name):
     if "高清" in name or "hd" in name_lower: return 2
     return 1
 
-def _atomic_write(filepath, content):
-    """原子化写入：先写临时文件再 rename，防止中途崩溃产生残缺文件"""
-    dir_path = os.path.dirname(filepath) or '.'
-    tmp = tempfile.NamedTemporaryFile(mode='w', encoding='utf-8',
-                                       dir=dir_path, delete=False, suffix='.tmp')
-    try:
-        tmp.write(content)
-        tmp.close()
-        os.replace(tmp.name, filepath)
-    except Exception:
-        try: os.unlink(tmp.name)
-        except OSError: pass
-        raise
-
 # ===============================
 # 4. 主程序入口
 # ===============================
@@ -320,8 +329,7 @@ if __name__ == "__main__":
         else:
             live_print(f"  [{idx:02d}/{len(unique_all):02d}] ⏭️ 剔除 | {ip:<21} | {desc}")
             stats["geo_fail"] += 1
-        time.sleep(2.0)
-    log_group_end()
+            log_group_end()
 
     # 4. 写入文件（标准 M3U 格式 + 原子化写入）
     if geo_ips:
@@ -329,7 +337,7 @@ if __name__ == "__main__":
         geo_ips.sort()
 
         # 写入 source-ip.txt（原子化）
-        _atomic_write(SOURCE_IP_FILE, "\n".join(geo_ips))
+        atomic_write(SOURCE_IP_FILE, "\n".join(geo_ips))
         live_print(f"  📝 {SOURCE_IP_FILE}")
 
         # 写入标准 M3U
@@ -360,9 +368,9 @@ if __name__ == "__main__":
                 except (ValueError, IndexError):
                     continue
 
-        _atomic_write(SOURCE_M3U_FILE, "\n".join(m3u_lines))
+        atomic_write(SOURCE_M3U_FILE, "\n".join(m3u_lines))
         live_print(f"  📝 {SOURCE_M3U_FILE} (标准M3U)")
-        _atomic_write(SOURCE_NONCHECK_FILE, "\n".join(compat_lines))
+        atomic_write(SOURCE_NONCHECK_FILE, "\n".join(compat_lines))
         live_print(f"  📝 {SOURCE_NONCHECK_FILE} (兼容格式)")
 
         stats["m3u_count"] = len(geo_ips) * len(rtps)
