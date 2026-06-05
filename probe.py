@@ -17,7 +17,12 @@ SNAPSHOT_DIR = "data/.last_snapshot" # 变动比对快照目录
 TARGET_REPO = "JE668/m3u-checker-max"
 TARGET_WORKFLOW = "update.yml"
 TARGET_BRANCH = "main"
-TRIGGER_TOKEN = os.environ.get("PAT_TOKEN", "")
+TRIGGER_TOKEN=os.environ.get("PAT_TOKEN", "")
+
+# 联动 iptv-api：get-m3u 完成后同时触发订阅源更新
+IPTV_API_REPO = "JE668/iptv-api"
+IPTV_API_WORKFLOW = "main.yml"
+IPTV_API_BRANCH = "master"
 
 # ===============================
 # 3. 比对与联动逻辑
@@ -210,10 +215,21 @@ if __name__ == "__main__":
      write_summary(f"| ⚖️ 联动决策 | ⏭️ 跳过 ({current_count}/3) |")
 
     if should_trigger and TRIGGER_TOKEN:
+        # 触发 m3u-checker-max
         live_print(f"::group::🔗 远程联动: {TARGET_REPO}")
         try:
             url = f"https://api.github.com/repos/{TARGET_REPO}/actions/workflows/{TARGET_WORKFLOW}/dispatches"
             r = requests.post(url, headers={"Authorization": f"token {TRIGGER_TOKEN}", "Accept": "application/vnd.github.v3+json"}, json={"ref": TARGET_BRANCH}, timeout=10)
+            live_print(f"🎉 状态码: {r.status_code}")
+        except requests.RequestException as e:
+            live_print(f"❌ 请求失败: {e}")
+        live_print("::endgroup::")
+
+        # 同时触发 iptv-api（订阅源更新）
+        live_print(f"::group::🔗 远程联动: {IPTV_API_REPO}")
+        try:
+            url = f"https://api.github.com/repos/{IPTV_API_REPO}/actions/workflows/{IPTV_API_WORKFLOW}/dispatches"
+            r = requests.post(url, headers={"Authorization": f"token {TRIGGER_TOKEN}", "Accept": "application/vnd.github.v3+json"}, json={"ref": IPTV_API_BRANCH}, timeout=10)
             live_print(f"🎉 状态码: {r.status_code}")
         except requests.RequestException as e:
             live_print(f"❌ 请求失败: {e}")
