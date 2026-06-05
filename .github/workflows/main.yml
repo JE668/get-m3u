@@ -23,7 +23,7 @@ jobs:
       - name: 📥 检出代码
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: 🐍 配置 Python 3.12
         uses: actions/setup-python@v5
@@ -37,6 +37,20 @@ jobs:
           pip install -r requirements.txt
           echo "::endgroup::"
           echo "✅ 依赖安装完成"
+
+      - name: 🗄️ 更新 ip2region 离线库
+        run: |
+          echo "::group::📥 检查 ip2region xdb 版本"
+          XDB_URL="https://raw.githubusercontent.com/lionsoul2014/ip2region/master/binding/python/data/ip2region.xdb"
+          curl -fsSL -z data/ip2region.xdb -o data/ip2region.xdb.new "$XDB_URL" 2>/dev/null || true
+          if [ -f data/ip2region.xdb.new ] && [ $(stat -c%s data/ip2region.xdb.new 2>/dev/null || stat -f%z data/ip2region.xdb.new 2>/dev/null || echo 0) -gt 1000000 ]; then
+            mv data/ip2region.xdb.new data/ip2region.xdb
+            echo "✅ ip2region xdb 已更新"
+          else
+            rm -f data/ip2region.xdb.new 2>/dev/null
+            echo "ℹ️ ip2region xdb 无更新或下载失败，使用现有版本"
+          fi
+          echo "::endgroup::"
 
       # ──── 核心任务 ────
       - name: 🔍 Phase 1 — 资源发现 (main.py)

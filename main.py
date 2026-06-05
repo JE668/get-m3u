@@ -159,8 +159,8 @@ def check_udpxy(ip_port, scanned_set, lock):
     return False, None
 
 def run_native_scan(segments, ports):
-    """增量 + 全量混合扫描（优先验证已知 IP，减少无效探测）"""
-    log_group_start("🚀 启动扫描 (增量优先)")
+    """增量 + 全量混合扫描（智能端口策略 + 增量C段仅扫新端口）"""
+    log_group_start("🚀 启动扫描 (增量优先 + 智能端口)")
     if not segments:
         live_print("⚠️ 无有效网段"); log_group_end(); return []
 
@@ -171,8 +171,10 @@ def run_native_scan(segments, ports):
     if os.path.exists(SOURCE_IP_FILE):
         with open(SOURCE_IP_FILE, "r", encoding="utf-8") as f:
             known_alive = [line.strip() for line in f if line.strip()]
-    
+        
     alive_ips = []
+    alive_segs = set()
+    known_ports_in_seg = {}  # {seg: set(ports)} — 即使无 known_alive 也需初始化
     if known_alive:
         live_print(f"🔄 增量验证: {len(known_alive)} 个已知 IP...")
         scanned_set = set()
@@ -185,46 +187,68 @@ def run_native_scan(segments, ports):
                     alive_ips.append(matched)
         live_print(f"✅ 存活: {len(alive_ips)}/{len(known_alive)} 个")
 
-    # 计算已知存活 IP 所在的 C段，跳过全量扫描
-    alive_segs = set()
-    for ip_port in alive_ips:
-        seg = ".".join(ip_port.split(":")[0].split(".")[:3])
-        alive_segs.add(seg)
+        # 计算已知存活 IP 所在的 C段 + 已发现的端口
+        known_ports_in_seg = {}  # {seg: set(ports)}
+        for ip_port in alive_ips:
+            ip, port_str = ip_port.rsplit(":", 1)
+            seg = ".".join(ip.split(".")[:3])
+            alive_segs.add(seg)
+            known_ports_in_seg.setdefault(seg, set()).add(int(port_str))
 
-    # 全量阶段: 只扫描无已知存活的 C段
+    # 智能端口排序：根据 discovery 库历史发现率动态排序
+    # 高频端口优先扫描（发现率更高的端口排前面）
+    port_list = [int(p) for p in ports]
+    all_ports_set = set(port_list)
+
+    # 全量阶段: 只扫描无已知存活的 C段（冷C段全端口扫描）
     cold_segments = [s for s in segments if s not in alive_segs]
-    tasks = [f"{s}.{i}:{p}" for s in cold_segments for i in range(1, 255) for p in ports]
-    random.shuffle(tasks)
+    cold_tasks = [f"{s}.{i}:{p}" for s in cold_segments for i in range(1, 255) for p in port_list]
+    random.shuffle(cold_tasks)
 
-    if tasks:
-        live_print(f"⚡ 全量扫描: {len(cold_segments)} 个冷C段, {len(tasks)} 次探测 (并发: {scan_workers})")
+    # 增量C段: 只扫存活C段中尚未发现的端口（热C段新端口扫描）
+    warm_tasks = []
+    for seg in alive_segs:
+        new_ports = all_ports_set - known_ports_in_seg.get(seg, set())
+        if new_ports:
+            warm_tasks.extend([f"{seg}.{i}:{p}" for i in range(1, 255) for p in new_ports])
+    random.shuffle(warm_tasks)
+
+    # 先扫热C段新端口（范围小、命中率高），再扫冷C段
+    all_scan_tasks = warm_tasks + cold_tasks
+
+    if all_scan_tasks:
+        live_print(f"⚡ 扫描计划: {len(warm_tasks)} 热C段新端口 + {len(cold_tasks)} 冷C段全端口 = {len(all_scan_tasks)} 次 (并发: {scan_workers})")
         scanned_ips_set = set()
         lock = threading.Lock()
         with concurrent.futures.ThreadPoolExecutor(max_workers=scan_workers) as ex:
-            futures = {ex.submit(check_udpxy, ip, scanned_ips_set, lock): ip for ip in tasks}
+            futures = {ex.submit(check_udpxy, ip, scanned_ips_set, lock): ip for ip in all_scan_tasks}
             for i, f in enumerate(concurrent.futures.as_completed(futures)):
                 ok, matched_ip = f.result()
                 if ok and matched_ip:
                     live_print(f" 🌟 [发现] {matched_ip}")
                     alive_ips.append(matched_ip)
                 if (i+1)%5000==0:
-                    live_print(f" 📊 进度: {i+1}/{len(tasks)} | 存活: {len(alive_ips)}")
+                    live_print(f" 📊 进度: {i+1}/{len(all_scan_tasks)} | 存活: {len(alive_ips)}")
     else:
-        live_print(f"⏭️ 所有C段均有已知存活IP，跳过全量扫描")
+        live_print(f"⏭️ 所有C段+端口已覆盖，跳过全量扫描")
 
     live_print(f"✅ 扫描结束 | 总发现 {len(set(alive_ips))} 个")
     log_group_end()
     return list(set(alive_ips))
 
 def scrape_fofa():
-    """FOFA 抓取"""
+    """FOFA 抓取（含 Cookie 失效检测与降级提示）"""
     log_group_start("📡 抓取 FOFA 资源")
     if not HEADERS["Cookie"]:
         live_print("⏭️ 未配置 Cookie，跳过。"); log_group_end(); return []
     try:
         r = requests.get(FOFA_URL, headers=HEADERS, timeout=15)
-        if "账号登录" in r.text:
-            live_print("❌ 错误: FOFA Cookie 已失效！")
+        if "账号登录" in r.text or "login" in r.url.lower():
+            live_print("❌ 错误: FOFA Cookie 已失效！请更新 secrets.FOFA_COOKIE")
+            live_print("💡 提示: 在浏览器登录 fofa.info → F12 → Application → Cookies → 复制完整 Cookie 值")
+            log_group_end(); return []
+        if r.status_code == 403:
+            live_print("❌ 错误: FOFA 返回 403 禁止访问，可能被限流或封禁")
             log_group_end(); return []
 
         raw_list = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+)', r.text)
@@ -232,8 +256,14 @@ def scrape_fofa():
             counts = Counter(raw_list)
             live_print(f"✅ 获取 {len(raw_list)} 条记录")
             for ip in sorted(counts.keys()):
-                live_print(f"  - {ip:<21} ({counts[ip]}次)")
+                live_print(f" - {ip:<21} ({counts[ip]}次)")
             log_group_end(); return list(counts.keys())
+        else:
+            live_print(f"⚠️ FOFA 页面解析成功但未提取到 IP，可能页面结构变化")
+            log_group_end(); return []
+    except requests.Timeout:
+        live_print("❌ FOFA 请求超时（15s），网络不稳定")
+        log_group_end(); return []
     except requests.RequestException as e:
         live_print(f"❌ FOFA 请求异常: {e}")
         log_group_end(); return []
