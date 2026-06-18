@@ -85,10 +85,18 @@ def get_trigger_status(changed):
     return should, count, forced
 
 # ===============================
-# 4. 抽样测速逻辑
+# 4. 抽样测速逻辑（量化版：512KB + 带宽计算）
 # ===============================
+PROBE_DOWNLOAD_TARGET = 512 * 1024  # 512KB，比原128KB多4倍数据量，支持带宽计算
+PROBE_TIMEOUT_PER_URL = 6           # 单URL最多6秒（原5秒）
+SOURCE_META_FILE = "output/source-meta.json"
+
 def fast_ip_probe(host_port, url_list):
-    """抽取最多3个频道测试是否能下载视频流，host_port 格式为 ip:port"""
+    """
+    抽取最多3个频道测试流质量。
+    返回: (is_alive, host_port, bandwidth_mbps, log_message)
+    bandwidth_mbps 为 0 表示无数据（死服务器）
+    """
     for test_url in url_list[:3]:
         start = time.time()
         try:
@@ -97,11 +105,20 @@ def fast_ip_probe(host_port, url_list):
                 down = 0
                 for chunk in r.iter_content(1024*64):
                     down += len(chunk)
-                    if down >= 1024*128: # 成功下载 128KB 数据
-                        return True, host_port, f" 🟢 [顺畅] {host_port:<21} | {round(time.time()-start,2)}s"
-                    if time.time() - start > 5: break
-        except requests.RequestException: continue
-    return False, host_port, f" 🔴 [无流] {host_port:<21}"
+                    if down >= PROBE_DOWNLOAD_TARGET:
+                        elapsed = time.time() - start
+                        bw = round(down * 8 / elapsed / 1_000_000, 1)
+                        return True, host_port, bw, f" 🟢 [存活] {host_port:<21} | {elapsed:.2f}s | {bw:.1f}Mbps"
+                    if time.time() - start > PROBE_TIMEOUT_PER_URL:
+                        break
+                # 下载不足但拿到了一些数据
+                elapsed = time.time() - start
+                bw = round(down * 8 / elapsed / 1_000_000, 1) if down > 4096 else 0
+                if bw > 0:
+                    return True, host_port, bw, f" 🟡 [弱流] {host_port:<21} | {elapsed:.2f}s | {bw:.1f}Mbps"
+        except requests.RequestException:
+            continue
+    return False, host_port, 0.0, f" 🔴 [无流] {host_port:<21}"
 
 # ===============================
 # 5. 运行主逻辑
@@ -128,8 +145,9 @@ if __name__ == "__main__":
                     url_map[ip_key].append(url)
                 except (ValueError, IndexError): continue
 
-            live_print(f"::group::🎬 抽样测速 (共 {len(ip_map)} 个独立 IP)")
+            live_print(f"::group::🎬 抽样测速 (共 {len(ip_map)} 个独立 IP，量化版 {PROBE_DOWNLOAD_TARGET//1024}KB)")
             valid_hostports, logs = set(), []
+            meta_data = {}  # host_port -> {bandwidth, latency}
 
             # 多线程测速 (并发数可配置)
             # 每个 ip:port 独立探测，通过后存回 ip:port（保留端口号）
@@ -142,12 +160,20 @@ if __name__ == "__main__":
             with concurrent.futures.ThreadPoolExecutor(max_workers=probe_workers) as ex:
                 futures = [ex.submit(fast_ip_probe, hp, urls) for hp, urls in hostport_url_map.items()]
                 for f in concurrent.futures.as_completed(futures):
-                    ok, hp, msg = f.result()
+                    ok, hp, bw, msg = f.result()
                     live_print(msg)
                     logs.append(msg.strip())
-                    if ok: valid_hostports.add(hp)
+                    if ok:
+                        valid_hostports.add(hp)
+                        meta_data[hp] = {"bandwidth_mbps": bw}
 
             live_print("::endgroup::")
+
+            # 写入元数据供下游 m3u-checker-max 使用
+            if meta_data:
+                import json
+                atomic_write(SOURCE_META_FILE, json.dumps(meta_data, ensure_ascii=False, indent=2))
+                live_print(f" 📝 服务器元数据已写入: {SOURCE_META_FILE} ({len(meta_data)} 台)")
 
             # ==========================================
             # 6. 重新拼装存活 IP 并写入 source-m3u.txt（标准 M3U 格式）
