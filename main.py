@@ -269,10 +269,13 @@ def scrape_fofa():
         log_group_end(); return []
 
 def update_rtp_template():
-    """RTP 模板下载"""
+    """RTP 模板下载（并发抓取两个源）"""
     log_group_start("🔄 同步 RTP 模板")
     unique_rtp = {}
-    for url in RTP_SOURCES:
+
+    def _download_single(url):
+        """下载并解析单个 RTP 源"""
+        local_rtp = {}
         try:
             r = requests.get(url, timeout=15); r.encoding = 'utf-8'
             if r.status_code == 200:
@@ -285,13 +288,8 @@ def update_rtp_template():
                             for j in range(i+1, min(i+5, len(lines))):
                                 if lines[j].strip().startswith("rtp://"):
                                     rtp_url = lines[j].strip()
-                                    # 保留质量更高的名称（4K > 超清 > 高清 > 标清）
-                                    if rtp_url not in unique_rtp:
-                                        unique_rtp[rtp_url] = name
-                                    else:
-                                        existing = unique_rtp[rtp_url]
-                                        if _channel_quality(name) > _channel_quality(existing):
-                                            unique_rtp[rtp_url] = name
+                                    if rtp_url not in local_rtp or _channel_quality(name) > _channel_quality(local_rtp[rtp_url]):
+                                        local_rtp[rtp_url] = name
                                     count += 1
                                     break
                         except (ValueError, IndexError):
@@ -299,6 +297,16 @@ def update_rtp_template():
                 live_print(f"  📥 {url.split('/')[-1]} | 解析 {count} 条")
         except requests.RequestException:
             live_print(f"  ❌ 下载失败: {url}")
+        return local_rtp
+
+    # 并发下载两个 RTP 源
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as ex:
+        futures = {ex.submit(_download_single, url): url for url in RTP_SOURCES}
+        for future in concurrent.futures.as_completed(futures):
+            local = future.result()
+            for rtp_url, name in local.items():
+                if rtp_url not in unique_rtp or _channel_quality(name) > _channel_quality(unique_rtp[rtp_url]):
+                    unique_rtp[rtp_url] = name
 
     if unique_rtp:
         with open(RTP_FILE, "w", encoding="utf-8") as f:
@@ -376,27 +384,24 @@ if __name__ == "__main__":
             with open(RTP_FILE, encoding="utf-8") as f:
                 rtps = [x.strip() for x in f if "," in x]
 
-        m3u_lines = ["#EXTM3U"]
-        for ip in geo_ips:
-            for r in rtps:
-                try:
-                    name, rtp_url = r.split(",", 1)
-                    suffix = rtp_url.split("://")[1]
-                    m3u_lines.append(f"#EXTINF:-1,{name}")
-                    m3u_lines.append(f"http://{ip}/rtp/{suffix}")
-                except (ValueError, IndexError):
-                    continue
+        # 预计算 RTP 条目（避免每次循环内部重复 split）
+        rtp_entries = []
+        for r in rtps:
+            try:
+                name, rtp_url = r.split(",", 1)
+                suffix = rtp_url.split("://")[1]  # "239.77.1.234:5146"
+                rtp_entries.append((name, suffix))
+            except (ValueError, IndexError):
+                continue
 
-        # 同时输出兼容的自定义格式
+        m3u_lines = ["#EXTM3U"]
         compat_lines = []
         for ip in geo_ips:
-            for r in rtps:
-                try:
-                    cname = r.split(",")[0]
-                    csuffix = r.split("://")[1]
-                    compat_lines.append(f"{cname},http://{ip}/rtp/{csuffix}")
-                except (ValueError, IndexError):
-                    continue
+            for name, suffix in rtp_entries:
+                full_url = f"http://{ip}/rtp/{suffix}"
+                m3u_lines.append(f"#EXTINF:-1,{name}")
+                m3u_lines.append(full_url)
+                compat_lines.append(f"{name},{full_url}")
 
         atomic_write(SOURCE_M3U_FILE, "\n".join(m3u_lines))
         live_print(f"  📝 {SOURCE_M3U_FILE} (标准M3U)")
