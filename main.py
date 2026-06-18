@@ -144,12 +144,13 @@ def update_discovery_database(new_ips):
     log_group_end()
     return sorted_segs, sorted_ports
 
-def check_udpxy(ip_port, scanned_set, lock):
-    """HTTP 指纹探测 (含 IP 熔断，线程安全)"""
+def check_udpxy(ip_port, scanned_set=None, lock=None):
+    """HTTP 指纹探测 (含 IP 熔断，线程安全；scanned_set/lock 可选，冷段扫描可省略)"""
     ip = ip_port.split(":")[0]
-    with lock:
-        if ip in scanned_set: return False, None
-        scanned_set.add(ip)  # P1#2: 立即占位，防止同 IP 并发重复探测
+    if scanned_set is not None and lock is not None:
+        with lock:
+            if ip in scanned_set: return False, None
+            scanned_set.add(ip)  # P1#2: 立即占位，防止同 IP 并发重复探测
     try:
         r = requests.get(f"http://{ip_port}/status", timeout=2, headers={"User-Agent":"Wget/1.14"})
         if r.status_code == 200 and any(kw in r.text.lower() for kw in ["udpxy", "stat", "client"]):
@@ -213,22 +214,39 @@ def run_native_scan(segments, ports):
             warm_tasks.extend([f"{seg}.{i}:{p}" for i in range(1, 255) for p in new_ports])
     random.shuffle(warm_tasks)
 
-    # 先扫热C段新端口（范围小、命中率高），再扫冷C段
-    all_scan_tasks = warm_tasks + cold_tasks
+    # 先扫热C段新端口（范围小、命中率高），再分批复冷C段（减少内存峰值）
+    BATCH_SCAN_SIZE = int(os.environ.get("BATCH_SCAN_SIZE", "5000"))
 
-    if all_scan_tasks:
-        live_print(f"⚡ 扫描计划: {len(warm_tasks)} 热C段新端口 + {len(cold_tasks)} 冷C段全端口 = {len(all_scan_tasks)} 次 (并发: {scan_workers})")
+    if warm_tasks:
+        live_print(f"🎯 热C段扫描: {len(warm_tasks)} 个新端口任务 (并发: {scan_workers})")
         scanned_ips_set = set()
         lock = threading.Lock()
         with concurrent.futures.ThreadPoolExecutor(max_workers=scan_workers) as ex:
-            futures = {ex.submit(check_udpxy, ip, scanned_ips_set, lock): ip for ip in all_scan_tasks}
-            for i, f in enumerate(concurrent.futures.as_completed(futures)):
+            futures = {ex.submit(check_udpxy, ip, scanned_ips_set, lock): ip for ip in warm_tasks}
+            for f in concurrent.futures.as_completed(futures):
                 ok, matched_ip = f.result()
                 if ok and matched_ip:
                     live_print(f" 🌟 [发现] {matched_ip}")
                     alive_ips.append(matched_ip)
-                if (i+1)%5000==0:
-                    live_print(f" 📊 进度: {i+1}/{len(all_scan_tasks)} | 存活: {len(alive_ips)}")
+        live_print(f"✅ 热C段结束 | 存活: {len(alive_ips)} 个")
+
+    if cold_tasks:
+        total_cold = len(cold_tasks)
+        batches = (total_cold + BATCH_SCAN_SIZE - 1) // BATCH_SCAN_SIZE
+        live_print(f"🎯 冷C段扫描: {total_cold} 个任务, 分 {batches} 批 (每批 {BATCH_SCAN_SIZE}, 并发: {scan_workers})")
+        with concurrent.futures.ThreadPoolExecutor(max_workers=scan_workers) as ex:
+            for batch_idx in range(batches):
+                start = batch_idx * BATCH_SCAN_SIZE
+                end = min(start + BATCH_SCAN_SIZE, total_cold)
+                batch = cold_tasks[start:end]
+                # 冷段无重复 IP，无需 scanned_set 锁
+                futs = {ex.submit(check_udpxy, ip, None, None): ip for ip in batch}
+                for f in concurrent.futures.as_completed(futs):
+                    ok, matched_ip = f.result()
+                    if ok and matched_ip:
+                        live_print(f" 🌟 [发现] {matched_ip}")
+                        alive_ips.append(matched_ip)
+                live_print(f" 📊 冷段批次 {batch_idx+1}/{batches}: {end}/{total_cold} | 存活: {len(alive_ips)}")
     else:
         live_print(f"⏭️ 所有C段+端口已覆盖，跳过全量扫描")
 
