@@ -1,4 +1,4 @@
-import os, subprocess, time, concurrent.futures
+import os, subprocess, time, concurrent.futures, json
 import requests
 from datetime import datetime
 from utils import live_print, write_summary, atomic_write
@@ -120,6 +120,22 @@ def fast_ip_probe(host_port, url_list):
             continue
     return False, host_port, 0.0, f" 🔴 [无流] {host_port:<21}"
 
+def _trigger_workflow(repo, workflow, branch, token, max_retries=3):
+    """触发 GitHub Actions workflow，失败自动重试"""
+    for attempt in range(1, max_retries + 1):
+        try:
+            url = f"https://api.github.com/repos/{repo}/actions/workflows/{workflow}/dispatches"
+            r = requests.post(url, headers={"Authorization": f"token {token}", "Accept": "application/vnd.github.v3+json"}, json={"ref": branch}, timeout=10)
+            live_print(f"🎉 状态码: {r.status_code}")
+            return
+        except requests.RequestException as e:
+            if attempt < max_retries:
+                wait = 3 * attempt
+                live_print(f"⏳ 重试 ({attempt}/{max_retries})，{wait}s 后重试: {e}")
+                time.sleep(wait)
+            else:
+                live_print(f"❌ 联动失败 (已重试 {max_retries} 次): {e}")
+
 # ===============================
 # 5. 运行主逻辑
 # ===============================
@@ -171,7 +187,6 @@ if __name__ == "__main__":
 
             # 写入元数据供下游 m3u-checker-max 使用
             if meta_data:
-                import json
                 atomic_write(SOURCE_META_FILE, json.dumps(meta_data, ensure_ascii=False, indent=2))
                 live_print(f" 📝 服务器元数据已写入: {SOURCE_META_FILE} ({len(meta_data)} 台)")
 
@@ -192,15 +207,23 @@ if __name__ == "__main__":
                         rtps = [x.strip() for x in f if "," in x]
 
                     # 标准 M3U 格式输出（使用 ip:port 拼接，保留端口号）
-                    m3u_lines = ["#EXTM3U"]
-                    for hp in sorted(list(valid_hostports)):
-                        for r in rtps:
-                            try:
-                                name, r_url = r.split(",", 1)
-                                suffix = r_url.split("://")[1]
-                                m3u_lines.append(f"#EXTINF:-1,{name}")
-                                m3u_lines.append(f"http://{hp}/rtp/{suffix}")
-                            except (ValueError, IndexError): continue
+                    m3u_lines = []
+
+                    # 预计算 RTP 条目（避免内层循环重复 split）
+                    rtp_entries = []
+                    for r in rtps:
+                        try:
+                            name, r_url = r.split(",", 1)
+                            suffix = r_url.split("://")[1]
+                            rtp_entries.append((name, suffix))
+                        except (ValueError, IndexError):
+                            continue
+
+                    m3u_lines.append("#EXTM3U")
+                    for hp in sorted(valid_hostports):
+                        for name, suffix in rtp_entries:
+                            m3u_lines.append(f"#EXTINF:-1,{name}")
+                            m3u_lines.append(f"http://{hp}/rtp/{suffix}")
 
                     atomic_write(SOURCE_M3U_FILE, "\n".join(m3u_lines))
 
@@ -243,20 +266,10 @@ if __name__ == "__main__":
     if should_trigger and TRIGGER_TOKEN:
         # 触发 m3u-checker-max
         live_print(f"::group::🔗 远程联动: {TARGET_REPO}")
-        try:
-            url = f"https://api.github.com/repos/{TARGET_REPO}/actions/workflows/{TARGET_WORKFLOW}/dispatches"
-            r = requests.post(url, headers={"Authorization": f"token {TRIGGER_TOKEN}", "Accept": "application/vnd.github.v3+json"}, json={"ref": TARGET_BRANCH}, timeout=10)
-            live_print(f"🎉 状态码: {r.status_code}")
-        except requests.RequestException as e:
-            live_print(f"❌ 请求失败: {e}")
+        _trigger_workflow(TARGET_REPO, TARGET_WORKFLOW, TARGET_BRANCH, TRIGGER_TOKEN)
         live_print("::endgroup::")
 
         # 同时触发 iptv-api（订阅源更新）
         live_print(f"::group::🔗 远程联动: {IPTV_API_REPO}")
-        try:
-            url = f"https://api.github.com/repos/{IPTV_API_REPO}/actions/workflows/{IPTV_API_WORKFLOW}/dispatches"
-            r = requests.post(url, headers={"Authorization": f"token {TRIGGER_TOKEN}", "Accept": "application/vnd.github.v3+json"}, json={"ref": IPTV_API_BRANCH}, timeout=10)
-            live_print(f"🎉 状态码: {r.status_code}")
-        except requests.RequestException as e:
-            live_print(f"❌ 请求失败: {e}")
+        _trigger_workflow(IPTV_API_REPO, IPTV_API_WORKFLOW, IPTV_API_BRANCH, TRIGGER_TOKEN)
         live_print("::endgroup::")
