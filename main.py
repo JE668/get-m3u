@@ -178,7 +178,7 @@ def _build_segment_tasks(seg, port_list, sample_size=None):
         ips = all_ips
     return [f"{seg}.{i}:{p}" for i in ips for p in port_list]
 
-async def run_native_scan(segments, ports):
+async def run_native_scan(segments, ports, found_set=None):
     """统一扫描：所有段全量扫描，同一 IP 命中后熔断其他端口 (async + httpx)"""
     log_group_start("🚀 启动扫描 (async + IP 命中熔断)")
     if not segments:
@@ -187,8 +187,9 @@ async def run_native_scan(segments, ports):
     scan_workers = int(os.environ.get("SCAN_WORKERS", "500"))
     BATCH_SCAN_SIZE = int(os.environ.get("BATCH_SCAN_SIZE", "5000"))
 
-    # 全局 found_set：增量验证和全量扫描共享，IP 命中后跳过其所有端口
-    found_set = set()
+    # 复用外部 found_set（跨扫描共享，IP 命中后跳过全部端口）
+    if found_set is None:
+        found_set = set()
     sem = asyncio.Semaphore(scan_workers)
 
     # 端口优先级：高频端口排前面，更快命中
@@ -356,10 +357,12 @@ async def main():
     high_ports = [p for p in all_ports if int(p) in high_set]
     ext_ports = [p for p in all_ports if int(p) not in high_set]
 
+    # 共享 found_set：第一次命中的 IP，在第二次跳过所有扩展端口
+    shared_found = set()
     # 先扫高优先端口（高频端口命中率高，优先扫可快速出结果）
-    sips_high = await run_native_scan(valid_segs, high_ports) if high_ports else []
-    # 扩展端口始终扫（避免漏扫只开放冷门端口的独立服务器）
-    sips_ext = await run_native_scan(valid_segs, ext_ports) if ext_ports else []
+    sips_high = await run_native_scan(valid_segs, high_ports, shared_found) if high_ports else []
+    # 扩展端口始终扫（避免漏扫只开放冷门端口的独立服务器），但 shared_found 已记录在案的 IP 跳过
+    sips_ext = await run_native_scan(valid_segs, ext_ports, shared_found) if ext_ports else []
     sips = list(set(sips_high + sips_ext))
     stats["scan_found"] = len(sips)
 
