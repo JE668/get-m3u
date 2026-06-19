@@ -146,9 +146,14 @@ async def main():
     changed = has_data_changed(SOURCE_IP_FILE)
     should_trigger, current_count, is_forced = get_trigger_status(changed)
 
+    # 预初始化，确保即使数据为空也有定义，防止 summary 阶段 NameError
+    ip_map, url_map = {}, {}
+    valid_hostports = set()
+
     if os.path.exists(SOURCE_NONCHECK_FILE):
         with open(SOURCE_NONCHECK_FILE, encoding="utf-8") as f:
             lines = [l.strip() for l in f if "," in l]
+
         if lines:
             # 1. 归集要测试的 IP:port 和 URL
             ip_map, url_map = {}, {}
