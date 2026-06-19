@@ -1,6 +1,5 @@
 import os, re, time, random, threading, io, asyncio, concurrent.futures
 from collections import Counter
-import requests
 import httpx
 import ip2region.util as ip2region_util
 import ip2region.searcher as ip2region_searcher
@@ -283,13 +282,13 @@ async def run_native_scan(segments, ports, found_set=None):
     return alive_ips
 
 def scrape_fofa():
-    """FOFA 抓取（含 Cookie 失效检测与降级提示）"""
+    """FOFA 抓取（含 Cookie 失效检测与降级提示，使用 httpx 同步客户端）"""
     log_group_start("📡 抓取 FOFA 资源")
     if not HEADERS["Cookie"]:
         live_print("⏭️ 未配置 Cookie，跳过。"); log_group_end(); return []
     try:
-        r = requests.get(FOFA_URL, headers=HEADERS, timeout=15)
-        if "账号登录" in r.text or "login" in r.url.lower():
+        r = httpx.get(FOFA_URL, headers=HEADERS, timeout=15)
+        if "账号登录" in r.text or "login" in str(r.url).lower():
             live_print("❌ 错误: FOFA Cookie 已失效！请更新 secrets.FOFA_COOKIE")
             live_print("💡 提示: 在浏览器登录 fofa.info → F12 → Application → Cookies → 复制完整 Cookie 值")
             log_group_end(); return []
@@ -307,10 +306,10 @@ def scrape_fofa():
         else:
             live_print(f"⚠️ FOFA 页面解析成功但未提取到 IP，可能页面结构变化")
             log_group_end(); return []
-    except requests.Timeout:
+    except httpx.TimeoutException:
         live_print("❌ FOFA 请求超时（15s），网络不稳定")
         log_group_end(); return []
-    except requests.RequestException as e:
+    except httpx.RequestError as e:
         live_print(f"❌ FOFA 请求异常: {e}")
         log_group_end(); return []
 
@@ -320,10 +319,10 @@ def update_rtp_template():
     unique_rtp = {}
 
     def _download_single(url):
-        """下载并解析单个 RTP 源"""
+        """下载并解析单个 RTP 源（使用 httpx 同步客户端）"""
         local_rtp = {}
         try:
-            r = requests.get(url, timeout=15); r.encoding = 'utf-8'
+            r = httpx.get(url, timeout=15); r.encoding = 'utf-8'
             if r.status_code == 200:
                 lines = r.text.splitlines()
                 count = 0
@@ -341,7 +340,7 @@ def update_rtp_template():
                         except (ValueError, IndexError):
                             continue
                 live_print(f"  📥 {url.split('/')[-1]} | 解析 {count} 条")
-        except requests.RequestException:
+        except httpx.RequestError:
             live_print(f"  ❌ 下载失败: {url}")
         return local_rtp
 
