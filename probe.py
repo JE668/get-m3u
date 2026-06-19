@@ -10,7 +10,6 @@ SOURCE_IP_FILE = "output/source-ip.txt"
 SOURCE_M3U_FILE = "output/source-m3u.txt"
 SOURCE_NONCHECK_FILE = "output/source-m3u-noncheck.txt"
 LOG_FILE = "output/log.txt"
-TRIGGER_COUNTER_FILE = "data/trigger_counter.txt"
 RTP_FILE = "data/rtp/ChinaTelecom-Guangdong.txt"
 SNAPSHOT_DIR = "data/.last_snapshot" # 变动比对快照目录
 

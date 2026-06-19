@@ -1,4 +1,4 @@
-import os, re, time, random, threading, io, asyncio, concurrent.futures
+import os, re, time, threading, io, asyncio, concurrent.futures
 from collections import Counter
 import httpx
 import ip2region.util as ip2region_util
@@ -57,7 +57,7 @@ DEFAULT_PORTS = [4022, 8000, 8686, 55555, 54321, 1024, 10001, 8443, 8888]
 # 3. 核心功能函数
 # ===============================
 
-def get_geo_info(ip, session=None):
+def get_geo_info(ip):
     """查询 IP 归属地（离线 ip2region，零延迟无限速）"""
     try:
         region = _get_ip2region().search(ip)
