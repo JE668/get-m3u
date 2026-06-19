@@ -217,10 +217,17 @@ def run_native_scan(segments, ports):
 
     # 全量阶段: 只扫描无已知存活的 C段（冷C段采样扫描，避免耗时过长）
     cold_segments = [s for s in segments if s not in alive_segs]
-    cold_sample_size = int(os.environ.get("COLD_SAMPLE_SIZE", "20"))
-    cold_tasks = []
-    for seg in cold_segments:
-        cold_tasks.extend(_build_segment_tasks(seg, port_list, sample_size=cold_sample_size))
+    cold_sample_size = int(os.environ.get("COLD_SAMPLE_SIZE", "0"))  # 默认0=全扫
+    
+    if cold_sample_size > 0:
+        # 采样模式：随机抽取 sample_size 个 IP
+        cold_tasks = []
+        for seg in cold_segments:
+            sampled_ips = random.sample(range(1, 255), min(cold_sample_size, 254))
+            cold_tasks.extend([f"{seg}.{i}:{p}" for i in sampled_ips for p in port_list])
+    else:
+        # 全量模式：保持原有高效推导式
+        cold_tasks = [f"{s}.{i}:{p}" for s in cold_segments for i in range(1, 255) for p in port_list]
     random.shuffle(cold_tasks)
 
     # 增量C段: 只扫存活C段中尚未发现的端口（热C段新端口扫描）
@@ -250,7 +257,8 @@ def run_native_scan(segments, ports):
     if cold_tasks:
         total_cold = len(cold_tasks)
         batches = (total_cold + BATCH_SCAN_SIZE - 1) // BATCH_SCAN_SIZE
-        live_print(f"🎯 冷C段扫描: {total_cold} 个任务(每段采样≤{cold_sample_size}个IP), 分 {batches} 批 (每批 {BATCH_SCAN_SIZE}, 并发: {scan_workers})")
+        sample_info = f"(每段采样≤{cold_sample_size}个IP)" if cold_sample_size > 0 else "(全量)"
+        live_print(f"🎯 冷C段扫描: {total_cold} 个任务{sample_info}, 分 {batches} 批 (每批 {BATCH_SCAN_SIZE}, 并发: {scan_workers})")
         with concurrent.futures.ThreadPoolExecutor(max_workers=scan_workers) as ex:
             for batch_idx in range(batches):
                 start = batch_idx * BATCH_SCAN_SIZE
