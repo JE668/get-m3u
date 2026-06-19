@@ -159,6 +159,20 @@ def check_udpxy(ip_port, scanned_set=None, lock=None):
         pass
     return False, None
 
+
+def _build_segment_tasks(seg, port_list, sample_size=None):
+    """生成单个 C 段的任务列表（全量或采样）。
+
+    sample_size=None/0: 全量 1~254
+    sample_size>0:  随机采样 sample_size 个 IP（不含 .0 和 .255）
+    """
+    all_ips = list(range(1, 255))  # 排除 .0 和 .255
+    if sample_size and sample_size > 0:
+        ips = random.sample(all_ips, min(sample_size, 254))
+    else:
+        ips = all_ips
+    return [f"{seg}.{i}:{p}" for i in ips for p in port_list]
+
 def run_native_scan(segments, ports):
     """增量 + 全量混合扫描（智能端口策略 + 增量C段仅扫新端口）"""
     log_group_start("🚀 启动扫描 (增量优先 + 智能端口)")
@@ -201,9 +215,12 @@ def run_native_scan(segments, ports):
     port_list = [int(p) for p in ports]
     all_ports_set = set(port_list)
 
-    # 全量阶段: 只扫描无已知存活的 C段（冷C段全端口扫描）
+    # 全量阶段: 只扫描无已知存活的 C段（冷C段采样扫描，避免耗时过长）
     cold_segments = [s for s in segments if s not in alive_segs]
-    cold_tasks = [f"{s}.{i}:{p}" for s in cold_segments for i in range(1, 255) for p in port_list]
+    cold_sample_size = int(os.environ.get("COLD_SAMPLE_SIZE", "20"))
+    cold_tasks = []
+    for seg in cold_segments:
+        cold_tasks.extend(_build_segment_tasks(seg, port_list, sample_size=cold_sample_size))
     random.shuffle(cold_tasks)
 
     # 增量C段: 只扫存活C段中尚未发现的端口（热C段新端口扫描）
@@ -233,7 +250,7 @@ def run_native_scan(segments, ports):
     if cold_tasks:
         total_cold = len(cold_tasks)
         batches = (total_cold + BATCH_SCAN_SIZE - 1) // BATCH_SCAN_SIZE
-        live_print(f"🎯 冷C段扫描: {total_cold} 个任务, 分 {batches} 批 (每批 {BATCH_SCAN_SIZE}, 并发: {scan_workers})")
+        live_print(f"🎯 冷C段扫描: {total_cold} 个任务(每段采样≤{cold_sample_size}个IP), 分 {batches} 批 (每批 {BATCH_SCAN_SIZE}, 并发: {scan_workers})")
         with concurrent.futures.ThreadPoolExecutor(max_workers=scan_workers) as ex:
             for batch_idx in range(batches):
                 start = batch_idx * BATCH_SCAN_SIZE
