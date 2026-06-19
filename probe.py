@@ -66,23 +66,10 @@ def has_data_changed(filename):
     live_print("::endgroup::"); return True
 
 def get_trigger_status(changed):
-    count = 0
-    os.makedirs(os.path.dirname(TRIGGER_COUNTER_FILE), exist_ok=True)
-    if os.path.exists(TRIGGER_COUNTER_FILE):
-        try:
-            with open(TRIGGER_COUNTER_FILE, 'r', encoding='utf-8') as f:
-                count = int(f.read().strip())
-        except (ValueError, OSError): pass
-
-    forced = False
-    if changed: count = 0; should = True
-    else:
-        count += 1
-        if count >= 3: should = True; count = 0; forced = True
-        else: should = False
-
-    with open(TRIGGER_COUNTER_FILE, 'w', encoding='utf-8') as f: f.write(str(count))
-    return should, count, forced
+    """每次运行成功均触发下游，不再计数等待。
+    changed=True → 数据有变化，正常触发
+    changed=False → 数据无变化，仍触发（保证下游同步）"""
+    return True, 0, not changed  # should=True, count=0, is_forced=(无变化时为True)
 
 # ===============================
 # 4. 抽样测速逻辑（量化版：512KB + 带宽计算）
@@ -263,7 +250,7 @@ if __name__ == "__main__":
     else:
      write_summary(f"| ⚖️ 联动决策 | ⏭️ 跳过 ({current_count}/3) |")
 
-    if should_trigger and TRIGGER_TOKEN:
+    if TRIGGER_TOKEN:
         # 触发 m3u-checker-max
         live_print(f"::group::🔗 远程联动: {TARGET_REPO}")
         _trigger_workflow(TARGET_REPO, TARGET_WORKFLOW, TARGET_BRANCH, TRIGGER_TOKEN)
