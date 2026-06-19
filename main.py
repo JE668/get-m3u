@@ -210,7 +210,7 @@ async def run_native_scan(segments, ports, found_set=None):
     alive_ips = []
     async with httpx.AsyncClient(
         limits=httpx.Limits(max_keepalive_connections=50, max_connections=1000),
-        timeout=httpx.Timeout(connect=0.8, read=1.5, pool=0.5),
+        timeout=httpx.Timeout(connect=0.8, read=1.5, write=1.5, pool=0.5),
     ) as client:
         # 增量验证：先快速验证上次的存活 IP，命中者直接加入结果
         if os.path.exists(SOURCE_IP_FILE):
