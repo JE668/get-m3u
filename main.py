@@ -146,13 +146,15 @@ def update_discovery_database(new_ips):
     log_group_end()
     return sorted_segs, sorted_ports
 
-async def check_udpxy(ip_port, found_set=None, timeout=2, client=None):
-    """HTTP 指纹探测 (含 IP 命中后熔断，线程安全)。
+async def check_udpxy(ip_port, found_set=None, reject_set=None, timeout=2, client=None):
+    """HTTP 指纹探测 (含 IP 命中后熔断 + 连接拒绝预熔断，线程安全)。
     
     一旦某 IP 的任意端口命中 udpxy，该 IP 其他端口任务直接跳过。
+    一旦某 IP 的任意端口连接被拒绝(TCP RST)，该 IP 其他端口任务直接跳过。
     """
     ip = ip_port.split(":")[0]
     if found_set is not None and ip in found_set: return False, None
+    if reject_set is not None and ip in reject_set: return False, None
     if client is None: client = httpx.AsyncClient()
     try:
         r = await client.get(f"http://{ip_port}/status", timeout=timeout, headers={"User-Agent":"Wget/1.14"})
@@ -160,6 +162,10 @@ async def check_udpxy(ip_port, found_set=None, timeout=2, client=None):
             if found_set is not None:
                 found_set.add(ip)
             return True, ip_port
+    except httpx.ConnectError:
+        # 端口关闭（TCP RST），该 IP 其他端口无需再试
+        if reject_set is not None: reject_set.add(ip)
+        return False, None
     except Exception:
         pass
     return False, None
@@ -178,7 +184,7 @@ def _build_segment_tasks(seg, port_list, sample_size=None):
         ips = all_ips
     return [f"{seg}.{i}:{p}" for i in ips for p in port_list]
 
-async def run_native_scan(segments, ports, found_set=None):
+async def run_native_scan(segments, ports, found_set=None, reject_set=None):
     """统一扫描：所有段全量扫描，同一 IP 命中后熔断其他端口 (async + httpx)"""
     log_group_start("🚀 启动扫描 (async + IP 命中熔断)")
     if not segments:
@@ -187,19 +193,27 @@ async def run_native_scan(segments, ports, found_set=None):
     scan_workers = int(os.environ.get("SCAN_WORKERS", "500"))
     BATCH_SCAN_SIZE = int(os.environ.get("BATCH_SCAN_SIZE", "5000"))
 
-    # 复用外部 found_set（跨扫描共享，IP 命中后跳过全部端口）
+    # 复用外部 found_set / reject_set（跨扫描共享）
     if found_set is None:
         found_set = set()
+    if reject_set is None:
+        reject_set = set()
     sem = asyncio.Semaphore(scan_workers)
 
     # 端口优先级：高频端口排前面，更快命中
     port_list = [int(p) for p in ports]
-    # 生成任务：按 (IP, 端口优先级) 排序，确保同一 IP 的高频端口先被处理
-    all_tasks = [f"{s}.{i}:{p}" for s in segments for i in range(1, 255) for p in port_list]
+    
+    # 惰性任务生成器：避免预建百万级列表
+    def _task_generator():
+        for seg in segments:
+            for i in range(1, 255):
+                ip = f"{seg}.{i}"
+                for port in port_list:
+                    yield f"{ip}:{port}"
 
-    async def bounded_check(ip_port, timeout=2, client=None):
+    async def bounded_check(ip_port, timeout, client):
         async with sem:
-            return await check_udpxy(ip_port, found_set, timeout, client)
+            return await check_udpxy(ip_port, found_set, reject_set, timeout, client)
 
     alive_ips = []
     async with httpx.AsyncClient(limits=httpx.Limits(max_keepalive_connections=50, max_connections=1000)) as client:
@@ -225,25 +239,27 @@ async def run_native_scan(segments, ports, found_set=None):
                             f.write(ip + "\n")
                     live_print(f"🧹 清理 {removed} 个失效 IP，SOURCE_IP_FILE 剩余 {len(still_alive)} 个")
 
-        # 全量扫描：所有段 × 所有 IP × 所有端口
-        # 复用上面的 found_set，增量验证已命中的 IP 会自动跳过
-        total_tasks = len(all_tasks)
+        # 全量扫描：使用惰性生成器，按批生成任务
+        import itertools
+        total_tasks = len(segments) * 254 * len(port_list)
         batches = (total_tasks + BATCH_SCAN_SIZE - 1) // BATCH_SCAN_SIZE
         live_print(f"🎯 全量扫描: {total_tasks} 个任务, 分 {batches} 批 (每批 {BATCH_SCAN_SIZE}, 并发: {scan_workers})")
+        live_print(f"   当前命中IP集: {len(found_set)} | 拒绝IP集: {len(reject_set)}")
 
+        task_gen = _task_generator()
         for batch_idx in range(batches):
-            start = batch_idx * BATCH_SCAN_SIZE
-            end = min(start + BATCH_SCAN_SIZE, total_tasks)
-            batch = all_tasks[start:end]
-            tasks = [bounded_check(ip, 2, client) for ip in batch]
+            batch = list(itertools.islice(task_gen, BATCH_SCAN_SIZE))
+            if not batch: break
+            tasks = [bounded_check(ip_port, 1.5, client) for ip_port in batch]
             results = await asyncio.gather(*tasks)
             for ok, matched_ip in results:
                 if ok and matched_ip:
                     alive_ips.append(matched_ip)
-            live_print(f" 📊 批次 {batch_idx+1}/{batches}: {end}/{total_tasks} | 发现: {len(set(alive_ips))}")
+            live_print(f" 📊 批次 {batch_idx+1}/{batches}: {min((batch_idx+1)*BATCH_SCAN_SIZE, total_tasks)}/{total_tasks} | 发现: {len(set(alive_ips))} | 命中IP: {len(found_set)} | 拒绝IP: {len(reject_set)}")
 
     alive_ips = list(set(alive_ips))
     live_print(f"✅ 扫描结束 | 总发现 {len(alive_ips)} 个")
+    live_print(f"   📊 统计: 命中IP={len(found_set)} | 拒绝IP={len(reject_set)} | 存活IP={len(alive_ips)}")
     log_group_end()
     return alive_ips
 
@@ -352,19 +368,17 @@ async def main():
     valid_segs = filter_segments(all_segs)
     stats["segments_valid"] = len(valid_segs)
 
-    # 端口分级：以 DEFAULT_PORTS 为基准，不再手工维护 HIGH_PORTS
-    high_set = set(DEFAULT_PORTS)
-    high_ports = [p for p in all_ports if int(p) in high_set]
-    ext_ports = [p for p in all_ports if int(p) not in high_set]
+    # 合并所有端口，一次性扫描（优化：取消端口分级）
+    all_ports_set = set(int(p) for p in all_ports)
+    sorted_ports = sorted(list(all_ports_set))
+    live_print(f"📋 端口列表: {sorted_ports} ({len(sorted_ports)} 个)")
 
-    # 共享 found_set：第一次命中的 IP，在第二次跳过所有扩展端口
+    # 共享 found_set 和 reject_set
     shared_found = set()
-    # 先扫高优先端口（高频端口命中率高，优先扫可快速出结果）
-    sips_high = await run_native_scan(valid_segs, high_ports, shared_found) if high_ports else []
-    # 扩展端口始终扫（避免漏扫只开放冷门端口的独立服务器），但 shared_found 已记录在案的 IP 跳过
-    sips_ext = await run_native_scan(valid_segs, ext_ports, shared_found) if ext_ports else []
-    sips = list(set(sips_high + sips_ext))
+    shared_reject = set()
+    sips = await run_native_scan(valid_segs, sorted_ports, shared_found, shared_reject) if sorted_ports else []
     stats["scan_found"] = len(sips)
+    live_print(f"📊 扫描汇总: 发现 {len(sips)} 个存活 IP | 命中IP集: {len(shared_found)} | 拒绝IP集: {len(shared_reject)}")
 
     unique_all = sorted(list(set(fips + sips)))
 
