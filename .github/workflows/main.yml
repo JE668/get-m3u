@@ -1,4 +1,4 @@
-name: 📡 IPTV Discovery & Probe
+name: 📡 源发现与探测
 
 on:
   schedule:
@@ -13,13 +13,12 @@ permissions:
   contents: write
 
 jobs:
-  run-service:
-    name: 🚀 发现 & 测速
+  run:
+    name: 🚀 发现与测速
     runs-on: ubuntu-latest
     timeout-minutes: 120
 
     steps:
-      # ──── 环境准备 ────
       - name: 📥 检出代码
         uses: actions/checkout@v4
         with:
@@ -32,40 +31,34 @@ jobs:
 
       - name: 📦 安装依赖
         run: |
-          echo "::group::📋 依赖安装详情"
           pip install --upgrade pip
           pip install -r requirements.txt
-          echo "::endgroup::"
           echo "✅ 依赖安装完成"
 
-      - name: 🗄️ 更新 ip2region 离线库
+      - name: 🗄️ 更新 ip2region 库
         run: |
-          echo "::group::📥 检查 ip2region xdb 版本"
           XDB_URL="https://raw.githubusercontent.com/lionsoul2014/ip2region/master/binding/python/data/ip2region.xdb"
           curl -fsSL -z data/ip2region.xdb -o data/ip2region.xdb.new "$XDB_URL" 2>/dev/null || true
           if [ -f data/ip2region.xdb.new ] && [ $(stat -c%s data/ip2region.xdb.new 2>/dev/null || stat -f%z data/ip2region.xdb.new 2>/dev/null || echo 0) -gt 1000000 ]; then
             mv data/ip2region.xdb.new data/ip2region.xdb
-            echo "✅ ip2region xdb 已更新"
+            echo "✅ ip2region 已更新"
           else
             rm -f data/ip2region.xdb.new 2>/dev/null
-            echo "ℹ️ ip2region xdb 无更新或下载失败，使用现有版本"
+            echo "ℹ️ ip2region 无更新，使用现有版本"
           fi
-          echo "::endgroup::"
 
-      # ──── 核心任务 ────
-      - name: 🔍 Phase 1 — 资源发现 (main.py)
+      - name: 🔍 阶段1 — 源发现 (main.py)
         env:
           FOFA_COOKIE: ${{ secrets.FOFA_COOKIE }}
           PYTHONUNBUFFERED: 1
         run: python main.py 2>&1 | tee /tmp/discovery.log
 
-      - name: 🎬 Phase 2 — 质量探测 (probe.py)
+      - name: 🎯 阶段2 — 质量探测 (probe.py)
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
           PYTHONUNBUFFERED: 1
         run: python probe.py 2>&1 | tee /tmp/probe.log
 
-      # ──── 结果统计 ────
       - name: 📊 运行统计
         if: always()
         run: |
@@ -73,31 +66,22 @@ jobs:
           echo "| 指标 | 数值 |" >> $GITHUB_STEP_SUMMARY
           echo "|------|------|" >> $GITHUB_STEP_SUMMARY
 
-          # 统计源 IP 数量
           if [ -f output/source-ip.txt ]; then
             ip_count=$(grep -c . output/source-ip.txt 2>/dev/null || echo "0")
             echo "| 🖥️ 有效服务器 | ${ip_count} |" >> $GITHUB_STEP_SUMMARY
           fi
-
-          # 统计 M3U 链接数
           if [ -f output/source-m3u.txt ]; then
             m3u_count=$(grep -c "^http" output/source-m3u.txt 2>/dev/null || echo "0")
             echo "| 📺 M3U 链接数 | ${m3u_count} |" >> $GITHUB_STEP_SUMMARY
           fi
-
-          # 统计非校验链接数
           if [ -f output/source-m3u-noncheck.txt ]; then
             nc_count=$(grep -c "," output/source-m3u-noncheck.txt 2>/dev/null || echo "0")
             echo "| 📋 兼容格式链接 | ${nc_count} |" >> $GITHUB_STEP_SUMMARY
           fi
-
-          # 统计黑名单
           if [ -f data/blacklist.txt ]; then
             bl_count=$(grep -c . data/blacklist.txt 2>/dev/null || echo "0")
             echo "| 🚫 黑名单 C段 | ${bl_count} |" >> $GITHUB_STEP_SUMMARY
           fi
-
-          # 日志尾部错误（失败时辅助诊断）
           if [ -f /tmp/discovery.log ]; then
             disc_lines=$(wc -l < /tmp/discovery.log)
             echo "| 📝 发现日志行数 | ${disc_lines} |" >> $GITHUB_STEP_SUMMARY
@@ -106,62 +90,49 @@ jobs:
             probe_lines=$(wc -l < /tmp/probe.log)
             echo "| 📝 探测日志行数 | ${probe_lines} |" >> $GITHUB_STEP_SUMMARY
           fi
-
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "> ⏱️ 运行时间: $(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_STEP_SUMMARY
 
-      # ──── 提交推送 ────
-      - name: 💾 提交并推送变更
+      - name: 💾 提交并推送
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global pull.rebase true
 
-          echo "::group::📋 变更检测"
           git add data/ output/ || true
           if git diff --staged --quiet; then
             echo "ℹ️ 没有发现任何变更，跳过提交。"
-            echo "::endgroup::"
             echo "### 💾 代码提交" >> $GITHUB_STEP_SUMMARY
             echo "ℹ️ 本次运行无变更，跳过提交" >> $GITHUB_STEP_SUMMARY
           else
-            echo "🆕 发现变更，准备提交..."
             STAGED_FILES=$(git diff --staged --name-only | head -20)
             FILE_COUNT=$(git diff --staged --name-only | wc -l | tr -d ' ')
             echo "📝 变更文件数: ${FILE_COUNT}"
             echo "${STAGED_FILES}"
-            echo "::endgroup::"
-
             git commit -m "🔄 Auto Sync: $(date +'%Y-%m-%d %H:%M:%S') [skip ci]"
             git pull origin main || true
             git push origin main
-
             echo "### 💾 代码提交" >> $GITHUB_STEP_SUMMARY
             echo "✅ 已提交并推送 **${FILE_COUNT}** 个文件变更" >> $GITHUB_STEP_SUMMARY
           fi
 
-      # ──── 失败告警 ────
-      - name: 🚨 运行异常告警
+      - name: 🚨 运行异常
         if: failure()
         run: |
           echo "## 🚨 运行异常" >> $GITHUB_STEP_SUMMARY
           echo "❌ 本次运行出现错误，请检查上方日志！" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-
-          # 输出日志尾部辅助诊断
           echo "<details><summary>📋 Discovery 日志尾部</summary>" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           tail -30 /tmp/discovery.log 2>/dev/null || echo "(无日志)"
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "</details>" >> $GITHUB_STEP_SUMMARY
-
           echo "<details><summary>📋 Probe 日志尾部</summary>" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           tail -30 /tmp/probe.log 2>/dev/null || echo "(无日志)"
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "</details>" >> $GITHUB_STEP_SUMMARY
-
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "> 🔍 [查看完整日志](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY

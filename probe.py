@@ -28,9 +28,8 @@ IPTV_API_BRANCH = "master"
 # 3. 比对与联动逻辑
 # ===============================
 def has_data_changed(filename):
-    live_print(f"::group::🕵️ 变动检测 - {filename}")
-    if not os.path.exists(filename):
-        live_print("::endgroup::"); return False
+    live_print(f"━━━ 🕵️ 变动检测 ━━━━━━━━━━━━━━━━━━━━━━━━━━  📂 {filename}")
+    if not os.path.exists(filename): return False
     with open(filename, 'r', encoding='utf-8') as f:
         current = sorted([l.strip() for l in f if l.strip()])
 
@@ -42,7 +41,7 @@ def has_data_changed(filename):
             old = sorted([l.strip() for l in res.stdout.splitlines() if l.strip()])
             live_print(f" 📊 历史: {len(old)}行 | 当前: {len(current)}行")
             if current == old:
-                live_print(" ℹ️ 结论: 无变动"); live_print("::endgroup::"); return False
+                live_print(" ℹ️ 结论: 无变动"); return False
             live_print(" 🆕 结论: 有变动")
         else:
             live_print(" 🆕 结论: 无 Git 历史（首次或 shallow clone）")
@@ -56,14 +55,13 @@ def has_data_changed(filename):
         with open(snapshot_path, 'r', encoding='utf-8') as f:
             snap = sorted([l.strip() for l in f if l.strip()])
         if current == snap:
-            live_print(" ℹ️ 快照比对: 无变动"); live_print("::endgroup::"); return False
+            live_print(" ℹ️ 快照比对: 无变动"); return False
         live_print(" 🆕 快照比对: 有变动")
 
     # 更新快照
     with open(snapshot_path, 'w', encoding='utf-8') as f:
         f.write("\n".join(current))
-
-    live_print("::endgroup::"); return True
+    return True
 
 def get_trigger_status(changed):
     """每次运行成功均触发下游，不再计数等待。
@@ -164,7 +162,7 @@ async def main():
                     url_map[ip_key].append(url)
                 except (ValueError, IndexError): continue
 
-            live_print(f"::group::🎬 抽样测速 (共 {len(ip_map)} 个独立 IP，async并发)")
+            live_print(f"━━━ 🎬 抽样测速 ━━━━━━━━━━━━━━━━━━━━━━━━  🌐 {len(ip_map)} IP (async)")
             valid_hostports, logs = set(), []
             meta_data = {}
 
@@ -229,8 +227,6 @@ async def main():
                             # 该 IP 所有端口都测完了，下一个 IP
                             ip_idx += 1
 
-            live_print("::endgroup::")
-
             # 写入元数据供下游 m3u-checker-max 使用
             if meta_data:
                 atomic_write(SOURCE_META_FILE, json.dumps(meta_data, ensure_ascii=False, indent=2))
@@ -239,7 +235,7 @@ async def main():
             # ==========================================
             # 6. 重新拼装存活 IP 并写入 source-m3u.txt（标准 M3U 格式）
             # ==========================================
-            live_print(f"::group::💾 纯净版数据重组与归档")
+            live_print(f"━━━ 💾 数据重组与归档 ━━━━━━━━━━━━━━━━━━━━━")
 
             # 先写日志
             with open(LOG_FILE, "w", encoding="utf-8") as f:
@@ -285,8 +281,6 @@ async def main():
                 atomic_write(SOURCE_M3U_FILE, "")
                 live_print(f" 📝 存活 IP 为 0，已清空 {SOURCE_M3U_FILE}")
 
-            live_print("::endgroup::")
-
     # ==========================================
     # 7. 联动处理
     # ==========================================
@@ -311,14 +305,12 @@ async def main():
 
     if TRIGGER_TOKEN:
         # 触发 m3u-checker-max
-        live_print(f"::group::🔗 远程联动: {TARGET_REPO}")
+        live_print(f"━━━ 🔗 远程联动: {TARGET_REPO} ━━━━━━━━━━━")
         _trigger_workflow(TARGET_REPO, TARGET_WORKFLOW, TARGET_BRANCH, TRIGGER_TOKEN)
-        live_print("::endgroup::")
 
         # 同时触发 iptv-api（订阅源更新）
-        live_print(f"::group::🔗 远程联动: {IPTV_API_REPO}")
+        live_print(f"━━━ 🔗 远程联动: {IPTV_API_REPO} ━━━━━━━━━")
         _trigger_workflow(IPTV_API_REPO, IPTV_API_WORKFLOW, IPTV_API_BRANCH, TRIGGER_TOKEN)
-        live_print("::endgroup::")
 
 if __name__ == "__main__":
     asyncio.run(main())
