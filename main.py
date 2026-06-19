@@ -1,4 +1,5 @@
-import os, re, time, threading, io, asyncio, concurrent.futures
+import os, re, time, threading, io, asyncio, concurrent.futures, json
+from datetime import datetime
 from collections import Counter
 import httpx
 import ip2region.util as ip2region_util
@@ -48,6 +49,13 @@ SOURCE_M3U_FILE = "output/source-m3u.txt"
 SOURCE_NONCHECK_FILE = "output/source-m3u-noncheck.txt"
 
 DEFAULT_PORTS = [4022, 8000, 8686, 55555, 54321, 1024, 10001, 8443, 8888]
+
+# --- 端口动态管理 ---
+PORT_STATS_FILE = "data/port-stats.json"
+
+# 连续多少次零扫描后自动休眠端口（默认端口×2，更宽容）
+MISSES_BEFORE_DEACTIVATE = 3
+DEFAULT_PORT_MISSES_EXTRA = 3  # 默认端口额外容忍次数
 
 # ===============================
 # 2. 核心功能函数（工具函数已迁移至 utils.py）
@@ -129,6 +137,173 @@ def filter_segments(segments):
     live_print(f"📊 最终有效 C段: {len(valid_segments)} 个 (历史黑名单跳过: {blacklist_skip} 个, 本次临时跳过: {len(skipped_segments)} 个)")
     log_group_end()
     return valid_segments
+
+# ===============================
+# 2a. 端口动态管理（基于历史命中率自动休眠/激活）
+# ===============================
+
+def _load_port_stats():
+    """加载端口命中率统计"""
+    if os.path.exists(PORT_STATS_FILE):
+        try:
+            with open(PORT_STATS_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except (json.JSONDecodeError, IOError):
+            pass
+    return {"version": 1, "run_counter": 0, "last_run": "", "ports": {}}
+
+
+def _save_port_stats(stats):
+    """保存端口命中率统计"""
+    with open(PORT_STATS_FILE, "w", encoding="utf-8") as f:
+        json.dump(stats, f, indent=2, ensure_ascii=False)
+    live_print(f"  📊 端口统计已保存 ({sum(1 for p in stats['ports'].values() if p['active'])} active / {sum(1 for p in stats['ports'].values() if not p['active'])} 休眠)")
+
+
+def _sync_discovery_to_stats(discovery_ports, stats, meta_from_ips):
+    """同步 discovery.txt 端口到 port-stats.json，新端口给试用期"""
+    now = datetime.utcnow().isoformat() + "Z"
+    changed = False
+    for p in discovery_ports:
+        p_str = str(p)
+        if p_str not in stats["ports"]:
+            is_default = p_str in [str(x) for x in DEFAULT_PORTS]
+            stats["ports"][p_str] = {
+                "runs": 0,
+                "hits": 0,
+                "missed_streak": 0,
+                "active": True,
+                "first_seen": now,
+                "source": "default" if is_default else "fofa"
+            }
+            changed = True
+            if not is_default:
+                live_print(f"  🆕 新端口 :{p_str} 加入扫描（来自FOFA发现）")
+
+    # 从 source-ip.txt 统计复活：端口不在 discovery 但出现在 source-ip 中 → 加回来
+    if meta_from_ips:
+        for port_str in meta_from_ips:
+            if port_str not in discovery_ports:
+                # 这个端口被手动添加过或从历史数据来 → 复活
+                p_str = str(port_str)
+                if p_str not in stats["ports"]:
+                    stats["ports"][p_str] = {
+                        "runs": 0, "hits": 0, "missed_streak": 0,
+                        "active": True, "first_seen": now,
+                        "source": "source-ip-revival"
+                    }
+                    live_print(f"  ♻️ 端口 :{p_str} 复活（source-ip.txt 中存活）")
+                    discovery_ports.append(p_str)
+                    changed = True
+
+    if changed:
+        _save_port_stats(stats)
+    return stats
+
+
+def _filter_ports_by_stats(discovery_ports, stats):
+    """根据统计过滤端口：只返回 active 端口，按命中率排序（高→低）"""
+    default_set = set(str(x) for x in DEFAULT_PORTS)
+
+    scored = []
+    for p in discovery_ports:
+        p_str = str(p)
+        entry = stats["ports"].get(p_str, {})
+
+        # 判定是否 active
+        if entry.get("active", True):
+            # active 端口：通过
+            pass
+        elif p_str in default_set:
+            # 默认端口即使休眠也强制激活
+            if not entry.get("active", True):
+                entry["active"] = True
+                entry["missed_streak"] = 0
+                live_print(f"  ♻️ 默认端口 :{p_str} 强制复活")
+        else:
+            # 非默认休眠端口 → 跳过
+            total_misses = entry.get("missed_streak", entry.get("runs", 0))
+            if total_misses >= MISSES_BEFORE_DEACTIVATE:
+                continue
+
+        # 计算优先级分（越高越先扫）
+        runs = entry.get("runs", 0)
+        hits = entry.get("hits", 0)
+        score = 0
+        if runs > 0:
+            hit_rate = hits / runs
+            score = int(hit_rate * 100) + hits * 5  # 命中率优先，总命中次之
+        elif p_str in default_set:
+            score = 50  # 默认端口零历史也给中等优先级
+        else:
+            score = 30  # 新端口低优先级
+
+        scored.append((score, p_str))
+
+    # 按得分降序排列
+    scored.sort(key=lambda x: (-x[0], x[1]))
+    sorted_ports = [p for _, p in scored]
+
+    if len(sorted_ports) < len(discovery_ports):
+        dropped = len(discovery_ports) - len(sorted_ports)
+        live_print(f"  🧹 端口过滤: {len(discovery_ports)}→{len(sorted_ports)} (休眠 {dropped} 个)")
+    else:
+        live_print(f"  ✅ 端口: {len(sorted_ports)} 个 (全部 active)")
+
+    return sorted_ports
+
+
+def _update_port_stats_after_scan(stats, scanned_ports, source_ip_file):
+    """扫描后更新端口命中统计"""
+    now = datetime.utcnow().isoformat() + "Z"
+    stats["run_counter"] += 1
+    stats["last_run"] = now
+
+    # 读取本次 source-ip.txt 中的端口命中
+    hit_ports = set()
+    if os.path.exists(source_ip_file):
+        with open(source_ip_file, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if ":" in line:
+                    port = line.rsplit(":", 1)[1]
+                    hit_ports.add(port)
+
+    # 更新每个被扫描端口的统计
+    deactivated = 0
+    default_set = set(str(x) for x in DEFAULT_PORTS)
+    for p_str in scanned_ports:
+        entry = stats["ports"].setdefault(p_str, {
+            "runs": 0, "hits": 0, "missed_streak": 0,
+            "active": True, "first_seen": now,
+            "source": "default" if p_str in default_set else "discovery"
+        })
+
+        entry["runs"] = entry.get("runs", 0) + 1
+
+        if p_str in hit_ports:
+            entry["hits"] = entry.get("hits", 0) + 1
+            entry["missed_streak"] = 0
+        else:
+            entry["missed_streak"] = entry.get("missed_streak", 0) + 1
+
+        # 休眠判定
+        deactivate_threshold = MISSES_BEFORE_DEACTIVATE
+        if p_str in default_set:
+            deactivate_threshold += DEFAULT_PORT_MISSES_EXTRA
+
+        if entry.get("active", True) and entry["missed_streak"] >= deactivate_threshold:
+            entry["active"] = False
+            deactivated += 1
+            live_print(f"  💤 端口 :{p_str} 休眠（连续 {entry['missed_streak']} 次零命中）")
+        elif not entry.get("active", True) and entry["missed_streak"] == 0:
+            # 刚命中 → 自动复活
+            entry["active"] = True
+            live_print(f"  ♻️ 端口 :{p_str} 复活（本次命中）")
+
+    _save_port_stats(stats)
+    return deactivated
+
 
 def update_discovery_database(new_ips):
     """更新发现库"""
@@ -426,16 +601,29 @@ async def main():
     valid_segs = filter_segments(all_segs)
     stats["segments_valid"] = len(valid_segs)
 
-    # 合并所有端口，一次性扫描（优化：取消端口分级）
-    all_ports_set = set(int(p) for p in all_ports)
-    sorted_ports = sorted(list(all_ports_set))
-    live_print(f"📋 端口列表: {sorted_ports} ({len(sorted_ports)} 个)")
+    # ---- 端口动态管理（基于历史命中率过滤 + 排序） ----
+    port_stats = _load_port_stats()
+    # 分析 source-ip.txt 端口命中，用于复活检查
+    live_ports = set()
+    if os.path.exists(SOURCE_IP_FILE):
+        with open(SOURCE_IP_FILE, "r", encoding="utf-8") as f:
+            for line in f:
+                if ":" in line.strip():
+                    live_ports.add(line.strip().rsplit(":", 1)[1])
+    # 将 discovery 新端口同步到 stats，同时检查复活
+    port_stats = _sync_discovery_to_stats(all_ports, port_stats, live_ports)
+    # 按统计过滤端口（只保留 active + 按命中率排序）
+    sorted_ports = _filter_ports_by_stats(all_ports, port_stats)
+    live_print(f"📋 端口扫描计划: {sorted_ports} ({len(sorted_ports)} 个 active)")
 
     # 共享 found_set
     shared_found = set()
     sips = await run_native_scan(valid_segs, sorted_ports, shared_found) if sorted_ports else []
     stats["scan_found"] = len(sips)
     live_print(f"📊 扫描汇总: 发现 {len(sips)} 个存活 IP | 命中IP集: {len(shared_found)}")
+
+    # ---- 扫描后更新端口统计（在 source-ip 写入前记录 scanned_ports） ----
+    scanned_ports = [str(p) for p in sorted_ports]
 
     unique_all = sorted(list(set(fips + sips)))
 
@@ -461,6 +649,11 @@ async def main():
         # 写入 source-ip.txt（原子化）
         atomic_write(SOURCE_IP_FILE, "\n".join(geo_ips))
         live_print(f"  📝 {SOURCE_IP_FILE}")
+
+        # 更新端口命中统计（基于本次 source-ip.txt）
+        deactivated = _update_port_stats_after_scan(port_stats, scanned_ports, SOURCE_IP_FILE)
+        if deactivated:
+            stats["port_deactivated"] = deactivated
 
         # 写入标准 M3U
         rtps = []
@@ -506,6 +699,7 @@ async def main():
     live_print(f"├── C段过滤: {stats['segments_total']}→{stats['segments_valid']} 个有效")
     live_print(f"├── 矩阵扫描: {stats['scan_found']} 个存活")
     live_print(f"├── 归属复核: ✅{stats['geo_pass']} / ⏭️{stats['geo_fail']}")
+    live_print(f"├── 端口管理: {stats.get('port_deactivated', 0)} 个休眠")
     live_print(f"└── M3U 生成: {stats.get('m3u_count', 0)} 条")
     live_print(f"\n⏱️ 总耗时: {elapsed}s")
 
@@ -516,6 +710,7 @@ async def main():
     write_summary(f"| 🛰️ FOFA 获取 | {stats['fofa']} 个 IP |")
     write_summary(f"| 🛡️ C段过滤 | {stats['segments_total']}→{stats['segments_valid']} 个有效 |")
     write_summary(f"| 🚀 矩阵扫描 | {stats['scan_found']} 个存活 |")
+    write_summary(f"| 💤 端口休眠 | {stats.get('port_deactivated', 0)} 个 |")
     write_summary(f"| 🌍 归属复核 | ✅ {stats['geo_pass']} / ⏭️ {stats['geo_fail']} |")
     write_summary(f"| 📺 M3U 生成 | {stats.get('m3u_count', 0)} 条 |")
     write_summary(f"| 🖥️ 有效服务器 | {len(geo_ips)} 个 |")
