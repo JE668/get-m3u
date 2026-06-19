@@ -443,7 +443,7 @@ async def main():
         else:
             live_print(f"  [{idx:02d}/{len(unique_all):02d}] ⏭️ 剔除 | {ip:<21} | {desc}")
             stats["geo_fail"] += 1
-            log_group_end()
+    log_group_end()
 
     # 4. 写入文件（标准 M3U 格式 + 原子化写入）
     if geo_ips:
