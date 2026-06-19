@@ -116,6 +116,17 @@ jobs:
             echo "✅ 已提交并推送 **${FILE_COUNT}** 个文件变更" >> $GITHUB_STEP_SUMMARY
           fi
 
+      - name: 🔄 触发下游 — m3u-checker-max
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          echo "⏳ 触发 m3u-checker-max..."
+          gh workflow run update.yml \
+            --repo JE668/m3u-checker-max \
+            --ref main
+          echo "✅ 已触发"
+
       - name: 🚨 运行异常
         if: failure()
         run: |
