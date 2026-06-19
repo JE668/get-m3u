@@ -51,13 +51,13 @@ jobs:
         env:
           FOFA_COOKIE: ${{ secrets.FOFA_COOKIE }}
           PYTHONUNBUFFERED: 1
-        run: python main.py 2>&1 | tee /tmp/discovery.log
+        run: stdbuf -oL python main.py 2>&1 | tee /tmp/discovery.log
 
       - name: 🎯 阶段2 — 质量探测 (probe.py)
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
           PYTHONUNBUFFERED: 1
-        run: python probe.py 2>&1 | tee /tmp/probe.log
+        run: stdbuf -oL python probe.py 2>&1 | tee /tmp/probe.log
 
       - name: 📊 运行统计
         if: always()
