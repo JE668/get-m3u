@@ -179,13 +179,12 @@ def _build_segment_tasks(seg, port_list, sample_size=None):
     return [f"{seg}.{i}:{p}" for i in ips for p in port_list]
 
 async def run_native_scan(segments, ports, found_set=None):
-    """统一扫描：所有段全量扫描，同一 IP 命中后熔断其他端口 (async + httpx)"""
-    log_group_start("🚀 启动扫描 (async + IP 命中熔断)")
+    """统一扫描：持续任务流，结果随到随处理，不等慢任务 (async + httpx)"""
+    log_group_start("🚀 启动扫描 (async + 持续任务流)")
     if not segments:
         live_print("⚠️ 无有效网段"); log_group_end(); return []
 
     scan_workers = int(os.environ.get("SCAN_WORKERS", "500"))
-    BATCH_SCAN_SIZE = int(os.environ.get("BATCH_SCAN_SIZE", "5000"))
 
     # 复用外部 found_set（跨扫描共享，IP 命中后跳过其他端口）
     if found_set is None:
@@ -194,39 +193,30 @@ async def run_native_scan(segments, ports, found_set=None):
 
     # 端口优先级：高频端口排前面，更快命中
     port_list = [int(p) for p in ports]
-    
-    # 惰性任务生成器：避免预建百万级列表
-    def _task_generator():
-        for seg in segments:
-            for i in range(1, 255):
-                ip = f"{seg}.{i}"
-                for port in port_list:
-                    yield f"{ip}:{port}"
 
-    async def bounded_check(ip_port, timeout, client):
+    async def check_one(ip_port, timeout, client):
         async with sem:
             return await check_udpxy(ip_port, found_set, timeout, client)
 
     alive_ips = []
     async with httpx.AsyncClient(
-        limits=httpx.Limits(max_keepalive_connections=50, max_connections=1000),
+        limits=httpx.Limits(max_keepalive_connections=200, max_connections=1000),
         timeout=httpx.Timeout(connect=0.8, read=1.5, write=1.5, pool=0.5),
     ) as client:
-        # 增量验证：先快速验证上次的存活 IP，命中者直接加入结果
+        # 增量验证：先快速验证上次的存活 IP（随完随处理）
         if os.path.exists(SOURCE_IP_FILE):
             with open(SOURCE_IP_FILE, "r", encoding="utf-8") as f:
                 known_alive = [line.strip() for line in f if line.strip()]
             if known_alive:
                 live_print(f"🔄 增量验证: {len(known_alive)} 个已知 IP (connect≤0.3s, read≤0.5s)...")
                 still_alive = []
-                tasks = [bounded_check(ip, 0.5, client) for ip in known_alive]
-                results = await asyncio.gather(*tasks)
-                for ok, matched in results:
+                tasks = [asyncio.create_task(check_one(ip, 0.5, client)) for ip in known_alive]
+                for coro in asyncio.as_completed(tasks):
+                    ok, matched = await coro
                     if ok and matched:
                         still_alive.append(matched)
                         alive_ips.append(matched)
                 live_print(f"✅ 已知存活验证: {len(still_alive)}/{len(known_alive)} 个")
-                # 清理失效 IP：下次不再验证已失效的 IP
                 removed = len(known_alive) - len(still_alive)
                 if removed > 0:
                     with open(SOURCE_IP_FILE, "w", encoding="utf-8") as f:
@@ -234,26 +224,61 @@ async def run_native_scan(segments, ports, found_set=None):
                             f.write(ip + "\n")
                     live_print(f"🧹 清理 {removed} 个失效 IP，SOURCE_IP_FILE 剩余 {len(still_alive)} 个")
 
-        # 全量扫描：使用惰性生成器，按批生成任务
-        import itertools
+        # 全量扫描：持续任务流，滚动窗口
+        def _task_generator():
+            for seg in segments:
+                for i in range(1, 255):
+                    ip = f"{seg}.{i}"
+                    if ip in found_set:
+                        continue
+                    for port in port_list:
+                        yield f"{ip}:{port}"
+
         total_tasks = len(segments) * 254 * len(port_list)
-        batches = (total_tasks + BATCH_SCAN_SIZE - 1) // BATCH_SCAN_SIZE
-        live_print(f"🎯 全量扫描: {total_tasks} 个任务, 分 {batches} 批 (每批 {BATCH_SCAN_SIZE}, 并发: {scan_workers})")
+        live_print(f"🎯 全量扫描: 持续任务流 (并发: {scan_workers}, 预估任务: {total_tasks})")
         task_gen = _task_generator()
-        for batch_idx in range(batches):
-            batch = list(itertools.islice(task_gen, BATCH_SCAN_SIZE))
-            if not batch: break
-            tasks = [bounded_check(ip_port, 1.5, client) for ip_port in batch]
-            # 每个 batch 打印预估剩余时间
-            results = await asyncio.gather(*tasks)
-            for ok, matched_ip in results:
+        completed = 0
+        start_time = time.time()
+
+        # 初始化：启动 scan_workers 个任务
+        pending = set()
+        for _ in range(scan_workers):
+            try:
+                ip_port = next(task_gen)
+                pending.add(asyncio.create_task(check_one(ip_port, 1.5, client)))
+            except StopIteration:
+                break
+
+        while pending:
+            done, pending = await asyncio.wait(pending, return_when=asyncio.FIRST_COMPLETED)
+            for task in done:
+                completed += 1
+                ok, matched_ip = task.result()
                 if ok and matched_ip:
                     alive_ips.append(matched_ip)
-            live_print(f" 📊 批次 {batch_idx+1}/{batches}: {min((batch_idx+1)*BATCH_SCAN_SIZE, total_tasks)}/{total_tasks} | 发现: {len(set(alive_ips))} | 命中IP: {len(found_set)}")
+
+            # 补充新任务，维持并发数
+            while len(pending) < scan_workers:
+                try:
+                    ip_port = next(task_gen)
+                    pending.add(asyncio.create_task(check_one(ip_port, 1.5, client)))
+                except StopIteration:
+                    break
+
+            if completed % 5000 == 0:
+                elapsed = time.time() - start_time
+                rate = completed / elapsed if elapsed > 0 else 0
+                found = len(set(alive_ips))
+                msg = f" 📊 进度: {completed}/{total_tasks} | 发现: {found} | 命中IP: {len(found_set)}"
+                if rate > 0:
+                    remaining = (total_tasks - completed) / rate
+                    msg += f" | 速度: {rate:.0f}/s | 预估剩余: {remaining:.0f}s"
+                live_print(msg)
+
+        live_print(f"✅ 扫描结束 | 总发现 {len(set(alive_ips))} 个")
+        live_print(f"   📊 统计: 命中IP={len(found_set)} | 存活IP={len(set(alive_ips))}")
 
     alive_ips = list(set(alive_ips))
-    live_print(f"✅ 扫描结束 | 总发现 {len(alive_ips)} 个")
-    live_print(f"   📊 统计: 命中IP={len(found_set)} | 存活IP={len(alive_ips)}")
     log_group_end()
     return alive_ips
 
