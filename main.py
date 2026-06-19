@@ -182,7 +182,12 @@ async def check_udpxy(ip_port, found_set=None, timeout=None, client=None):
     """
     ip = ip_port.split(":")[0]
     if found_set is not None and ip in found_set: return False, None
-    if client is None: client = httpx.AsyncClient()
+
+    # 未传入 client 时创建临时 client，函数结束前关闭
+    _own_client = False
+    if client is None:
+        client = httpx.AsyncClient()
+        _own_client = True
 
     # 解析超时配置
     if timeout is None:
@@ -200,6 +205,9 @@ async def check_udpxy(ip_port, found_set=None, timeout=None, client=None):
             return True, ip_port
     except Exception:
         pass
+    finally:
+        if _own_client:
+            await client.aclose()
     return False, None
 
 async def run_native_scan(segments, ports, found_set=None):
