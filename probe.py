@@ -169,49 +169,66 @@ async def main():
             valid_hostports, logs = set(), []
             meta_data = {}
 
-            # 构建 host_port -> url_list 映射
-            hostport_url_map = {}
+            # 构建 IP -> [(host_port, url_list), ...] 映射（同IP多端口并发）
+            ip_to_hostports = {}
             for ip_key, urls in url_map.items():
-                for hp in ip_map[ip_key]:
-                    hostport_url_map[hp] = urls
+                ip_to_hostports[ip_key] = [(hp, urls) for hp in ip_map[ip_key]]
 
-            # 异步并发测速
+            # 异步并发测速（同IP多端口并发 + 提前满足）
             probe_workers = int(os.environ.get("PROBE_WORKERS", "50"))
             sem = asyncio.Semaphore(probe_workers)
+            ip_found = set()  # 已找到有效端口的 IP，跳过剩余端口
             
             async with httpx.AsyncClient(
-                limits=httpx.Limits(max_keepalive_connections=100, max_connections=500),
+                limits=httpx.Limits(max_keepalive_connections=300, max_connections=1000),
                 timeout=httpx.Timeout(connect=4, read=6, write=5, pool=2)
             ) as client:
                 async def bounded_probe(hp, urls):
                     async with sem:
                         return await async_fast_ip_probe(client, hp, urls)
                 
-                # 滚动窗口并发（不等整批）
+                # 滚动窗口并发（同IP多端口并发，任意端口成功后跳过该IP剩余端口）
                 pending = set()
-                all_items = list(hostport_url_map.items())
-                idx = 0
+                all_ips = list(ip_to_hostports.items())  # [(ip, [(hp, urls), ...]), ...]
+                ip_idx = 0
+                hp_idx_per_ip = {}  # ip -> 当前测到第几个端口
                 
-                # 初始化：启动 probe_workers 个任务
-                for hp, urls in all_items[:probe_workers]:
-                    pending.add(asyncio.create_task(bounded_probe(hp, urls)))
-                idx = probe_workers
+                # 初始化：每个 IP 先测第一个端口
+                for ip, hps in all_ips[:probe_workers]:
+                    if hps:
+                        hp, urls = hps[0]
+                        pending.add(asyncio.create_task(bounded_probe(hp, urls)))
+                        hp_idx_per_ip[ip] = 1
+                ip_idx = min(probe_workers, len(all_ips))
                 
                 while pending:
                     done, pending = await asyncio.wait(pending, return_when=asyncio.FIRST_COMPLETED)
                     for task in done:
                         ok, hp, bw, msg = task.result()
+                        ip = hp.split(":")[0]
                         live_print(msg)
                         logs.append(msg.strip())
                         if ok:
                             valid_hostports.add(hp)
                             meta_data[hp] = {"bandwidth_mbps": bw}
+                            ip_found.add(ip)  # 该 IP 已找到有效端口
                     
-                    # 补充新任务
-                    while len(pending) < probe_workers and idx < len(all_items):
-                        hp, urls = all_items[idx]
-                        pending.add(asyncio.create_task(bounded_probe(hp, urls)))
-                        idx += 1
+                    # 补充新任务（跳过已成功的 IP）
+                    while len(pending) < probe_workers and ip_idx < len(all_ips):
+                        ip, hps = all_ips[ip_idx]
+                        # 如果该 IP 已成功，跳过剩余端口
+                        if ip in ip_found:
+                            ip_idx += 1
+                            continue
+                        # 测试该 IP 的下一个端口（如果还有）
+                        hp_idx = hp_idx_per_ip.get(ip, 0)
+                        if hp_idx < len(hps):
+                            hp, urls = hps[hp_idx]
+                            pending.add(asyncio.create_task(bounded_probe(hp, urls)))
+                            hp_idx_per_ip[ip] = hp_idx + 1
+                        else:
+                            # 该 IP 所有端口都测完了，下一个 IP
+                            ip_idx += 1
 
             live_print("::endgroup::")
 
