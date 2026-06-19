@@ -4,7 +4,7 @@ import os, tempfile
 SUMMARY_FILE = os.environ.get("GITHUB_STEP_SUMMARY", "")
 
 def live_print(content):
-    print(content, flush=True)
+    print(content, flush=True, file=sys.stderr)
 
 def write_summary(content):
     """写入 GitHub Actions Job Summary（Markdown 格式，仅 GitHub 环境生效）"""
@@ -16,10 +16,10 @@ def write_summary(content):
             pass
 
 def log_group_start(name):
-    live_print(f"\n::group::{name}")
+    print(f"\n::group::{name}", flush=True)
 
 def log_group_end():
-    live_print("\n::endgroup::")
+    print("\n::endgroup::", flush=True)
 
 def log_section(name, icon="🔹"):
     live_print(f"\n{icon} {'='*15} {name} {'='*15}")
