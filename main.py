@@ -102,24 +102,29 @@ def filter_segments(segments):
             blacklist_skip += 1
             continue
         # 多IP抽样（.1/.100/.200），防止网关IP误判
-        sample_results = []
+        sample_details = []
         for offset in SAMPLE_IPS_PER_SEG:
             ip = f"{seg}.{offset}"
             is_valid, desc = get_geo_info(ip)
-            sample_results.append((is_valid, desc))
+            sample_details.append((ip, is_valid, desc))
 
-        # 统计不合格IP数
-        fail_count = sum(1 for ok, _ in sample_results if not ok)
+        # 统计不合格IP数，并构造详细日志
+        fail_count = sum(1 for _, ok, _ in sample_details if not ok)
+        ok_count = len(sample_details) - fail_count
+        detail_lines = [f"{ip}: {('✅' if ok else '❌')} {desc}" for ip, ok, desc in sample_details]
+        
         if fail_count >= SAMPLE_GEO_THRESHOLD:
             # 至少2个IP不合格才跳过（容忍1个误报）
-            descs = "; ".join(d for _, d in sample_results if not d)
-            live_print(f"  [{idx}/{total}] ❌ 跳过: {seg} ({fail_count}/{len(SAMPLE_IPS_PER_SEG)} 不合格: {descs[:60]})")
+            live_print(f"  [{idx}/{total}] ❌ 跳过: {seg}")
+            for line in detail_lines:
+                live_print(f"      {line}")
             skipped_segments.append(seg)
         else:
             # 至少1个IP合格即通过
             valid_segments.append(seg)
-            ok_count = len(sample_results) - fail_count
             live_print(f"  [{idx}/{total}] ✅ 通过: {seg} ({ok_count}/{len(SAMPLE_IPS_PER_SEG)} 合格)")
+            for line in detail_lines:
+                live_print(f"      {line}")
 
     live_print(f"📊 最终有效 C段: {len(valid_segments)} 个 (历史黑名单跳过: {blacklist_skip} 个, 本次临时跳过: {len(skipped_segments)} 个)")
     log_group_end()
@@ -275,6 +280,10 @@ async def run_native_scan(segments, ports, found_set=None):
                 ok, matched_ip = task.result()
                 if ok and matched_ip:
                     alive_ips.append(matched_ip)
+                    # 打印新命中的 IP 详情
+                    ip = matched_ip.split(":")[0]
+                    _, geo_desc = get_geo_info(ip)
+                    live_print(f"    🎯 命中: {matched_ip} | {geo_desc}")
 
             # 补充新任务，维持并发数
             while len(pending) < scan_workers:
