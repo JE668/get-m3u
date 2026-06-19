@@ -181,9 +181,9 @@ async def check_udpxy(ip_port, found_set=None, timeout=None, client=None):
 
     # 解析超时配置
     if timeout is None:
-        tm = httpx.Timeout(connect=SCAN_CONNECT_TIMEOUT, read=SCAN_READ_TIMEOUT)
+        tm = httpx.Timeout(SCAN_READ_TIMEOUT, connect=SCAN_CONNECT_TIMEOUT, read=SCAN_READ_TIMEOUT)
     elif isinstance(timeout, tuple):
-        tm = httpx.Timeout(connect=timeout[0], read=timeout[1])
+        tm = httpx.Timeout(timeout[1], connect=timeout[0], read=timeout[1])
     else:
         tm = httpx.Timeout(timeout)  # 兼容旧调用（数字→全局等分）
 
