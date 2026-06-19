@@ -1,5 +1,5 @@
 """get-m3u 公共工具模块"""
-import os, tempfile
+import os, sys, tempfile
 
 SUMMARY_FILE = os.environ.get("GITHUB_STEP_SUMMARY", "")
 
