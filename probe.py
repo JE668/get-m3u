@@ -85,7 +85,7 @@ async def async_fast_ip_probe(client, host_port, url_list):
     async def _probe_single_url(test_url):
         start = time.time()
         try:
-            async with client.stream("GET", test_url, timeout=httpx.Timeout(default=10, connect=4, read=6)) as r:
+            async with client.stream("GET", test_url, timeout=httpx.Timeout(10, connect=4, read=6)) as r:
                 if r.status_code == 200:
                     down = 0
                     async for chunk in r.aiter_bytes(chunk_size=64*1024):
