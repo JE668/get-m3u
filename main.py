@@ -144,16 +144,21 @@ def update_discovery_database(new_ips):
     log_group_end()
     return sorted_segs, sorted_ports
 
-def check_udpxy(ip_port, scanned_set=None, lock=None):
-    """HTTP 指纹探测 (含 IP 熔断，线程安全；scanned_set/lock 可选，冷段扫描可省略)"""
+def check_udpxy(ip_port, found_set=None, lock=None):
+    """HTTP 指纹探测 (含 IP 命中后熔断，线程安全)。
+    
+    一旦某 IP 的任意端口命中 udpxy，该 IP 其他端口任务直接跳过。
+    """
     ip = ip_port.split(":")[0]
-    if scanned_set is not None and lock is not None:
+    if found_set is not None and lock is not None:
         with lock:
-            if ip in scanned_set: return False, None
-            scanned_set.add(ip)  # P1#2: 立即占位，防止同 IP 并发重复探测
+            if ip in found_set: return False, None
     try:
         r = requests.get(f"http://{ip_port}/status", timeout=2, headers={"User-Agent":"Wget/1.14"})
         if r.status_code == 200 and any(kw in r.text.lower() for kw in ["udpxy", "stat", "client"]):
+            if found_set is not None and lock is not None:
+                with lock:
+                    found_set.add(ip)
             return True, ip_port
     except requests.RequestException:
         pass
@@ -174,110 +179,60 @@ def _build_segment_tasks(seg, port_list, sample_size=None):
     return [f"{seg}.{i}:{p}" for i in ips for p in port_list]
 
 def run_native_scan(segments, ports):
-    """增量 + 全量混合扫描（智能端口策略 + 增量C段仅扫新端口）"""
-    log_group_start("🚀 启动扫描 (增量优先 + 智能端口)")
+    """统一扫描：所有段全量扫描，同一 IP 命中后熔断其他端口"""
+    log_group_start("🚀 启动扫描 (IP 命中熔断 + 端口优先级)")
     if not segments:
         live_print("⚠️ 无有效网段"); log_group_end(); return []
 
     scan_workers = int(os.environ.get("SCAN_WORKERS", "100"))
+    BATCH_SCAN_SIZE = int(os.environ.get("BATCH_SCAN_SIZE", "5000"))
 
-    # --- 增量阶段: 先验证上次已知存活的 IP ---
-    known_alive = []
+    # 端口优先级：高频端口排前面，更快命中
+    port_list = [int(p) for p in ports]
+    # 生成任务：按 (IP, 端口优先级) 排序，确保同一 IP 的高频端口先被处理
+    all_tasks = [f"{s}.{i}:{p}" for s in segments for i in range(1, 255) for p in port_list]
+    # 按端口排序（列表推导已按端口顺序生成），shuffle 会破坏优先级，这里不打乱
+
+    # 增量验证：先快速验证上次的存活 IP，命中者直接加入结果
+    alive_ips = []
     if os.path.exists(SOURCE_IP_FILE):
         with open(SOURCE_IP_FILE, "r", encoding="utf-8") as f:
             known_alive = [line.strip() for line in f if line.strip()]
-        
-    alive_ips = []
-    alive_segs = set()
-    known_ports_in_seg = {}  # {seg: set(ports)} — 即使无 known_alive 也需初始化
-    if known_alive:
-        live_print(f"🔄 增量验证: {len(known_alive)} 个已知 IP...")
-        scanned_set = set()
-        lock = threading.Lock()
-        with concurrent.futures.ThreadPoolExecutor(max_workers=scan_workers) as ex:
-            futures = {ex.submit(check_udpxy, ip, scanned_set, lock): ip for ip in known_alive}
-            for f in concurrent.futures.as_completed(futures):
-                ok, matched = f.result()
-                if ok and matched:
-                    alive_ips.append(matched)
-        live_print(f"✅ 存活: {len(alive_ips)}/{len(known_alive)} 个")
+        if known_alive:
+            live_print(f"🔄 增量验证: {len(known_alive)} 个已知 IP...")
+            found_set = set()
+            lock = threading.Lock()
+            with concurrent.futures.ThreadPoolExecutor(max_workers=scan_workers) as ex:
+                futures = {ex.submit(check_udpxy, ip, found_set, lock): ip for ip in known_alive}
+                for f in concurrent.futures.as_completed(futures):
+                    ok, matched = f.result()
+                    if ok and matched:
+                        alive_ips.append(matched)
+            live_print(f"✅ 已知存活验证: {len(alive_ips)}/{len(known_alive)} 个")
 
-        # 计算已知存活 IP 所在的 C段 + 已发现的端口
-        known_ports_in_seg = {}  # {seg: set(ports)}
-        for ip_port in alive_ips:
-            ip, port_str = ip_port.rsplit(":", 1)
-            seg = ".".join(ip.split(".")[:3])
-            alive_segs.add(seg)
-            known_ports_in_seg.setdefault(seg, set()).add(int(port_str))
-
-    # 智能端口排序：根据 discovery 库历史发现率动态排序
-    # 高频端口优先扫描（发现率更高的端口排前面）
-    port_list = [int(p) for p in ports]
-    all_ports_set = set(port_list)
-
-    # 全量阶段: 只扫描无已知存活的 C段（冷C段采样扫描，避免耗时过长）
-    cold_segments = [s for s in segments if s not in alive_segs]
-    cold_sample_size = int(os.environ.get("COLD_SAMPLE_SIZE", "0"))  # 默认0=全扫
+    # 全量扫描：所有段 × 所有 IP × 所有端口
+    found_set = set()
+    lock = threading.Lock()
+    total_tasks = len(all_tasks)
+    batches = (total_tasks + BATCH_SCAN_SIZE - 1) // BATCH_SCAN_SIZE
+    live_print(f"🎯 全量扫描: {total_tasks} 个任务, 分 {batches} 批 (每批 {BATCH_SCAN_SIZE}, 并发: {scan_workers})")
     
-    if cold_sample_size > 0:
-        # 采样模式：随机抽取 sample_size 个 IP
-        cold_tasks = []
-        for seg in cold_segments:
-            sampled_ips = random.sample(range(1, 255), min(cold_sample_size, 254))
-            cold_tasks.extend([f"{seg}.{i}:{p}" for i in sampled_ips for p in port_list])
-    else:
-        # 全量模式：保持原有高效推导式
-        cold_tasks = [f"{s}.{i}:{p}" for s in cold_segments for i in range(1, 255) for p in port_list]
-    random.shuffle(cold_tasks)
-
-    # 增量C段: 只扫存活C段中尚未发现的端口（热C段新端口扫描）
-    warm_tasks = []
-    for seg in alive_segs:
-        new_ports = all_ports_set - known_ports_in_seg.get(seg, set())
-        if new_ports:
-            warm_tasks.extend([f"{seg}.{i}:{p}" for i in range(1, 255) for p in new_ports])
-    random.shuffle(warm_tasks)
-
-    # 先扫热C段新端口（范围小、命中率高），再分批复冷C段（减少内存峰值）
-    BATCH_SCAN_SIZE = int(os.environ.get("BATCH_SCAN_SIZE", "5000"))
-
-    if warm_tasks:
-        live_print(f"🎯 热C段扫描: {len(warm_tasks)} 个新端口任务 (并发: {scan_workers})")
-        scanned_ips_set = set()
-        lock = threading.Lock()
-        with concurrent.futures.ThreadPoolExecutor(max_workers=scan_workers) as ex:
-            futures = {ex.submit(check_udpxy, ip, scanned_ips_set, lock): ip for ip in warm_tasks}
-            for f in concurrent.futures.as_completed(futures):
+    with concurrent.futures.ThreadPoolExecutor(max_workers=scan_workers) as ex:
+        for batch_idx in range(batches):
+            start = batch_idx * BATCH_SCAN_SIZE
+            end = min(start + BATCH_SCAN_SIZE, total_tasks)
+            batch = all_tasks[start:end]
+            futs = {ex.submit(check_udpxy, ip, found_set, lock): ip for ip in batch}
+            for f in concurrent.futures.as_completed(futs):
                 ok, matched_ip = f.result()
                 if ok and matched_ip:
-                    live_print(f" 🌟 [发现] {matched_ip}")
                     alive_ips.append(matched_ip)
-        live_print(f"✅ 热C段结束 | 存活: {len(alive_ips)} 个")
+            live_print(f" 📊 批次 {batch_idx+1}/{batches}: {end}/{total_tasks} | 发现: {len(set(alive_ips))}")
 
-    if cold_tasks:
-        total_cold = len(cold_tasks)
-        batches = (total_cold + BATCH_SCAN_SIZE - 1) // BATCH_SCAN_SIZE
-        sample_info = f"(每段采样≤{cold_sample_size}个IP)" if cold_sample_size > 0 else "(全量)"
-        live_print(f"🎯 冷C段扫描: {total_cold} 个任务{sample_info}, 分 {batches} 批 (每批 {BATCH_SCAN_SIZE}, 并发: {scan_workers})")
-        with concurrent.futures.ThreadPoolExecutor(max_workers=scan_workers) as ex:
-            for batch_idx in range(batches):
-                start = batch_idx * BATCH_SCAN_SIZE
-                end = min(start + BATCH_SCAN_SIZE, total_cold)
-                batch = cold_tasks[start:end]
-                # 冷段无重复 IP，无需 scanned_set 锁
-                futs = {ex.submit(check_udpxy, ip, None, None): ip for ip in batch}
-                for f in concurrent.futures.as_completed(futs):
-                    ok, matched_ip = f.result()
-                    if ok and matched_ip:
-                        live_print(f" 🌟 [发现] {matched_ip}")
-                        alive_ips.append(matched_ip)
-                live_print(f" 📊 冷段批次 {batch_idx+1}/{batches}: {end}/{total_cold} | 存活: {len(alive_ips)}")
-    else:
-        live_print(f"⏭️ 所有C段+端口已覆盖，跳过全量扫描")
-
-    live_print(f"✅ 扫描结束 | 总发现 {len(set(alive_ips))} 个")
+    alive_ips = list(set(alive_ips))
+    live_print(f"✅ 扫描结束 | 总发现 {len(alive_ips)} 个")
     log_group_end()
-    return list(set(alive_ips))
+    return alive_ips
 
 def scrape_fofa():
     """FOFA 抓取（含 Cookie 失效检测与降级提示）"""
