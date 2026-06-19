@@ -144,7 +144,7 @@ def update_discovery_database(new_ips):
     log_group_end()
     return sorted_segs, sorted_ports
 
-def check_udpxy(ip_port, found_set=None, lock=None):
+def check_udpxy(ip_port, found_set=None, lock=None, timeout=2):
     """HTTP 指纹探测 (含 IP 命中后熔断，线程安全)。
     
     一旦某 IP 的任意端口命中 udpxy，该 IP 其他端口任务直接跳过。
@@ -154,7 +154,7 @@ def check_udpxy(ip_port, found_set=None, lock=None):
         with lock:
             if ip in found_set: return False, None
     try:
-        r = requests.get(f"http://{ip_port}/status", timeout=2, headers={"User-Agent":"Wget/1.14"})
+        r = requests.get(f"http://{ip_port}/status", timeout=timeout, headers={"User-Agent":"Wget/1.14"})
         if r.status_code == 200 and any(kw in r.text.lower() for kw in ["udpxy", "stat", "client"]):
             if found_set is not None and lock is not None:
                 with lock:
@@ -187,6 +187,10 @@ def run_native_scan(segments, ports):
     scan_workers = int(os.environ.get("SCAN_WORKERS", "100"))
     BATCH_SCAN_SIZE = int(os.environ.get("BATCH_SCAN_SIZE", "5000"))
 
+    # 全局 found_set：增量验证和全量扫描共享，IP 命中后跳过其所有端口
+    found_set = set()
+    lock = threading.Lock()
+
     # 端口优先级：高频端口排前面，更快命中
     port_list = [int(p) for p in ports]
     # 生成任务：按 (IP, 端口优先级) 排序，确保同一 IP 的高频端口先被处理
@@ -199,20 +203,26 @@ def run_native_scan(segments, ports):
         with open(SOURCE_IP_FILE, "r", encoding="utf-8") as f:
             known_alive = [line.strip() for line in f if line.strip()]
         if known_alive:
-            live_print(f"🔄 增量验证: {len(known_alive)} 个已知 IP...")
-            found_set = set()
-            lock = threading.Lock()
+            live_print(f"🔄 增量验证: {len(known_alive)} 个已知 IP (1秒超时)...")
+            still_alive = []
             with concurrent.futures.ThreadPoolExecutor(max_workers=scan_workers) as ex:
-                futures = {ex.submit(check_udpxy, ip, found_set, lock): ip for ip in known_alive}
+                futures = {ex.submit(check_udpxy, ip, found_set, lock, 1): ip for ip in known_alive}
                 for f in concurrent.futures.as_completed(futures):
                     ok, matched = f.result()
                     if ok and matched:
+                        still_alive.append(matched)
                         alive_ips.append(matched)
-            live_print(f"✅ 已知存活验证: {len(alive_ips)}/{len(known_alive)} 个")
+            live_print(f"✅ 已知存活验证: {len(still_alive)}/{len(known_alive)} 个")
+            # 清理失效 IP：下次不再验证已失效的 IP
+            removed = len(known_alive) - len(still_alive)
+            if removed > 0:
+                with open(SOURCE_IP_FILE, "w", encoding="utf-8") as f:
+                    for ip in still_alive:
+                        f.write(ip + "\n")
+                live_print(f"🧹 清理 {removed} 个失效 IP，SOURCE_IP_FILE 剩余 {len(still_alive)} 个")
 
     # 全量扫描：所有段 × 所有 IP × 所有端口
-    found_set = set()
-    lock = threading.Lock()
+    # 复用上面的 found_set，增量验证已命中的 IP 会自动跳过
     total_tasks = len(all_tasks)
     batches = (total_tasks + BATCH_SCAN_SIZE - 1) // BATCH_SCAN_SIZE
     live_print(f"🎯 全量扫描: {total_tasks} 个任务, 分 {batches} 批 (每批 {BATCH_SCAN_SIZE}, 并发: {scan_workers})")
