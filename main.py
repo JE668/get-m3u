@@ -1,5 +1,7 @@
-import os, re, requests, time, concurrent.futures, random, threading, io
+import os, re, time, random, threading, io, asyncio
 from collections import Counter
+import requests
+import httpx
 import ip2region.util as ip2region_util
 import ip2region.searcher as ip2region_searcher
 from utils import live_print, write_summary, log_group_start, log_group_end, log_section, atomic_write
@@ -144,23 +146,21 @@ def update_discovery_database(new_ips):
     log_group_end()
     return sorted_segs, sorted_ports
 
-def check_udpxy(ip_port, found_set=None, lock=None, timeout=2):
+async def check_udpxy(ip_port, found_set=None, timeout=2, client=None):
     """HTTP 指纹探测 (含 IP 命中后熔断，线程安全)。
     
     一旦某 IP 的任意端口命中 udpxy，该 IP 其他端口任务直接跳过。
     """
     ip = ip_port.split(":")[0]
-    if found_set is not None and lock is not None:
-        with lock:
-            if ip in found_set: return False, None
+    if found_set is not None and ip in found_set: return False, None
+    if client is None: client = httpx.AsyncClient()
     try:
-        r = requests.get(f"http://{ip_port}/status", timeout=timeout, headers={"User-Agent":"Wget/1.14"})
+        r = await client.get(f"http://{ip_port}/status", timeout=timeout, headers={"User-Agent":"Wget/1.14"})
         if r.status_code == 200 and any(kw in r.text.lower() for kw in ["udpxy", "stat", "client"]):
-            if found_set is not None and lock is not None:
-                with lock:
-                    found_set.add(ip)
+            if found_set is not None:
+                found_set.add(ip)
             return True, ip_port
-    except requests.RequestException:
+    except Exception:
         pass
     return False, None
 
@@ -178,63 +178,65 @@ def _build_segment_tasks(seg, port_list, sample_size=None):
         ips = all_ips
     return [f"{seg}.{i}:{p}" for i in ips for p in port_list]
 
-def run_native_scan(segments, ports):
-    """统一扫描：所有段全量扫描，同一 IP 命中后熔断其他端口"""
-    log_group_start("🚀 启动扫描 (IP 命中熔断 + 端口优先级)")
+async def run_native_scan(segments, ports):
+    """统一扫描：所有段全量扫描，同一 IP 命中后熔断其他端口 (async + httpx)"""
+    log_group_start("🚀 启动扫描 (async + IP 命中熔断)")
     if not segments:
         live_print("⚠️ 无有效网段"); log_group_end(); return []
 
-    scan_workers = int(os.environ.get("SCAN_WORKERS", "100"))
+    scan_workers = int(os.environ.get("SCAN_WORKERS", "500"))
     BATCH_SCAN_SIZE = int(os.environ.get("BATCH_SCAN_SIZE", "5000"))
 
     # 全局 found_set：增量验证和全量扫描共享，IP 命中后跳过其所有端口
     found_set = set()
-    lock = threading.Lock()
+    sem = asyncio.Semaphore(scan_workers)
 
     # 端口优先级：高频端口排前面，更快命中
     port_list = [int(p) for p in ports]
     # 生成任务：按 (IP, 端口优先级) 排序，确保同一 IP 的高频端口先被处理
     all_tasks = [f"{s}.{i}:{p}" for s in segments for i in range(1, 255) for p in port_list]
-    # 按端口排序（列表推导已按端口顺序生成），shuffle 会破坏优先级，这里不打乱
 
-    # 增量验证：先快速验证上次的存活 IP，命中者直接加入结果
+    async def bounded_check(ip_port, timeout=2, client=None):
+        async with sem:
+            return await check_udpxy(ip_port, found_set, timeout, client)
+
     alive_ips = []
-    if os.path.exists(SOURCE_IP_FILE):
-        with open(SOURCE_IP_FILE, "r", encoding="utf-8") as f:
-            known_alive = [line.strip() for line in f if line.strip()]
-        if known_alive:
-            live_print(f"🔄 增量验证: {len(known_alive)} 个已知 IP (1秒超时)...")
-            still_alive = []
-            with concurrent.futures.ThreadPoolExecutor(max_workers=scan_workers) as ex:
-                futures = {ex.submit(check_udpxy, ip, found_set, lock, 1): ip for ip in known_alive}
-                for f in concurrent.futures.as_completed(futures):
-                    ok, matched = f.result()
+    async with httpx.AsyncClient(limits=httpx.Limits(max_keepalive_connections=50, max_connections=1000)) as client:
+        # 增量验证：先快速验证上次的存活 IP，命中者直接加入结果
+        if os.path.exists(SOURCE_IP_FILE):
+            with open(SOURCE_IP_FILE, "r", encoding="utf-8") as f:
+                known_alive = [line.strip() for line in f if line.strip()]
+            if known_alive:
+                live_print(f"🔄 增量验证: {len(known_alive)} 个已知 IP (1秒超时)...")
+                still_alive = []
+                tasks = [bounded_check(ip, 1, client) for ip in known_alive]
+                results = await asyncio.gather(*tasks)
+                for ok, matched in results:
                     if ok and matched:
                         still_alive.append(matched)
                         alive_ips.append(matched)
-            live_print(f"✅ 已知存活验证: {len(still_alive)}/{len(known_alive)} 个")
-            # 清理失效 IP：下次不再验证已失效的 IP
-            removed = len(known_alive) - len(still_alive)
-            if removed > 0:
-                with open(SOURCE_IP_FILE, "w", encoding="utf-8") as f:
-                    for ip in still_alive:
-                        f.write(ip + "\n")
-                live_print(f"🧹 清理 {removed} 个失效 IP，SOURCE_IP_FILE 剩余 {len(still_alive)} 个")
+                live_print(f"✅ 已知存活验证: {len(still_alive)}/{len(known_alive)} 个")
+                # 清理失效 IP：下次不再验证已失效的 IP
+                removed = len(known_alive) - len(still_alive)
+                if removed > 0:
+                    with open(SOURCE_IP_FILE, "w", encoding="utf-8") as f:
+                        for ip in still_alive:
+                            f.write(ip + "\n")
+                    live_print(f"🧹 清理 {removed} 个失效 IP，SOURCE_IP_FILE 剩余 {len(still_alive)} 个")
 
-    # 全量扫描：所有段 × 所有 IP × 所有端口
-    # 复用上面的 found_set，增量验证已命中的 IP 会自动跳过
-    total_tasks = len(all_tasks)
-    batches = (total_tasks + BATCH_SCAN_SIZE - 1) // BATCH_SCAN_SIZE
-    live_print(f"🎯 全量扫描: {total_tasks} 个任务, 分 {batches} 批 (每批 {BATCH_SCAN_SIZE}, 并发: {scan_workers})")
-    
-    with concurrent.futures.ThreadPoolExecutor(max_workers=scan_workers) as ex:
+        # 全量扫描：所有段 × 所有 IP × 所有端口
+        # 复用上面的 found_set，增量验证已命中的 IP 会自动跳过
+        total_tasks = len(all_tasks)
+        batches = (total_tasks + BATCH_SCAN_SIZE - 1) // BATCH_SCAN_SIZE
+        live_print(f"🎯 全量扫描: {total_tasks} 个任务, 分 {batches} 批 (每批 {BATCH_SCAN_SIZE}, 并发: {scan_workers})")
+
         for batch_idx in range(batches):
             start = batch_idx * BATCH_SCAN_SIZE
             end = min(start + BATCH_SCAN_SIZE, total_tasks)
             batch = all_tasks[start:end]
-            futs = {ex.submit(check_udpxy, ip, found_set, lock): ip for ip in batch}
-            for f in concurrent.futures.as_completed(futs):
-                ok, matched_ip = f.result()
+            tasks = [bounded_check(ip, 2, client) for ip in batch]
+            results = await asyncio.gather(*tasks)
+            for ok, matched_ip in results:
                 if ok and matched_ip:
                     alive_ips.append(matched_ip)
             live_print(f" 📊 批次 {batch_idx+1}/{batches}: {end}/{total_tasks} | 发现: {len(set(alive_ips))}")
@@ -332,7 +334,7 @@ def _channel_quality(name):
 # ===============================
 # 4. 主程序入口
 # ===============================
-if __name__ == "__main__":
+async def main():
     start_time = time.time()
     stats = {"fofa": 0, "segments_total": 0, "segments_valid": 0,
              "scan_tasks": 0, "scan_found": 0, "geo_pass": 0, "geo_fail": 0,
@@ -355,9 +357,9 @@ if __name__ == "__main__":
     ext_ports = [p for p in all_ports if int(p) not in high_set]
 
     # 先扫高优先端口（高频端口命中率高，优先扫可快速出结果）
-    sips_high = run_native_scan(valid_segs, high_ports) if high_ports else []
+    sips_high = await run_native_scan(valid_segs, high_ports) if high_ports else []
     # 扩展端口始终扫（避免漏扫只开放冷门端口的独立服务器）
-    sips_ext = run_native_scan(valid_segs, ext_ports) if ext_ports else []
+    sips_ext = await run_native_scan(valid_segs, ext_ports) if ext_ports else []
     sips = list(set(sips_high + sips_ext))
     stats["scan_found"] = len(sips)
 
@@ -445,3 +447,6 @@ if __name__ == "__main__":
     write_summary(f"| 🖥️ 有效服务器 | {len(geo_ips)} 个 |")
     write_summary(f"| 📺 RTP 频道 | {stats.get('rtp_count', 0)} 个 |")
     write_summary(f"| ⏱️ 总耗时 | {elapsed}s |")
+
+if __name__ == "__main__":
+    asyncio.run(main())
