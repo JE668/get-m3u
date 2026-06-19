@@ -1,6 +1,5 @@
 import os, subprocess, time, json, asyncio
 import httpx
-import requests
 from datetime import datetime
 from utils import live_print, write_summary, atomic_write
 

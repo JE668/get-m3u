@@ -76,39 +76,52 @@ def get_geo_info(ip, session=None):
     except Exception as e:
         return False, f"查询异常: {e}"
 
+SAMPLE_IPS_PER_SEG = [1, 100, 200]  # 每个C段抽测3个IP
+SAMPLE_GEO_THRESHOLD = 2              # 至少2个IP不合格才跳过（容忍1个误报）
+
 def filter_segments(segments):
-    """C段 预校验与清洗"""
-    log_group_start("🛡️ C段 归属地预校验")
+    """C段 预校验与清洗（多IP抽样，防止 .1 网关误判）。
+    
+    - 每段抽 SAMPLE_IPS_PER_SEG 个IP做归属地测试
+    - 至少 SAMPLE_GEO_THRESHOLD 个IP不合格才跳过（容忍1个误报）
+    - 不再永久写入黑名单文件（避免单个网关IP误判导致整段永久消失）
+    """
+    log_group_start("🛡️ C段 归属地预校验（多IP抽样）")
     blacklist = set()
     if os.path.exists(BLACKLIST_FILE):
         with open(BLACKLIST_FILE, "r", encoding="utf-8") as f:
             blacklist = set([line.strip() for line in f if line.strip()])
 
-    valid_segments, new_black_segments = [], []
+    valid_segments, skipped_segments = [], []
     total = len(segments)
     blacklist_skip = 0
-    live_print(f"📋 待检测: {total} 个 | 黑名单库: {len(blacklist)} 个")
+    live_print(f"📋 待检测: {total} 个 | 黑名单库: {len(blacklist)} 个 | 抽样: {len(SAMPLE_IPS_PER_SEG)} 个IP/段")
 
     for idx, seg in enumerate(segments, 1):
         if seg in blacklist:
             blacklist_skip += 1
             continue
-        # 抽取 .1 进行测试
-        is_valid, desc = get_geo_info(f"{seg}.1")
-        if is_valid:
-            live_print(f"  [{idx}/{total}] ✅ 通过: {seg} ({desc})")
-            valid_segments.append(seg)
+        # 多IP抽样（.1/.100/.200），防止网关IP误判
+        sample_results = []
+        for offset in SAMPLE_IPS_PER_SEG:
+            ip = f"{seg}.{offset}"
+            is_valid, desc = get_geo_info(ip)
+            sample_results.append((is_valid, desc))
+
+        # 统计不合格IP数
+        fail_count = sum(1 for ok, _ in sample_results if not ok)
+        if fail_count >= SAMPLE_GEO_THRESHOLD:
+            # 至少2个IP不合格才跳过（容忍1个误报）
+            descs = "; ".join(d for _, d in sample_results if not d)
+            live_print(f"  [{idx}/{total}] ❌ 跳过: {seg} ({fail_count}/{len(SAMPLE_IPS_PER_SEG)} 不合格: {descs[:60]})")
+            skipped_segments.append(seg)
         else:
-            live_print(f"  [{idx}/{total}] ❌ 拉黑: {seg} ({desc})")
-            new_black_segments.append(seg)
-            blacklist.add(seg)
+            # 至少1个IP合格即通过
+            valid_segments.append(seg)
+            ok_count = len(sample_results) - fail_count
+            live_print(f"  [{idx}/{total}] ✅ 通过: {seg} ({ok_count}/{len(SAMPLE_IPS_PER_SEG)} 合格)")
 
-    if new_black_segments:
-        with open(BLACKLIST_FILE, "a", encoding="utf-8") as f:
-            f.write("\n".join(new_black_segments) + "\n")
-        live_print(f"💾 新增黑名单: {len(new_black_segments)} 个")
-
-    live_print(f"📊 最终有效 C段: {len(valid_segments)} 个 (黑名单跳过: {blacklist_skip} 个)")
+    live_print(f"📊 最终有效 C段: {len(valid_segments)} 个 (历史黑名单跳过: {blacklist_skip} 个, 本次临时跳过: {len(skipped_segments)} 个)")
     log_group_end()
     return valid_segments
 
@@ -145,16 +158,37 @@ def update_discovery_database(new_ips):
     log_group_end()
     return sorted_segs, sorted_ports
 
-async def check_udpxy(ip_port, found_set=None, timeout=2, client=None):
-    """HTTP 指纹探测 (含 IP 命中后熔断，线程安全)。
+# 扫描阶段超时配置（两阶段：连接快筛 + 读数据给足时间）
+# connect=0.5s: 够快，0.5s内没完成TCP握手 → 真实不可达，直接放弃
+# read=3.0s: 够慢，udpxy处理+网络RTT最多吃2-3s，给足缓冲不误杀
+SCAN_CONNECT_TIMEOUT = 0.5
+SCAN_READ_TIMEOUT = 3.0
 
-    一旦某 IP 的任意端口命中 udpxy，该 IP 其他端口任务直接跳过。
+# 增量验证超时（更短：已知的存活IP应该秒回）
+INCR_CONNECT_TIMEOUT = 0.3
+INCR_READ_TIMEOUT = 0.5
+
+
+async def check_udpxy(ip_port, found_set=None, timeout=None, client=None):
+    """HTTP 指纹探测（两阶段超时：connect快筛 + read给足时间）。
+
+    timeout 为 None 时使用 SCAN_* 默认配置（扫描阶段）。
+    传入 (connect_timeout, read_timeout) 元组时使用自定义值（增量验证等）。
     """
     ip = ip_port.split(":")[0]
     if found_set is not None and ip in found_set: return False, None
     if client is None: client = httpx.AsyncClient()
+
+    # 解析超时配置
+    if timeout is None:
+        tm = httpx.Timeout(connect=SCAN_CONNECT_TIMEOUT, read=SCAN_READ_TIMEOUT)
+    elif isinstance(timeout, tuple):
+        tm = httpx.Timeout(connect=timeout[0], read=timeout[1])
+    else:
+        tm = httpx.Timeout(timeout)  # 兼容旧调用（数字→全局等分）
+
     try:
-        r = await client.get(f"http://{ip_port}/status", timeout=timeout, headers={"User-Agent":"Wget/1.14"})
+        r = await client.get(f"http://{ip_port}/status", timeout=tm, headers={"User-Agent":"Wget/1.14"})
         if r.status_code == 200 and any(kw in r.text.lower() for kw in ["udpxy", "stat", "client"]):
             if found_set is not None:
                 found_set.add(ip)
@@ -162,20 +196,6 @@ async def check_udpxy(ip_port, found_set=None, timeout=2, client=None):
     except Exception:
         pass
     return False, None
-
-
-def _build_segment_tasks(seg, port_list, sample_size=None):
-    """生成单个 C 段的任务列表（全量或采样）。
-
-    sample_size=None/0: 全量 1~254
-    sample_size>0:  随机采样 sample_size 个 IP（不含 .0 和 .255）
-    """
-    all_ips = list(range(1, 255))  # 排除 .0 和 .255
-    if sample_size and sample_size > 0:
-        ips = random.sample(all_ips, min(sample_size, 254))
-    else:
-        ips = all_ips
-    return [f"{seg}.{i}:{p}" for i in ips for p in port_list]
 
 async def run_native_scan(segments, ports, found_set=None):
     """统一扫描：持续任务流，结果随到随处理，不等慢任务 (async + httpx)"""
@@ -200,7 +220,7 @@ async def run_native_scan(segments, ports, found_set=None):
     alive_ips = []
     async with httpx.AsyncClient(
         limits=httpx.Limits(max_keepalive_connections=200, max_connections=1000),
-        timeout=httpx.Timeout(connect=0.8, read=1.5, write=1.5, pool=0.5),
+        timeout=httpx.Timeout(connect=SCAN_CONNECT_TIMEOUT, read=SCAN_READ_TIMEOUT, write=1.5, pool=0.5),
     ) as client:
         # 增量验证：先快速验证上次的存活 IP（随完随处理）
         if os.path.exists(SOURCE_IP_FILE):
@@ -209,7 +229,7 @@ async def run_native_scan(segments, ports, found_set=None):
             if known_alive:
                 live_print(f"🔄 增量验证: {len(known_alive)} 个已知 IP (connect≤0.3s, read≤0.5s)...")
                 still_alive = []
-                tasks = [asyncio.create_task(check_one(ip, 0.5, client)) for ip in known_alive]
+                tasks = [asyncio.create_task(check_one(ip, (INCR_CONNECT_TIMEOUT, INCR_READ_TIMEOUT), client)) for ip in known_alive]
                 for coro in asyncio.as_completed(tasks):
                     ok, matched = await coro
                     if ok and matched:
@@ -244,7 +264,7 @@ async def run_native_scan(segments, ports, found_set=None):
         for _ in range(scan_workers):
             try:
                 ip_port = next(task_gen)
-                pending.add(asyncio.create_task(check_one(ip_port, 1.5, client)))
+                pending.add(asyncio.create_task(check_one(ip_port, None, client)))
             except StopIteration:
                 break
 
@@ -260,7 +280,7 @@ async def run_native_scan(segments, ports, found_set=None):
             while len(pending) < scan_workers:
                 try:
                     ip_port = next(task_gen)
-                    pending.add(asyncio.create_task(check_one(ip_port, 1.5, client)))
+                    pending.add(asyncio.create_task(check_one(ip_port, None, client)))
                 except StopIteration:
                     break
 
@@ -313,8 +333,10 @@ def scrape_fofa():
         live_print(f"❌ FOFA 请求异常: {e}")
         log_group_end(); return []
 
+_rtp_lock = threading.Lock()
+
 def update_rtp_template():
-    """RTP 模板下载（并发抓取两个源）"""
+    """RTP 模板下载（并发抓取两个源，线程安全）"""
     log_group_start("🔄 同步 RTP 模板")
     unique_rtp = {}
 
@@ -344,14 +366,15 @@ def update_rtp_template():
             live_print(f"  ❌ 下载失败: {url}")
         return local_rtp
 
-    # 并发下载两个 RTP 源
+    # 并发下载两个 RTP 源，unique_rtp 写操作加锁保证线程安全
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as ex:
         futures = {ex.submit(_download_single, url): url for url in RTP_SOURCES}
         for future in concurrent.futures.as_completed(futures):
             local = future.result()
-            for rtp_url, name in local.items():
-                if rtp_url not in unique_rtp or _channel_quality(name) > _channel_quality(unique_rtp[rtp_url]):
-                    unique_rtp[rtp_url] = name
+            with _rtp_lock:
+                for rtp_url, name in local.items():
+                    if rtp_url not in unique_rtp or _channel_quality(name) > _channel_quality(unique_rtp[rtp_url]):
+                        unique_rtp[rtp_url] = name
 
     if unique_rtp:
         with open(RTP_FILE, "w", encoding="utf-8") as f:
