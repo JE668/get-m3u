@@ -692,30 +692,59 @@ async def main():
     else:
         live_print("\n❌ 本次运行未找到有效节点")
 
-    # 5. 运行统计摘要
+    # 5. 阶段摘要（管道视图 — 每一阶段输出即下一阶段输入）
     elapsed = round(time.time() - start_time, 2)
-    log_section("运行统计", "📊")
-    live_print(f"├── FOFA 获取: {stats['fofa']} 个 IP")
-    live_print(f"├── C段过滤: {stats['segments_total']}→{stats['segments_valid']} 个有效")
-    live_print(f"├── 矩阵扫描: {stats['scan_found']} 个存活")
-    live_print(f"├── 归属复核: ✅{stats['geo_pass']} / ⏭️{stats['geo_fail']}")
-    live_print(f"├── 端口管理: {stats.get('port_deactivated', 0)} 个休眠")
-    live_print(f"└── M3U 生成: {stats.get('m3u_count', 0)} 条")
-    live_print(f"\n⏱️ 总耗时: {elapsed}s")
+    deactivated = stats.get('port_deactivated', 0)
+    m3u_count = stats.get('m3u_count', 0)
+    rtp_count = stats.get('rtp_count', 0)
+    review_total = stats['geo_pass'] + stats['geo_fail']
+    scan_total = stats['scan_found']
+    fofa_total = stats['fofa']
+    fofa_only = max(0, review_total - scan_total)
 
-    # 6. 写入 GitHub Actions Job Summary
-    write_summary("### 📊 运行统计摘要\n")
-    write_summary("| 指标 | 数值 |")
-    write_summary("|------|------|")
-    write_summary(f"| 🛰️ FOFA 获取 | {stats['fofa']} 个 IP |")
-    write_summary(f"| 🛡️ C段过滤 | {stats['segments_total']}→{stats['segments_valid']} 个有效 |")
-    write_summary(f"| 🚀 矩阵扫描 | {stats['scan_found']} 个存活 |")
-    write_summary(f"| 💤 端口休眠 | {stats.get('port_deactivated', 0)} 个 |")
-    write_summary(f"| 🌍 归属复核 | ✅ {stats['geo_pass']} / ⏭️ {stats['geo_fail']} |")
-    write_summary(f"| 📺 M3U 生成 | {stats.get('m3u_count', 0)} 条 |")
-    write_summary(f"| 🖥️ 有效服务器 | {len(geo_ips)} 个 |")
-    write_summary(f"| 📺 RTP 频道 | {stats.get('rtp_count', 0)} 个 |")
-    write_summary(f"| ⏱️ 总耗时 | {elapsed}s |")
+    # ── Console 输出 ──
+    log_section("源发现 — 阶段摘要", "📊")
+    live_print(f"  源获取→端口扫描→归属复核→成品输出")
+    live_print(f"")
+    live_print(f"  ┌─ 阶段1: 源获取")
+    live_print(f"  │  ├ FOFA 刮取 ............ {fofa_total:>4} 个原始IP")
+    live_print(f"  │  ├ C段预过滤 ........... {stats['segments_valid']:>4} 个有效")
+    live_print(f"  │  └ (黑名单跳过) ........ {stats.get('blacklist_skip', 0):>4} 个")
+    live_print(f"  │")
+    live_print(f"  ├─ 阶段2: 端口扫描")
+    live_print(f"  │  ├ 存活发现 ............ {scan_total:>4} 个新IP")
+    live_print(f"  │  ├ FOFA 旧IP复用 ........ {fofa_only:>4} 个")
+    live_print(f"  │  ├ 待复核总数 ........... {review_total:>4} 个IP")
+    live_print(f"  │  └ 端口休眠 ............. {deactivated:>4} 个")
+    live_print(f"  │")
+    live_print(f"  ├─ 阶段3: 归属复核")
+    live_print(f"  │  ├ 复核通过 ............ {stats['geo_pass']:>4} 个")
+    live_print(f"  │  └ 复核剔除 ............ {stats['geo_fail']:>4} 个")
+    live_print(f"  │")
+    live_print(f"  ├─ 阶段4: 成品输出")
+    live_print(f"  │  ├ 有效服务器 .......... {len(geo_ips):>4} 个 (→ output/source-ip.txt)")
+    live_print(f"  │  ├ RTP 频道 ............ {rtp_count:>4} 个")
+    live_print(f"  │  ├ M3U 链接 ............ {m3u_count:>4} 条 (→ output/source-m3u.txt)")
+    live_print(f"  │  └ 耗时 ............... {elapsed:>7.2f}s")
+    live_print(f"  └──")
+
+    # ── GitHub Actions Job Summary ──
+    write_summary("### 📊 阶段摘要 — 源发现\n")
+    write_summary(f"**源获取 → 端口扫描 → 归属复核 → 成品输出** | ⏱️ {elapsed}s\n\n")
+    write_summary("| 阶段 | 指标 | 数值 |")
+    write_summary("|------|------|------|")
+    write_summary(f"| ① 源获取 | FOFA 刮取 | {fofa_total} 个原始IP |")
+    write_summary(f"| ① 源获取 | C段预过滤 | {stats['segments_valid']} 个有效 ({stats['segments_total']}→{stats['segments_valid']}) |")
+    write_summary(f"| ① 源获取 | 黑名单跳过 | {stats.get('blacklist_skip', 0)} 个 |")
+    write_summary(f"| ② 端口扫描 | 新存活发现 | {scan_total} 个IP |")
+    write_summary(f"| ② 端口扫描 | 端口休眠 | {deactivated} 个 |")
+    write_summary(f"| ③ 归属复核 | 复核通过 | {stats['geo_pass']} 个 |")
+    write_summary(f"| ③ 归属复核 | 复核剔除 | {stats['geo_fail']} 个 |")
+    write_summary(f"| ④ 成品输出 | 有效服务器 | {len(geo_ips)} 个 |")
+    write_summary(f"| ④ 成品输出 | RTP 频道 | {rtp_count} 个 |")
+    write_summary(f"| ④ 成品输出 | M3U 总链接 | {m3u_count} 条 |")
+
+    write_summary(f"\n> 💾 输出文件: `output/source-ip.txt` `output/source-m3u.txt` `output/source-m3u-noncheck.txt`")
 
 if __name__ == "__main__":
     asyncio.run(main())

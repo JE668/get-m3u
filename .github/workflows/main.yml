@@ -63,35 +63,29 @@ jobs:
         if: always()
         run: |
           echo "## 📊 运行统计" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
           echo "| 指标 | 数值 |" >> $GITHUB_STEP_SUMMARY
           echo "|------|------|" >> $GITHUB_STEP_SUMMARY
 
           if [ -f output/source-ip.txt ]; then
             ip_count=$(grep -c . output/source-ip.txt 2>/dev/null || echo "0")
-            echo "| 🖥️ 有效服务器 | ${ip_count} |" >> $GITHUB_STEP_SUMMARY
+            echo "| 💾 有效服务器 (source-ip.txt) | ${ip_count} 个 |" >> $GITHUB_STEP_SUMMARY
           fi
           if [ -f output/source-m3u.txt ]; then
             m3u_count=$(grep -c "^http" output/source-m3u.txt 2>/dev/null || echo "0")
-            echo "| 📺 M3U 链接数 | ${m3u_count} |" >> $GITHUB_STEP_SUMMARY
-          fi
-          if [ -f output/source-m3u-noncheck.txt ]; then
-            nc_count=$(grep -c "," output/source-m3u-noncheck.txt 2>/dev/null || echo "0")
-            echo "| 📋 兼容格式链接 | ${nc_count} |" >> $GITHUB_STEP_SUMMARY
-          fi
-          if [ -f data/blacklist.txt ]; then
-            bl_count=$(grep -c . data/blacklist.txt 2>/dev/null || echo "0")
-            echo "| 🚫 黑名单 C段 | ${bl_count} |" >> $GITHUB_STEP_SUMMARY
+            echo "| 💾 M3U 链接 (source-m3u.txt) | ${m3u_count} 条 |" >> $GITHUB_STEP_SUMMARY
           fi
           if [ -f /tmp/discovery.log ]; then
             disc_lines=$(wc -l < /tmp/discovery.log)
-            echo "| 📝 发现日志行数 | ${disc_lines} |" >> $GITHUB_STEP_SUMMARY
+            echo "| 📝 发现日志 | ${disc_lines} 行 |" >> $GITHUB_STEP_SUMMARY
           fi
           if [ -f /tmp/probe.log ]; then
             probe_lines=$(wc -l < /tmp/probe.log)
-            echo "| 📝 探测日志行数 | ${probe_lines} |" >> $GITHUB_STEP_SUMMARY
+            echo "| 📝 探测日志 | ${probe_lines} 行 |" >> $GITHUB_STEP_SUMMARY
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "> ⏱️ 运行时间: $(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_STEP_SUMMARY
+          echo "> 各阶段详情见上方 main.py / probe.py 输出的阶段摘要" >> $GITHUB_STEP_SUMMARY
+          echo "> ⏱️ 运行结束: $(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_STEP_SUMMARY
 
       - name: 💾 提交并推送
         run: |

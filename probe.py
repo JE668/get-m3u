@@ -1,7 +1,7 @@
 import os, subprocess, time, json, asyncio
 import httpx
 from datetime import datetime
-from utils import live_print, write_summary, atomic_write
+from utils import live_print, write_summary, atomic_write, log_section
 
 # ===============================
 # 1. 配置区 (目录结构优化)
@@ -142,6 +142,7 @@ def _trigger_workflow(repo, workflow, branch, token, max_retries=3):
 # 5. 运行主逻辑 (async)
 # ===============================
 async def main():
+    start_time = time.time()
     changed = has_data_changed(SOURCE_IP_FILE)
     should_trigger, current_count, is_forced = get_trigger_status(changed)
 
@@ -293,19 +294,42 @@ async def main():
     elif changed: live_print(f"✨ 更新触发")
     else: live_print(f"⏭️ 跳过 (计数: {current_count}/3)")
 
-    # 写入 Job Summary
-    write_summary("### 🎬 测速与联动摘要\n")
-    write_summary("| 指标 | 数值 |")
-    write_summary("|------|------|")
-    write_summary(f"| 🧪 抽样 IP | {len(ip_map)} 个 |")
-    write_summary(f"| ✅ 存活 IP | {len(valid_hostports)} 个 |")
-    write_summary(f"| ❌ 无流 IP | {len(ip_map) - len(valid_hostports)} 个 |")
+    elapsed = round(time.time() - start_time, 2)
+    out_of_ip_count = len(ip_map) - len(valid_hostports)
+
+    log_section("测速 — 阶段摘要", "🎬")
+    live_print(f"  源发现结果 → 抽样测速 → 联动决策")
+    live_print(f"")
+    live_print(f"  ┌─ 阶段: 测速结果")
+    live_print(f"  │  ├ 上游有效服务器 ..... {len(ip_map):>4} 个 (来自 source-ip.txt)")
+    live_print(f"  │  ├ 有流响应 .......... {len(valid_hostports):>4} 个")
+    live_print(f"  │  └ 无流/失败 ......... {out_of_ip_count:>4} 个")
+    live_print(f"  │")
+    live_print(f"  └─ 阶段: 联动决策")
     if is_forced:
-     write_summary("| ⚖️ 联动决策 | 🚨 强制触发 |")
+        live_print(f"     ├ 决策: 🚨 强制触发")
     elif changed:
-     write_summary("| ⚖️ 联动决策 | ✨ 更新触发 |")
+        live_print(f"     ├ 决策: ✨ 更新触发")
     else:
-     write_summary(f"| ⚖️ 联动决策 | ⏭️ 跳过 ({current_count}/3) |")
+        live_print(f"     ├ 决策: ⏭️ 跳过 ({current_count}/3)")
+    live_print(f"     └ 耗时 ............. {elapsed:>7.2f}s")
+    live_print(f"")
+
+    # ── Job Summary ──
+    write_summary("### 🎬 阶段摘要 — 测速与联动\n")
+    write_summary("| 阶段 | 指标 | 数值 |")
+    write_summary("|------|------|------|")
+    write_summary(f"| ① 测速 | 待测服务器 | {len(ip_map)} 个 |")
+    write_summary(f"| ① 测速 | 有流响应 | {len(valid_hostports)} 个 |")
+    write_summary(f"| ① 测速 | 无流/失败 | {out_of_ip_count} 个 |")
+    if is_forced:
+        write_summary("| ② 联动决策 | 决策 | 🚨 强制触发 |")
+    elif changed:
+        write_summary("| ② 联动决策 | 决策 | ✨ 更新触发 |")
+    else:
+        write_summary(f"| ② 联动决策 | 决策 | ⏭️ 跳过 ({current_count}/3) |")
+
+    write_summary(f"\n> ⏱️ 总耗时: {elapsed}s")
 
     if TRIGGER_TOKEN:
         # 触发 m3u-checker-max
