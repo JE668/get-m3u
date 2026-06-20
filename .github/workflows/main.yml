@@ -115,11 +115,24 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          echo "⏳ 触发 m3u-checker-max..."
+          if [ -z "$GH_TOKEN" ]; then
+            echo "⚠️ PAT_TOKEN 未设置，跳过触发"
+            exit 0
+          fi
+          echo "⏳ 触发 m3u-checker-max (repo: JE668/m3u-checker-max, ref: main)..."
           gh workflow run update.yml \
             --repo JE668/m3u-checker-max \
-            --ref main
-          echo "✅ 已触发"
+            --ref main 2>&1
+          EXIT_CODE=$?
+          if [ $EXIT_CODE -ne 0 ]; then
+            echo "❌ 触发失败 (exit=$EXIT_CODE)，检查 PAT_TOKEN 权限"
+            echo "### 🔄 下游触发" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **m3u-checker-max** 触发失败 (exit=$EXIT_CODE)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ m3u-checker-max 已触发"
+            echo "### 🔄 下游触发" >> $GITHUB_STEP_SUMMARY
+            echo "✅ **m3u-checker-max** 已成功触发" >> $GITHUB_STEP_SUMMARY
+          fi
 
       - name: 🚨 运行异常
         if: failure()
