@@ -4,7 +4,7 @@ from collections import Counter
 import httpx
 import ip2region.util as ip2region_util
 import ip2region.searcher as ip2region_searcher
-from utils import live_print, write_summary, log_group_start, log_group_end, log_section, atomic_write
+from utils import live_print, write_summary, log_section, atomic_write
 
 # --- 初始化离线 IP 归属地查询（ip2region xdb，零网络延迟） ---
 _ip2region_searcher = None
@@ -94,7 +94,7 @@ def filter_segments(segments):
     - 至少 SAMPLE_GEO_THRESHOLD 个IP不合格才跳过（容忍1个误报）
     - 不再永久写入黑名单文件（避免单个网关IP误判导致整段永久消失）
     """
-    log_group_start("🛡️ C段 归属地预校验（多IP抽样）")
+    log_section("🛡️ C段 归属地预校验（多IP抽样）", "🔹")
     blacklist = set()
     if os.path.exists(BLACKLIST_FILE):
         with open(BLACKLIST_FILE, "r", encoding="utf-8") as f:
@@ -135,7 +135,7 @@ def filter_segments(segments):
                 live_print(f"      {line}")
 
     live_print(f"📊 最终有效 C段: {len(valid_segments)} 个 (历史黑名单跳过: {blacklist_skip} 个, 本次临时跳过: {len(skipped_segments)} 个)")
-    log_group_end()
+    
     return valid_segments
 
 # ===============================
@@ -307,7 +307,7 @@ def _update_port_stats_after_scan(stats, scanned_ports, source_ip_file):
 
 def update_discovery_database(new_ips):
     """更新发现库"""
-    log_group_start("📂 更新发现库 (data/discovery.txt)")
+    log_section("📂 更新发现库 (data/discovery.txt)", "🔹")
     segs, ports = set(), set(str(p) for p in DEFAULT_PORTS)  # P3#7: 统一为 str 类型
 
     if os.path.exists(DISCOVERY_FILE):
@@ -335,7 +335,7 @@ def update_discovery_database(new_ips):
         for p in sorted_ports: f.write(f"PORT|{p}\n")
 
     live_print(f"✅ 库同步 | C段: {len(sorted_segs)} | 端口: {len(sorted_ports)}")
-    log_group_end()
+    
     return sorted_segs, sorted_ports
 
 # 扫描阶段超时配置（两阶段：连接快筛 + 读数据给足时间）
@@ -387,9 +387,9 @@ async def check_udpxy(ip_port, found_set=None, timeout=None, client=None):
 
 async def run_native_scan(segments, ports, found_set=None):
     """统一扫描：持续任务流，结果随到随处理，不等慢任务 (async + httpx)"""
-    log_group_start("🚀 启动扫描 (async + 持续任务流)")
+    log_section("🚀 启动扫描 (async + 持续任务流)", "🔹")
     if not segments:
-        live_print("⚠️ 无有效网段"); log_group_end(); return []
+        live_print("⚠️ 无有效网段"); return []
 
     scan_workers = int(os.environ.get("SCAN_WORKERS", "500"))
 
@@ -490,23 +490,23 @@ async def run_native_scan(segments, ports, found_set=None):
         live_print(f"   📊 统计: 命中IP={len(found_set)} | 存活IP={len(set(alive_ips))}")
 
     alive_ips = list(set(alive_ips))
-    log_group_end()
+    
     return alive_ips
 
 def scrape_fofa():
     """FOFA 抓取（含 Cookie 失效检测与降级提示，使用 httpx 同步客户端）"""
-    log_group_start("📡 抓取 FOFA 资源")
+    log_section("📡 抓取 FOFA 资源", "🔹")
     if not HEADERS["Cookie"]:
-        live_print("⏭️ 未配置 Cookie，跳过。"); log_group_end(); return []
+        live_print("⏭️ 未配置 Cookie，跳过。"); return []
     try:
         r = httpx.get(FOFA_URL, headers=HEADERS, timeout=15)
         if "账号登录" in r.text or "login" in str(r.url).lower():
             live_print("❌ 错误: FOFA Cookie 已失效！请更新 secrets.FOFA_COOKIE")
             live_print("💡 提示: 在浏览器登录 fofa.info → F12 → Application → Cookies → 复制完整 Cookie 值")
-            log_group_end(); return []
+            return []
         if r.status_code == 403:
             live_print("❌ 错误: FOFA 返回 403 禁止访问，可能被限流或封禁")
-            log_group_end(); return []
+            return []
 
         raw_list = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+)', r.text)
         if raw_list:
@@ -514,22 +514,22 @@ def scrape_fofa():
             live_print(f"✅ 获取 {len(raw_list)} 条记录")
             for ip in sorted(counts.keys()):
                 live_print(f" - {ip:<21} ({counts[ip]}次)")
-            log_group_end(); return list(counts.keys())
+            return list(counts.keys())
         else:
             live_print(f"⚠️ FOFA 页面解析成功但未提取到 IP，可能页面结构变化")
-            log_group_end(); return []
+            return []
     except httpx.TimeoutException:
         live_print("❌ FOFA 请求超时（15s），网络不稳定")
-        log_group_end(); return []
+        return []
     except httpx.RequestError as e:
         live_print(f"❌ FOFA 请求异常: {e}")
-        log_group_end(); return []
+        return []
 
 _rtp_lock = threading.Lock()
 
 def update_rtp_template():
     """RTP 模板下载（并发抓取两个源，线程安全）"""
-    log_group_start("🔄 同步 RTP 模板")
+    log_section("🔄 同步 RTP 模板", "🔹")
     unique_rtp = {}
 
     def _download_single(url):
@@ -571,7 +571,7 @@ def update_rtp_template():
     if unique_rtp:
         with open(RTP_FILE, "w", encoding="utf-8") as f:
             for url, name in unique_rtp.items(): f.write(f"{name},{url}\n")
-    log_group_end()
+    
 
 def _channel_quality(name):
     """频道名称质量评分（用于去重时保留更高质量名称）"""
@@ -628,7 +628,7 @@ async def main():
     unique_all = sorted(list(set(fips + sips)))
 
     # 3. 最终复核
-    log_group_start("🌍 最终结果复核")
+    log_section("🌍 最终结果复核", "🔹")
     geo_ips = []
     for idx, ip in enumerate(unique_all, 1):
         ok, desc = get_geo_info(ip.split(":")[0])
@@ -639,11 +639,11 @@ async def main():
         else:
             live_print(f"  [{idx:02d}/{len(unique_all):02d}] ⏭️ 剔除 | {ip:<21} | {desc}")
             stats["geo_fail"] += 1
-    log_group_end()
+    
 
     # 4. 写入文件（标准 M3U 格式 + 原子化写入）
     if geo_ips:
-        log_group_start("💾 数据归档 (output目录)")
+        log_section("💾 数据归档 (output目录)", "🔹")
         geo_ips.sort()
 
         # 写入 source-ip.txt（原子化）
@@ -688,7 +688,7 @@ async def main():
         stats["m3u_count"] = len(geo_ips) * len(rtps)
         stats["rtp_count"] = len(rtps)
         live_print(f"✨ 总结: {len(geo_ips)} 个服务器 | {len(rtps)} 个频道 | {stats['m3u_count']} 条链接")
-        log_group_end()
+        
     else:
         live_print("\n❌ 本次运行未找到有效节点")
 

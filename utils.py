@@ -15,13 +15,8 @@ def write_summary(content):
         except OSError:
             pass
 
-def log_group_start(name):
-    print(f"\n::group::{name}", flush=True)
-
-def log_group_end():
-    print("\n::endgroup::", flush=True)
-
 def log_section(name, icon="🔹"):
+    """打印阶段分割线标题"""
     live_print(f"\n{icon} {'='*15} {name} {'='*15}")
 
 def atomic_write(filepath, content):
