@@ -1,1 +1,3 @@
 httpx
+# 注意：ip2region 为 vendored 依赖（./ip2region），未列入 pip 依赖，
+# 请勿单独升级 data/ip2region.xdb 而不同步升级其 Python 代码。

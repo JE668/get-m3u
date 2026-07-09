@@ -13,15 +13,9 @@ LOG_FILE = "output/log.txt"
 RTP_FILE = "data/rtp/ChinaTelecom-Guangdong.txt"
 SNAPSHOT_DIR = "data/.last_snapshot" # 变动比对快照目录
 
-TARGET_REPO = "JE668/m3u-checker-max"
-TARGET_WORKFLOW = "update.yml"
-TARGET_BRANCH = "main"
-TRIGGER_TOKEN=os.environ.get("PAT_TOKEN", "")
-
-# 联动 iptv-api：get-m3u 完成后同时触发订阅源更新
-IPTV_API_REPO = "JE668/iptv-api"
-IPTV_API_WORKFLOW = "main.yml"
-IPTV_API_BRANCH = "master"
+# 下游仓库联动触发已统一移至 .github/workflows/main.yml（通过 gh CLI 触发），
+# 避免与 Python 内触发重复，并集中错误处理与 Job Summary 汇报。
+# 下游仓库：JE668/m3u-checker-max (update.yml) / JE668/iptv-api (main.yml)
 
 # ===============================
 # 3. 比对与联动逻辑
@@ -61,12 +55,6 @@ def has_data_changed(filename):
     with open(snapshot_path, 'w', encoding='utf-8') as f:
         f.write("\n".join(current))
     return True
-
-def get_trigger_status(changed):
-    """每次运行成功均触发下游，不再计数等待。
-    changed=True → 数据有变化，正常触发
-    changed=False → 数据无变化，仍触发（保证下游同步）"""
-    return True, 0, not changed  # should=True, count=0, is_forced=(无变化时为True)
 
 # ===============================
 # 4. 抽样测速逻辑（量化版：512KB + 带宽计算）
@@ -122,29 +110,12 @@ async def async_fast_ip_probe(client, host_port, url_list):
         return False, host_port, 0.0, f" 🔴 [无流] {host_port:<21}"
 
 
-def _trigger_workflow(repo, workflow, branch, token, max_retries=3):
-    """触发 GitHub Actions workflow，失败自动重试（使用 httpx 同步客户端）"""
-    for attempt in range(1, max_retries + 1):
-        try:
-            url = f"https://api.github.com/repos/{repo}/actions/workflows/{workflow}/dispatches"
-            r = httpx.post(url, headers={"Authorization": f"token {token}", "Accept": "application/vnd.github.v3+json"}, json={"ref": branch}, timeout=10)
-            live_print(f"🎉 状态码: {r.status_code}")
-            return
-        except httpx.RequestError as e:
-            if attempt < max_retries:
-                wait = 3 * attempt
-                live_print(f"⏳ 重试 ({attempt}/{max_retries})，{wait}s 后重试: {e}")
-                time.sleep(wait)
-            else:
-                live_print(f"❌ 联动失败 (已重试 {max_retries} 次): {e}")
-
 # ===============================
 # 5. 运行主逻辑 (async)
 # ===============================
 async def main():
     start_time = time.time()
     changed = has_data_changed(SOURCE_IP_FILE)
-    should_trigger, current_count, is_forced = get_trigger_status(changed)
 
     # 预初始化，确保即使数据为空也有定义，防止 summary 阶段 NameError
     ip_map, url_map = {}, {}
@@ -287,58 +258,43 @@ async def main():
                 live_print(f" 📝 存活 IP 为 0，已清空 {SOURCE_M3U_FILE}")
 
     # ==========================================
-    # 7. 联动处理
+    # 7. 数据变动小结
+    #    （下游仓库联动触发已统一移至 .github/workflows/main.yml，
+    #     此处仅汇报本次数据是否相较上次提交有变动）
     # ==========================================
-    live_print("\n⚖️ ========== 联动决策 ==========")
-    if is_forced: live_print(f"🚨 强制触发")
-    elif changed: live_print(f"✨ 更新触发")
-    else: live_print(f"⏭️ 跳过 (计数: {current_count}/3)")
+    live_print("\n⚖️ ========== 数据变动 ==========")
+    live_print(f"📌 source-ip.txt 相对上次提交: {'🆕 有变动' if changed else 'ℹ️ 无变动'}")
+    live_print("🔗 下游触发(m3u-checker-max / iptv-api)由 CI 统一处理")
 
     elapsed = round(time.time() - start_time, 2)
     out_of_ip_count = len(ip_map) - len(valid_hostports)
 
     log_section("测速 — 阶段摘要", "🎬")
-    live_print(f"  源发现结果 → 抽样测速 → 联动决策")
+    live_print(f"  源发现结果 → 抽样测速 → 数据变动")
     live_print(f"")
     live_print(f"  ┌─ 阶段: 测速结果")
     live_print(f"  │  ├ 上游有效服务器 ..... {len(ip_map):>4} 个 (来自 source-ip.txt)")
     live_print(f"  │  ├ 有流响应 .......... {len(valid_hostports):>4} 个")
     live_print(f"  │  └ 无流/失败 ......... {out_of_ip_count:>4} 个")
     live_print(f"  │")
-    live_print(f"  └─ 阶段: 联动决策")
-    if is_forced:
-        live_print(f"     ├ 决策: 🚨 强制触发")
-    elif changed:
-        live_print(f"     ├ 决策: ✨ 更新触发")
-    else:
-        live_print(f"     ├ 决策: ⏭️ 跳过 ({current_count}/3)")
+    live_print(f"  └─ 阶段: 数据变动")
+    live_print(f"     ├ 本次数据: {'🆕 有变动' if changed else 'ℹ️ 无变动'}")
     live_print(f"     └ 耗时 ............. {elapsed:>7.2f}s")
     live_print(f"")
 
     # ── Job Summary ──
-    write_summary("### 🎬 阶段摘要 — 测速与联动\n")
+    write_summary("### 🎬 阶段摘要 — 测速\n")
     write_summary("| 阶段 | 指标 | 数值 |")
     write_summary("|------|------|------|")
     write_summary(f"| ① 测速 | 待测服务器 | {len(ip_map)} 个 |")
     write_summary(f"| ① 测速 | 有流响应 | {len(valid_hostports)} 个 |")
     write_summary(f"| ① 测速 | 无流/失败 | {out_of_ip_count} 个 |")
-    if is_forced:
-        write_summary("| ② 联动决策 | 决策 | 🚨 强制触发 |")
-    elif changed:
-        write_summary("| ② 联动决策 | 决策 | ✨ 更新触发 |")
-    else:
-        write_summary(f"| ② 联动决策 | 决策 | ⏭️ 跳过 ({current_count}/3) |")
+    write_summary(f"| ② 数据变动 | source-ip | {'🆕 有变动' if changed else 'ℹ️ 无变动'} |")
 
     write_summary(f"\n> ⏱️ 总耗时: {elapsed}s")
+    write_summary(f"\n> 🔗 下游触发(m3u-checker-max / iptv-api)由 CI 统一处理")
 
-    if TRIGGER_TOKEN:
-        # 触发 m3u-checker-max
-        live_print(f"━━━ 🔗 远程联动: {TARGET_REPO} ━━━━━━━━━━━")
-        _trigger_workflow(TARGET_REPO, TARGET_WORKFLOW, TARGET_BRANCH, TRIGGER_TOKEN)
-
-        # 同时触发 iptv-api（订阅源更新）
-        live_print(f"━━━ 🔗 远程联动: {IPTV_API_REPO} ━━━━━━━━━")
-        _trigger_workflow(IPTV_API_REPO, IPTV_API_WORKFLOW, IPTV_API_BRANCH, TRIGGER_TOKEN)
+    live_print("\n✅ 测速完成，下游联动由 GitHub Actions 统一触发。")
 
 if __name__ == "__main__":
     asyncio.run(main())

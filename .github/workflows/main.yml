@@ -55,7 +55,6 @@ jobs:
 
       - name: 🎯 阶段2 — 质量探测 (probe.py)
         env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
           PYTHONUNBUFFERED: 1
         run: stdbuf -oL python probe.py 2>&1 | tee /tmp/probe.log
 
@@ -132,6 +131,28 @@ jobs:
             echo "✅ m3u-checker-max 已触发"
             echo "### 🔄 下游触发" >> $GITHUB_STEP_SUMMARY
             echo "✅ **m3u-checker-max** 已成功触发" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: 🔄 触发下游 — iptv-api
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "⚠️ PAT_TOKEN 未设置，跳过触发"
+            exit 0
+          fi
+          echo "⏳ 触发 iptv-api (repo: JE668/iptv-api, ref: master)..."
+          gh workflow run main.yml \
+            --repo JE668/iptv-api \
+            --ref master 2>&1
+          EXIT_CODE=$?
+          if [ $EXIT_CODE -ne 0 ]; then
+            echo "❌ 触发失败 (exit=$EXIT_CODE)，检查 PAT_TOKEN 权限"
+            echo "❌ **iptv-api** 触发失败 (exit=$EXIT_CODE)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ iptv-api 已触发"
+            echo "✅ **iptv-api** 已成功触发" >> $GITHUB_STEP_SUMMARY
           fi
 
       - name: 🚨 运行异常

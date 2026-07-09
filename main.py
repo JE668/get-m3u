@@ -136,7 +136,7 @@ def filter_segments(segments):
 
     live_print(f"📊 最终有效 C段: {len(valid_segments)} 个 (历史黑名单跳过: {blacklist_skip} 个, 本次临时跳过: {len(skipped_segments)} 个)")
     
-    return valid_segments
+    return valid_segments, blacklist_skip
 
 # ===============================
 # 2a. 端口动态管理（基于历史命中率自动休眠/激活）
@@ -598,8 +598,9 @@ async def main():
     stats["fofa"] = len(fips)
     all_segs, all_ports = update_discovery_database(fips)
     stats["segments_total"] = len(all_segs)
-    valid_segs = filter_segments(all_segs)
+    valid_segs, blacklist_skip = filter_segments(all_segs)
     stats["segments_valid"] = len(valid_segs)
+    stats["blacklist_skip"] = blacklist_skip
 
     # ---- 端口动态管理（基于历史命中率过滤 + 排序） ----
     port_stats = _load_port_stats()
