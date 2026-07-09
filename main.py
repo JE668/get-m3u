@@ -4,7 +4,7 @@ from collections import Counter
 import httpx
 import ip2region.util as ip2region_util
 import ip2region.searcher as ip2region_searcher
-from utils import live_print, write_summary, log_section, atomic_write
+from utils import live_print, write_summary, log_section, atomic_write, parse_rtp_entries, build_m3u
 
 # --- 初始化离线 IP 归属地查询（ip2region xdb，零网络延迟） ---
 _ip2region_searcher = None
@@ -58,11 +58,7 @@ MISSES_BEFORE_DEACTIVATE = 3
 DEFAULT_PORT_MISSES_EXTRA = 3  # 默认端口额外容忍次数
 
 # ===============================
-# 2. 核心功能函数（工具函数已迁移至 utils.py）
-# ===============================
-
-# ===============================
-# 3. 核心功能函数
+# 核心功能函数
 # ===============================
 
 def get_geo_info(ip):
@@ -374,7 +370,7 @@ async def check_udpxy(ip_port, found_set=None, timeout=None, client=None):
 
     try:
         r = await client.get(f"http://{ip_port}/status", timeout=tm, headers={"User-Agent":"Wget/1.14"})
-        if r.status_code == 200 and any(kw in r.text.lower() for kw in ["udpxy", "stat", "client"]):
+        if r.status_code == 200 and "udpxy" in r.text.lower():
             if found_set is not None:
                 found_set.add(ip)
             return True, ip_port
@@ -463,10 +459,7 @@ async def run_native_scan(segments, ports, found_set=None):
                 ok, matched_ip = task.result()
                 if ok and matched_ip:
                     alive_ips.append(matched_ip)
-                    # 打印新命中的 IP 详情
-                    ip = matched_ip.split(":")[0]
-                    _, geo_desc = get_geo_info(ip)
-                    live_print(f"    🎯 命中: {matched_ip} | {geo_desc}")
+                    live_print(f"    🎯 命中: {matched_ip}")
 
             # 补充新任务，维持并发数
             while len(pending) < scan_workers:
@@ -581,6 +574,26 @@ def _channel_quality(name):
     if "高清" in name or "hd" in name_lower: return 2
     return 1
 
+def _review_geo(unique_all):
+    """最终复核：逐 IP 归属地校验。
+
+    返回 (geo_ips, geo_pass, geo_fail, lines)，供 main() 以 to_thread 调用，
+    避免同步 geo 查询阻塞事件循环。
+    """
+    geo_ips, lines = [], []
+    geo_pass = geo_fail = 0
+    total = len(unique_all)
+    for idx, ip in enumerate(unique_all, 1):
+        ok, desc = get_geo_info(ip.split(":")[0])
+        if ok:
+            lines.append(f"  [{idx:02d}/{total:02d}] ✅ 有效 | {ip:<21} | {desc}")
+            geo_ips.append(ip)
+            geo_pass += 1
+        else:
+            lines.append(f"  [{idx:02d}/{total:02d}] ⏭️ 剔除 | {ip:<21} | {desc}")
+            geo_fail += 1
+    return geo_ips, geo_pass, geo_fail, lines
+
 # ===============================
 # 4. 主程序入口
 # ===============================
@@ -590,15 +603,15 @@ async def main():
              "scan_tasks": 0, "scan_found": 0, "geo_pass": 0, "geo_fail": 0,
              "blacklist_skip": 0}
 
-    # 1. 准备 RTP
-    update_rtp_template()
+    # 1. 准备 RTP（同步阻塞 I/O 移至线程，避免卡住事件循环）
+    await asyncio.to_thread(update_rtp_template)
 
-    # 2. 抓取与扫描
-    fips = scrape_fofa()
+    # 2. 抓取与扫描（同步阻塞调用均 offload 到线程）
+    fips = await asyncio.to_thread(scrape_fofa)
     stats["fofa"] = len(fips)
-    all_segs, all_ports = update_discovery_database(fips)
+    all_segs, all_ports = await asyncio.to_thread(update_discovery_database, fips)
     stats["segments_total"] = len(all_segs)
-    valid_segs, blacklist_skip = filter_segments(all_segs)
+    valid_segs, blacklist_skip = await asyncio.to_thread(filter_segments, all_segs)
     stats["segments_valid"] = len(valid_segs)
     stats["blacklist_skip"] = blacklist_skip
 
@@ -628,18 +641,12 @@ async def main():
 
     unique_all = sorted(list(set(fips + sips)))
 
-    # 3. 最终复核
+    # 3. 最终复核（同步 geo 查询 offload 到线程，避免阻塞事件循环）
     log_section("🌍 最终结果复核", "🔹")
-    geo_ips = []
-    for idx, ip in enumerate(unique_all, 1):
-        ok, desc = get_geo_info(ip.split(":")[0])
-        if ok:
-            live_print(f"  [{idx:02d}/{len(unique_all):02d}] ✅ 有效 | {ip:<21} | {desc}")
-            geo_ips.append(ip)
-            stats["geo_pass"] += 1
-        else:
-            live_print(f"  [{idx:02d}/{len(unique_all):02d}] ⏭️ 剔除 | {ip:<21} | {desc}")
-            stats["geo_fail"] += 1
+    geo_ips, gp, gf, review_lines = await asyncio.to_thread(_review_geo, unique_all)
+    stats["geo_pass"], stats["geo_fail"] = gp, gf
+    for line in review_lines:
+        live_print(line)
     
 
     # 4. 写入文件（标准 M3U 格式 + 原子化写入）
@@ -656,39 +663,22 @@ async def main():
         if deactivated:
             stats["port_deactivated"] = deactivated
 
-        # 写入标准 M3U
-        rtps = []
-        if os.path.exists(RTP_FILE):
-            with open(RTP_FILE, encoding="utf-8") as f:
-                rtps = [x.strip() for x in f if "," in x]
-
-        # 预计算 RTP 条目（避免每次循环内部重复 split）
-        rtp_entries = []
-        for r in rtps:
-            try:
-                name, rtp_url = r.split(",", 1)
-                suffix = rtp_url.split("://")[1]  # "239.77.1.234:5146"
-                rtp_entries.append((name, suffix))
-            except (ValueError, IndexError):
-                continue
-
-        m3u_lines = ["#EXTM3U"]
+        # 写入标准 M3U（RTP 解析与拼接改用 utils 公共函数）
+        rtp_entries = parse_rtp_entries(RTP_FILE)
+        m3u_lines = build_m3u(rtp_entries, geo_ips)
         compat_lines = []
         for ip in geo_ips:
             for name, suffix in rtp_entries:
-                full_url = f"http://{ip}/rtp/{suffix}"
-                m3u_lines.append(f"#EXTINF:-1,{name}")
-                m3u_lines.append(full_url)
-                compat_lines.append(f"{name},{full_url}")
+                compat_lines.append(f"{name},http://{ip}/rtp/{suffix}")
 
         atomic_write(SOURCE_M3U_FILE, "\n".join(m3u_lines))
         live_print(f"  📝 {SOURCE_M3U_FILE} (标准M3U)")
         atomic_write(SOURCE_NONCHECK_FILE, "\n".join(compat_lines))
         live_print(f"  📝 {SOURCE_NONCHECK_FILE} (兼容格式)")
 
-        stats["m3u_count"] = len(geo_ips) * len(rtps)
-        stats["rtp_count"] = len(rtps)
-        live_print(f"✨ 总结: {len(geo_ips)} 个服务器 | {len(rtps)} 个频道 | {stats['m3u_count']} 条链接")
+        stats["m3u_count"] = len(geo_ips) * len(rtp_entries)
+        stats["rtp_count"] = len(rtp_entries)
+        live_print(f"✨ 总结: {len(geo_ips)} 个服务器 | {len(rtp_entries)} 个频道 | {stats['m3u_count']} 条链接")
         
     else:
         live_print("\n❌ 本次运行未找到有效节点")

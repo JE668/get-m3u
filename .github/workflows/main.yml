@@ -103,7 +103,8 @@ jobs:
             echo "📝 变更文件数: ${FILE_COUNT}"
             echo "${STAGED_FILES}"
             git commit -m "🔄 Auto Sync: $(date +'%Y-%m-%d %H:%M:%S') [skip ci]"
-            git pull origin main || true
+            # 显式 rebase 拉取，确保本地提交叠加在远端之上，push 为快进，降低 non-fast-forward 失败风险
+            git pull --rebase --autostash origin main || true
             git push origin main
             echo "### 💾 代码提交" >> $GITHUB_STEP_SUMMARY
             echo "✅ 已提交并推送 **${FILE_COUNT}** 个文件变更" >> $GITHUB_STEP_SUMMARY

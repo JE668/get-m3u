@@ -1,3 +1,6 @@
 __pycache__/
 *.pyc
 .DS_Store
+
+# probe.py 的变动比对快照（运行时生成，无需提交）
+data/.last_snapshot/

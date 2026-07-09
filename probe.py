@@ -1,7 +1,7 @@
 import os, subprocess, time, json, asyncio
 import httpx
 from datetime import datetime
-from utils import live_print, write_summary, atomic_write, log_section
+from utils import live_print, write_summary, atomic_write, log_section, parse_rtp_entries, build_m3u
 
 # ===============================
 # 1. 配置区 (目录结构优化)
@@ -218,44 +218,21 @@ async def main():
                 f.write(f"服务器抽测报告 | 时间: {datetime.now()}\n" + "\n".join(sorted(logs)))
             live_print(f" 📝 成功覆写日志: {LOG_FILE}")
 
-            # 读取 RTP 模板进行重新组装
-            if valid_hostports:
-                if os.path.exists(RTP_FILE):
-                    with open(RTP_FILE, encoding="utf-8") as f:
-                        rtps = [x.strip() for x in f if "," in x]
-
-                    # 标准 M3U 格式输出（使用 ip:port 拼接，保留端口号）
-                    m3u_lines = []
-
-                    # 预计算 RTP 条目（避免内层循环重复 split）
-                    rtp_entries = []
-                    for r in rtps:
-                        try:
-                            name, r_url = r.split(",", 1)
-                            suffix = r_url.split("://")[1]
-                            rtp_entries.append((name, suffix))
-                        except (ValueError, IndexError):
-                            continue
-
-                    m3u_lines.append("#EXTM3U")
-                    for hp in sorted(valid_hostports):
-                        for name, suffix in rtp_entries:
-                            m3u_lines.append(f"#EXTINF:-1,{name}")
-                            m3u_lines.append(f"http://{hp}/rtp/{suffix}")
-
-                    atomic_write(SOURCE_M3U_FILE, "\n".join(m3u_lines))
-
-                    live_print(f" 📝 成功重组纯净版: {SOURCE_M3U_FILE} (标准M3U)")
-                    live_print(f"✨ 测速结束: 存活 {len(valid_hostports)} 个 IP | 生成 {len(m3u_lines)-1} 条纯净链接")
-                else:
-                    live_print(f" ❌ 找不到 RTP 模板 {RTP_FILE}，无法重组！")
-                    # 无 RTP 模板时写入空 M3U 头，避免下游使用过期数据
-                    atomic_write(SOURCE_M3U_FILE, "#EXTM3U\n")
-                    live_print(f" 📝 已写入空 M3U 头: {SOURCE_M3U_FILE}")
-            else:
-                # 如果没有存活IP，清空文件
+            # 读取 RTP 模板进行重新组装（RTP 解析与拼接改用 utils 公共函数）
+            rtp_entries = parse_rtp_entries(RTP_FILE)
+            if not valid_hostports:
+                # 没有存活 IP，清空文件
                 atomic_write(SOURCE_M3U_FILE, "")
                 live_print(f" 📝 存活 IP 为 0，已清空 {SOURCE_M3U_FILE}")
+            elif rtp_entries:
+                m3u_lines = build_m3u(rtp_entries, valid_hostports)
+                atomic_write(SOURCE_M3U_FILE, "\n".join(m3u_lines))
+                live_print(f" 📝 成功重组纯净版: {SOURCE_M3U_FILE} (标准M3U)")
+                live_print(f"✨ 测速结束: 存活 {len(valid_hostports)} 个 IP | 生成 {len(m3u_lines)-1} 条纯净链接")
+            else:
+                # 有存活 IP 但 RTP 模板缺失/为空：写入空 M3U 头，避免下游使用过期数据
+                atomic_write(SOURCE_M3U_FILE, "#EXTM3U\n")
+                live_print(f" ⚠️ RTP 模板为空或缺失 {RTP_FILE}，已写入空 M3U 头")
 
     # ==========================================
     # 7. 数据变动小结
@@ -267,7 +244,9 @@ async def main():
     live_print("🔗 下游触发(m3u-checker-max / iptv-api)由 CI 统一处理")
 
     elapsed = round(time.time() - start_time, 2)
-    out_of_ip_count = len(ip_map) - len(valid_hostports)
+    # 无流/失败 IP 数：按 IP 维度统计（避免 IP 与 hostport 维度混用导致负值）
+    ip_found_count = len(set(hp.split(":")[0] for hp in valid_hostports))
+    out_of_ip_count = max(0, len(ip_map) - ip_found_count)
 
     log_section("测速 — 阶段摘要", "🎬")
     live_print(f"  源发现结果 → 抽样测速 → 数据变动")
