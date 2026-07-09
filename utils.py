@@ -70,3 +70,17 @@ def build_m3u(rtp_entries, hostports):
             lines.append(f"#EXTINF:-1,{name}")
             lines.append(f"http://{hp}/rtp/{suffix}")
     return lines
+
+
+def build_compat(rtp_entries, hostports):
+    """由 RTP 条目与 hostport 集合拼出兼容格式行（'频道名,http://ip:port/rtp/suffix'）。
+
+    供 main.py 与 probe.py 共用，避免两处重复拼接逻辑。
+    - rtp_entries: parse_rtp_entries() 的返回值 [(name, suffix), ...]
+    - hostports: 可迭代的 'ip:port' 字符串
+    """
+    lines = []
+    for hp in sorted(hostports):
+        for name, suffix in rtp_entries:
+            lines.append(f"{name},http://{hp}/rtp/{suffix}")
+    return lines

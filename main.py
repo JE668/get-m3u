@@ -4,7 +4,7 @@ from collections import Counter
 import httpx
 import ip2region.util as ip2region_util
 import ip2region.searcher as ip2region_searcher
-from utils import live_print, write_summary, log_section, atomic_write, parse_rtp_entries, build_m3u
+from utils import live_print, write_summary, log_section, atomic_write, parse_rtp_entries, build_m3u, build_compat
 
 # --- 初始化离线 IP 归属地查询（ip2region xdb，零网络延迟） ---
 _ip2region_searcher = None
@@ -422,10 +422,10 @@ async def run_native_scan(segments, ports, found_set=None):
                 live_print(f"✅ 已知存活验证: {len(still_alive)}/{len(known_alive)} 个")
                 removed = len(known_alive) - len(still_alive)
                 if removed > 0:
-                    with open(SOURCE_IP_FILE, "w", encoding="utf-8") as f:
-                        for ip in still_alive:
-                            f.write(ip + "\n")
-                    live_print(f"🧹 清理 {removed} 个失效 IP，SOURCE_IP_FILE 剩余 {len(still_alive)} 个")
+                    # 仅提示，不在此写回 SOURCE_IP_FILE：
+                    # 最终归档（阶段4）会用 geo_ips 覆盖写该文件，中途写回既冗余、
+                    # 又是 event loop 内同步 I/O，且会产生裁剪版中间态。
+                    live_print(f"🧹 清理 {removed} 个失效 IP (最终以阶段4归档为准)")
 
         # 全量扫描：持续任务流，滚动窗口
         def _task_generator():
@@ -479,8 +479,10 @@ async def run_native_scan(segments, ports, found_set=None):
                     msg += f" | 速度: {rate:.0f}/s | 预估剩余: {remaining:.0f}s"
                 live_print(msg)
 
+        scan_elapsed = round(time.time() - start_time, 2)
+        stats["scan_seconds"] = scan_elapsed
         live_print(f"✅ 扫描结束 | 总发现 {len(set(alive_ips))} 个")
-        live_print(f"   📊 统计: 命中IP={len(found_set)} | 存活IP={len(set(alive_ips))}")
+        live_print(f"   📊 统计: 命中IP={len(found_set)} | 存活IP={len(set(alive_ips))} | 扫描耗时 {scan_elapsed:.2f}s")
 
     alive_ips = list(set(alive_ips))
     
@@ -654,8 +656,8 @@ async def main():
         log_section("💾 数据归档 (output目录)", "🔹")
         geo_ips.sort()
 
-        # 写入 source-ip.txt（原子化）
-        atomic_write(SOURCE_IP_FILE, "\n".join(geo_ips))
+        # 写入 source-ip.txt（原子化，offload 到线程避免阻塞事件循环）
+        await asyncio.to_thread(atomic_write, SOURCE_IP_FILE, "\n".join(geo_ips))
         live_print(f"  📝 {SOURCE_IP_FILE}")
 
         # 更新端口命中统计（基于本次 source-ip.txt）
@@ -666,14 +668,11 @@ async def main():
         # 写入标准 M3U（RTP 解析与拼接改用 utils 公共函数）
         rtp_entries = parse_rtp_entries(RTP_FILE)
         m3u_lines = build_m3u(rtp_entries, geo_ips)
-        compat_lines = []
-        for ip in geo_ips:
-            for name, suffix in rtp_entries:
-                compat_lines.append(f"{name},http://{ip}/rtp/{suffix}")
+        compat_lines = build_compat(rtp_entries, geo_ips)
 
-        atomic_write(SOURCE_M3U_FILE, "\n".join(m3u_lines))
+        await asyncio.to_thread(atomic_write, SOURCE_M3U_FILE, "\n".join(m3u_lines))
         live_print(f"  📝 {SOURCE_M3U_FILE} (标准M3U)")
-        atomic_write(SOURCE_NONCHECK_FILE, "\n".join(compat_lines))
+        await asyncio.to_thread(atomic_write, SOURCE_NONCHECK_FILE, "\n".join(compat_lines))
         live_print(f"  📝 {SOURCE_NONCHECK_FILE} (兼容格式)")
 
         stats["m3u_count"] = len(geo_ips) * len(rtp_entries)
@@ -706,6 +705,7 @@ async def main():
     live_print(f"  │  ├ 存活发现 ............ {scan_total:>4} 个新IP")
     live_print(f"  │  ├ FOFA 旧IP复用 ........ {fofa_only:>4} 个")
     live_print(f"  │  ├ 待复核总数 ........... {review_total:>4} 个IP")
+    live_print(f"  │  ├ 扫描耗时 ............. {stats.get('scan_seconds', 0):>7.2f}s")
     live_print(f"  │  └ 端口休眠 ............. {deactivated:>4} 个")
     live_print(f"  │")
     live_print(f"  ├─ 阶段3: 归属复核")
@@ -728,6 +728,7 @@ async def main():
     write_summary(f"| ① 源获取 | C段预过滤 | {stats['segments_valid']} 个有效 ({stats['segments_total']}→{stats['segments_valid']}) |")
     write_summary(f"| ① 源获取 | 黑名单跳过 | {stats.get('blacklist_skip', 0)} 个 |")
     write_summary(f"| ② 端口扫描 | 新存活发现 | {scan_total} 个IP |")
+    write_summary(f"| ② 端口扫描 | 扫描耗时 | {stats.get('scan_seconds', 0)}s |")
     write_summary(f"| ② 端口扫描 | 端口休眠 | {deactivated} 个 |")
     write_summary(f"| ③ 归属复核 | 复核通过 | {stats['geo_pass']} 个 |")
     write_summary(f"| ③ 归属复核 | 复核剔除 | {stats['geo_fail']} 个 |")
