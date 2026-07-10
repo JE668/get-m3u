@@ -480,13 +480,12 @@ async def run_native_scan(segments, ports, found_set=None):
                 live_print(msg)
 
         scan_elapsed = round(time.time() - start_time, 2)
-        stats["scan_seconds"] = scan_elapsed
         live_print(f"✅ 扫描结束 | 总发现 {len(set(alive_ips))} 个")
         live_print(f"   📊 统计: 命中IP={len(found_set)} | 存活IP={len(set(alive_ips))} | 扫描耗时 {scan_elapsed:.2f}s")
 
     alive_ips = list(set(alive_ips))
     
-    return alive_ips
+    return alive_ips, scan_elapsed
 
 def scrape_fofa():
     """FOFA 抓取（含 Cookie 失效检测与降级提示，使用 httpx 同步客户端）"""
@@ -634,7 +633,11 @@ async def main():
 
     # 共享 found_set
     shared_found = set()
-    sips = await run_native_scan(valid_segs, sorted_ports, shared_found) if sorted_ports else []
+    if sorted_ports:
+        sips, scan_seconds = await run_native_scan(valid_segs, sorted_ports, shared_found)
+        stats["scan_seconds"] = scan_seconds
+    else:
+        sips = []
     stats["scan_found"] = len(sips)
     live_print(f"📊 扫描汇总: 发现 {len(sips)} 个存活 IP | 命中IP集: {len(shared_found)}")
 
