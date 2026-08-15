@@ -1,50 +1,53 @@
 {
-  "116.18.38.159:4000": {
-    "bandwidth_mbps": 3.1
-  },
   "121.10.7.16:4000": {
-    "bandwidth_mbps": 3.1
-  },
-  "58.62.235.29:10000": {
-    "bandwidth_mbps": 3.0
-  },
-  "113.95.136.76:8188": {
-    "bandwidth_mbps": 2.8
+    "bandwidth_mbps": 2.3
   },
   "14.155.225.232:8888": {
-    "bandwidth_mbps": 3.0
-  },
-  "113.89.247.177:4200": {
-    "bandwidth_mbps": 2.6
+    "bandwidth_mbps": 2.3
   },
   "14.155.236.217:4022": {
-    "bandwidth_mbps": 3.1
+    "bandwidth_mbps": 2.3
   },
-  "14.145.187.131:4022": {
-    "bandwidth_mbps": 2.5
+  "116.18.38.159:4000": {
+    "bandwidth_mbps": 2.3
   },
-  "113.95.142.239:8188": {
-    "bandwidth_mbps": 2.8
-  },
-  "113.83.248.176:4200": {
-    "bandwidth_mbps": 2.7
-  },
-  "183.7.148.239:4022": {
-    "bandwidth_mbps": 1.9
-  },
-  "183.47.2.156:16883": {
-    "bandwidth_mbps": 3.0
-  },
-  "14.221.177.12:4022": {
-    "bandwidth_mbps": 2.4
+  "113.110.202.127:55555": {
+    "bandwidth_mbps": 2.3
   },
   "219.128.40.2:4022": {
-    "bandwidth_mbps": 3.0
+    "bandwidth_mbps": 2.2
+  },
+  "183.47.2.156:16883": {
+    "bandwidth_mbps": 2.2
+  },
+  "113.95.135.210:8188": {
+    "bandwidth_mbps": 2.1
+  },
+  "183.7.148.132:8888": {
+    "bandwidth_mbps": 2.1
+  },
+  "113.95.138.229:8188": {
+    "bandwidth_mbps": 2.1
+  },
+  "58.62.235.29:10000": {
+    "bandwidth_mbps": 2.1
+  },
+  "183.7.148.239:4022": {
+    "bandwidth_mbps": 2.0
+  },
+  "113.83.248.176:4200": {
+    "bandwidth_mbps": 2.2
+  },
+  "14.145.187.131:4022": {
+    "bandwidth_mbps": 2.2
+  },
+  "113.89.247.177:4200": {
+    "bandwidth_mbps": 2.0
   },
   "113.95.140.3:8880": {
-    "bandwidth_mbps": 1.4
+    "bandwidth_mbps": 1.6
   },
   "183.31.11.22:8000": {
-    "bandwidth_mbps": 0.4
+    "bandwidth_mbps": 0.3
   }
 }
