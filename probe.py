@@ -1,6 +1,6 @@
 import os, subprocess, time, json, asyncio
 import httpx
-from datetime import datetime
+from datetime import datetime, timezone
 from utils import live_print, write_summary, atomic_write, log_section, parse_rtp_entries, build_m3u
 
 # ===============================
@@ -286,7 +286,11 @@ async def main():
 
             # 写入元数据供下游 m3u-checker-max 使用（_version 字段用于跨项目接口版本控制）
             if meta_data:
-                meta_json = {"_version": 1, **meta_data}
+                meta_json = {
+                    "_version": 1,
+                    "_generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    **meta_data,
+                }
                 await asyncio.to_thread(atomic_write, SOURCE_META_FILE, json.dumps(meta_json, ensure_ascii=False, indent=2))
                 live_print(f" 📝 服务器元数据已写入: {SOURCE_META_FILE} ({len(meta_data)} 台, v{meta_json['_version']})")
 

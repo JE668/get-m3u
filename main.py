@@ -241,12 +241,23 @@ def _save_scan_state(state):
         live_print(f"⚠️ 扫描状态写入失败: {e}")
 
 
-def select_scan_segments(valid_segs, known_alive_ips=None):
+def select_scan_segments(valid_segs, known_alive_ips=None, dead_ips=None):
     """从有效段中按轮换策略选出本轮要扫描的段。
 
+    - dead_ips（下游 checker 反馈的全挂服务器）所在段排到轮换队列尾部：
+      不拉黑（可能是临时故障），只降低本轮被选中的优先级，形成
+      检测 → 反馈 → 降权 → 复活的闭环。
     返回 (selected_segs, stats_line)
     """
+    dead_segs = set()
+    for ip_port in (dead_ips or []):
+        dead_segs.add(ip_port.split(":")[0].rsplit(".", 1)[0])
+
     if SCAN_SEGMENT_QUOTA <= 0 or len(valid_segs) <= SCAN_SEGMENT_QUOTA:
+        if dead_segs:
+            selected = [s for s in valid_segs if s not in dead_segs] + \
+                       [s for s in valid_segs if s in dead_segs]
+            return selected, f"全量模式: {len(valid_segs)} 段 ({len(dead_segs)} 个全挂段已排尾部)"
         return list(valid_segs), f"全量模式: {len(valid_segs)} 段 (配额={SCAN_SEGMENT_QUOTA or '∞'})"
 
     state = _load_scan_state()
@@ -256,12 +267,14 @@ def select_scan_segments(valid_segs, known_alive_ips=None):
     hot_segs = set()
     for ip_port in (known_alive_ips or []):
         seg = ip_port.split(":")[0].rsplit(".", 1)[0]
-        if seg in valid_segs:
+        if seg in valid_segs and seg not in dead_segs:
             hot_segs.add(seg)
 
-    # 其余段按优先级排序：未扫过的最优先，然后按 last_scanned 升序，同档 hits 降序
+    # 其余段按优先级排序：未扫过的最优先，然后按 last_scanned 升序，同档 hits 降序；
+    # dead_ips 所在段排最后
     rest = [s for s in valid_segs if s not in hot_segs]
-    rest.sort(key=lambda s: (state.get(s, {}).get("last_scanned", 0.0),
+    rest.sort(key=lambda s: (s in dead_segs,
+                             state.get(s, {}).get("last_scanned", 0.0),
                              -state.get(s, {}).get("hits", 0)))
 
     quota_left = max(0, SCAN_SEGMENT_QUOTA - len(hot_segs))
@@ -269,6 +282,7 @@ def select_scan_segments(valid_segs, known_alive_ips=None):
 
     live_print(f"🎯 扫描配额: {len(selected)}/{len(valid_segs)} 段 "
                f"(生产中段 {len(hot_segs)} 必扫 + 轮换 {min(quota_left, len(rest))} 段, "
+               f"全挂降权 {len(dead_segs)} 段, "
                f"剩余 {len(rest) - min(quota_left, len(rest))} 段下轮)")
     # 标记本轮扫描时间（实际命中数在扫描后由 update_scan_state 补记）
     for seg in selected:
@@ -890,11 +904,17 @@ async def main():
     live_print(f"📋 端口扫描计划: {sorted_ports} ({len(sorted_ports)} 个 active)")
 
     # ---- 扫描配额轮换：生产中段必扫 + 其余段按优先级取配额 ----
+    # 提前加载下游反馈：dead_ips 对应的段会被排入轮换尾部
+    feedback = await asyncio.to_thread(load_external_feedback)
+    dead_ips = feedback.get("dead_ips", [])
+    if dead_ips:
+        live_print(f"📥 下游反馈全挂服务器: {len(dead_ips)} 个 (其 C 段降权)")
+
     known_alive = []
     if os.path.exists(SOURCE_IP_FILE):
         with open(SOURCE_IP_FILE, "r", encoding="utf-8") as f:
             known_alive = [line.strip() for line in f if line.strip()]
-    scan_segs, quota_msg = select_scan_segments(valid_segs, known_alive)
+    scan_segs, quota_msg = select_scan_segments(valid_segs, known_alive, dead_ips=dead_ips)
     if quota_msg:
         live_print(f"🎯 {quota_msg}")
     stats["segments_scanned"] = len(scan_segs)
@@ -920,17 +940,15 @@ async def main():
     unique_all = sorted(list(set(fips + sips)))
     live_print(f"📋 合并结果: FOFA={len(fips)} + 扫描={len(sips)} = 总计 {len(unique_all)} 个唯一 IP")
 
-    # 加载下游反馈，优先测试评分高的源
-    feedback = await asyncio.to_thread(load_external_feedback)
-    feedback_channel_scores = feedback.get("channel_scores", {})
-    if feedback_channel_scores:
+    # 下游反馈排序：server_scores 按 host:port 聚合存活率/带宽（上方已加载）
+    server_scores = feedback.get("server_scores", {})
+    if server_scores:
         def _fb_key(ip_port):
-            score = feedback_channel_scores.get(ip_port, {})
-            if not score:
-                ip = ip_port.split(":")[0]
-                score = feedback_channel_scores.get(ip, {})
-            return score.get("best_bw", 0)
+            s = server_scores.get(ip_port, {})
+            # 按 best_bw 优先，其次存活数；无记录者排最后（返回 0）
+            return (s.get("best_bw", 0), s.get("alive", 0))
         unique_all.sort(key=_fb_key, reverse=True)
+        live_print(f"📥 反馈排序: {len(server_scores)} 台服务器评分已应用")
 
     # IP 列表签名检测：如果 IP 列表未变化，跳过归属复核使用缓存
     current_sig = compute_ip_signature(unique_all)
