@@ -3,7 +3,7 @@ import atexit
 import hashlib
 import ipaddress
 import requests
-from datetime import datetime
+from datetime import datetime, timezone
 from collections import Counter
 import httpx
 import ip2region.util as ip2region_util
@@ -230,7 +230,7 @@ def _save_port_stats(stats):
 
 def _sync_discovery_to_stats(discovery_ports, stats, meta_from_ips):
     """同步 discovery.txt 端口到 port-stats.json，新端口给试用期"""
-    now = datetime.utcnow().isoformat() + "Z"
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     changed = False
     for p in discovery_ports:
         p_str = str(p)
@@ -323,7 +323,7 @@ def _filter_ports_by_stats(discovery_ports, stats):
 
 def _update_port_stats_after_scan(stats, scanned_ports, source_ip_file):
     """扫描后更新端口命中统计"""
-    now = datetime.utcnow().isoformat() + "Z"
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     stats["run_counter"] += 1
     stats["last_run"] = now
 
