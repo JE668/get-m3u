@@ -579,6 +579,10 @@ def scrape_fofa():
         live_print("⏭️ 未配置 Cookie，跳过。"); return []
     try:
         r = httpx.get(FOFA_URL, headers=HEADERS, timeout=15)
+        if r.status_code == 429:
+            live_print("⚠️ FOFA 请求过于频繁 (HTTP 429)，将被限流")
+            live_print("💡 提示: 等待 10-15 分钟后重试，或使用爬虫模式")
+            return []
         if "账号登录" in r.text or "login" in str(r.url).lower():
             live_print("❌ 错误: FOFA Cookie 已失效！请更新 secrets.FOFA_COOKIE")
             live_print("💡 提示: 在浏览器登录 fofa.info → F12 → Application → Cookies → 复制完整 Cookie 值")

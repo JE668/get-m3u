@@ -69,6 +69,15 @@ jobs:
             echo "✅ FOFA Cookie 有效"
             echo "## ✅ FOFA Cookie 健康" >> $GITHUB_STEP_SUMMARY
             echo "Cookie 状态正常，将使用 FOFA + 爬虫双模式" >> $GITHUB_STEP_SUMMARY
+          elif [ "$HTTP_CODE" = "429" ]; then
+            echo "⚠️ FOFA 请求过于频繁 (HTTP 429)"
+            echo "## ⚠️ FOFA 限流" >> $GITHUB_STEP_SUMMARY
+            echo "Cookie 状态: HTTP 429 (Too Many Requests)" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "💡 **提示:**" >> $GITHUB_STEP_SUMMARY
+            echo "- Cookie 本身有效，但请求过于频繁被限流" >> $GITHUB_STEP_SUMMARY
+            echo "- 等待 10-15 分钟后重试" >> $GITHUB_STEP_SUMMARY
+            echo "- 将自动降级为爬虫模式（无 FOFA 依赖）" >> $GITHUB_STEP_SUMMARY
           elif [ "$HTTP_CODE" = "403" ] || [ "$HTTP_CODE" = "401" ]; then
             echo "⚠️ FOFA Cookie 已过期 (HTTP $HTTP_CODE)"
             echo "## ⚠️ FOFA Cookie 已过期" >> $GITHUB_STEP_SUMMARY
