@@ -40,6 +40,67 @@ HEADERS = {
 COOKIE_FILE = "data/fofa_cookie.txt"
 
 
+def _summary(text):
+    """写入 GitHub Actions Step Summary（本地运行时静默跳过）"""
+    summary_file = os.environ.get("GITHUB_STEP_SUMMARY", "")
+    if summary_file:
+        try:
+            with open(summary_file, "a", encoding="utf-8") as f:
+                f.write(text + "\n")
+        except OSError:
+            pass
+
+
+def check_cookie_workflow() -> int:
+    """供 GitHub Actions 调用的检查入口：检测 + 输出 Step Summary。
+
+    始终返回 0（不阻断 CI）——任何失败都由 main.py 的爬虫降级兜底。
+    """
+    cookie = os.environ.get("FOFA_COOKIE", "")
+    if not cookie:
+        live_print("⚠️ FOFA_COOKIE 未设置")
+        _summary("## ⚠️ FOFA Cookie 未设置")
+        _summary("")
+        _summary("❌ **FOFA_COOKIE Secret 不存在**，将使用爬虫模式")
+        _summary("")
+        _summary("🔧 **解决方法:**")
+        _summary("1. 登录 https://fofa.info")
+        _summary("2. F12 → Network → 复制 Cookie 头")
+        _summary("3. 创建 Secret: https://github.com/JE668/get-m3u/settings/secrets/actions")
+        return 0
+
+    is_valid, msg = check_cookie_valid(cookie)
+
+    if is_valid:
+        live_print(f"✅ {msg}")
+        _summary("## ✅ FOFA Cookie 健康")
+        _summary("")
+        _summary("Cookie 状态正常，将使用 FOFA + 爬虫双模式")
+    elif "429" in msg:
+        live_print(f"⚠️ {msg}")
+        _summary("## ⚠️ FOFA 限流")
+        _summary("")
+        _summary(f"Cookie 状态: {msg} (Too Many Requests)")
+        _summary("")
+        _summary("💡 **提示:**")
+        _summary("- Cookie 本身有效，只是请求过于频繁被限流")
+        _summary("- 等待 10-15 分钟后重试即可恢复")
+        _summary("- 本次将自动降级为爬虫模式（无 FOFA 依赖）")
+    else:
+        live_print(f"⚠️ {msg}")
+        _summary("## ⚠️ FOFA Cookie 已过期或异常")
+        _summary("")
+        _summary(f"Cookie 状态: {msg}")
+        _summary("")
+        _summary("🔧 **手动更新方法:**")
+        _summary("1. 登录 https://fofa.info")
+        _summary("2. F12 → Network → 复制 Cookie")
+        _summary("3. 更新 Secret: https://github.com/JE668/get-m3u/settings/secrets/actions")
+        _summary("")
+        _summary("💡 **提示:** 即使 Cookie 过期，main.py 会自动降级为爬虫模式")
+    return 0
+
+
 def check_cookie_valid(cookie: str) -> Tuple[bool, str]:
     """
     检测 FOFA cookie 是否有效
@@ -67,6 +128,8 @@ def check_cookie_valid(cookie: str) -> Tuple[bool, str]:
             return False, "Cookie 已过期（403 Forbidden）"
         elif r.status_code == 401:
             return False, "Cookie 已过期（401 Unauthorized）"
+        elif r.status_code == 429:
+            return False, "HTTP 429（请求过于频繁，Cookie 本身可能仍有效）"
         else:
             return False, f"HTTP {r.status_code}"
             
@@ -237,13 +300,17 @@ def main():
     
     parser = argparse.ArgumentParser(description="FOFA Cookie 自动续期工具")
     parser.add_argument("--check", action="store_true", help="仅检测 cookie 有效性")
+    parser.add_argument("--workflow", action="store_true",
+                        help="CI 模式：检测 + 输出 Step Summary（永不阻断，恒返回 0）")
     parser.add_argument("--renew", action="store_true", help="自动续期 cookie")
     parser.add_argument("--update-secret", action="store_true", help="更新 GitHub Secret")
-    
+
     args = parser.parse_args()
-    
+
     cookie = os.environ.get("FOFA_COOKIE", "")
-    
+
+    if args.workflow:
+        sys.exit(check_cookie_workflow())
     if args.check:
         if not cookie:
             print("❌ FOFA_COOKIE 环境变量未设置")
