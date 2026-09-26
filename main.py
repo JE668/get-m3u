@@ -736,17 +736,20 @@ def _review_geo(unique_all):
 # ===============================
 async def main():
     start_time = time.time()
+    live_print("🚀 main.py 启动...")
     stats = {"fofa": 0, "segments_total": 0, "segments_valid": 0,
              "scan_tasks": 0, "scan_found": 0, "geo_pass": 0, "geo_fail": 0,
              "blacklist_skip": 0}
 
     # 1. 准备 RTP（同步阻塞 I/O 移至线程，避免卡住事件循环）
     await asyncio.to_thread(update_rtp_template)
+    live_print("✅ RTP 模板更新完成")
 
     # 2. 抓取与扫描（同步阻塞调用均 offload 到线程）
     fips = await asyncio.to_thread(scrape_fofa)
     stats["fofa"] = len(fips)
-    
+    live_print(f"📡 FOFA 返回: {len(fips)} 条记录")
+
     # 始终加载现有发现库（包含历史 C-segment 和端口）
     all_segs, all_ports = await asyncio.to_thread(update_discovery_database, fips)
     stats["segments_total"] = len(all_segs)
@@ -938,4 +941,14 @@ async def main():
     write_summary(f"\n> 💾 输出文件: `output/source-ip.txt` `output/source-m3u.txt` `output/source-m3u-noncheck.txt`")
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except Exception as e:
+        import traceback
+        live_print(f"❌ main.py 异常退出: {e}")
+        traceback.print_exc()
+        # 写入错误日志，确保 CI 能看到
+        with open("output/error.txt", "w", encoding="utf-8") as f:
+            f.write(f"Error: {e}\n")
+            traceback.print_exc(file=f)
+        raise
