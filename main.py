@@ -1,10 +1,15 @@
 import os, re, time, threading, io, asyncio, concurrent.futures, json
+import atexit
+import hashlib
+import ipaddress
+import requests
 from datetime import datetime
 from collections import Counter
 import httpx
 import ip2region.util as ip2region_util
 import ip2region.searcher as ip2region_searcher
 from utils import live_print, write_summary, log_section, atomic_write, parse_rtp_entries, build_m3u, build_compat
+from probe import load_source_scores, update_source_score, filter_by_score
 
 # --- 初始化离线 IP 归属地查询（ip2region xdb，零网络延迟） ---
 _ip2region_searcher = None
@@ -19,6 +24,18 @@ def _get_ip2region():
         _ip2region_searcher = ip2region_searcher.new_with_vector_index(version, db_path, v_index)
         handle.close()
     return _ip2region_searcher
+
+def _release_ip2region():
+    """释放 ip2region searcher 资源（程序退出时自动调用）"""
+    global _ip2region_searcher
+    if _ip2region_searcher:
+        try:
+            _ip2region_searcher.close()
+        except Exception:
+            pass
+        _ip2region_searcher = None
+
+atexit.register(_release_ip2region)
 
 # ===============================
 # 1. 配置区 (目录结构优化版)
@@ -47,11 +64,18 @@ RTP_FILE = "data/rtp/ChinaTelecom-Guangdong.txt"
 SOURCE_IP_FILE = "output/source-ip.txt"
 SOURCE_M3U_FILE = "output/source-m3u.txt"
 SOURCE_NONCHECK_FILE = "output/source-m3u-noncheck.txt"
+IP_SIGNATURE_FILE = "output/.ip_signature"
 
 DEFAULT_PORTS = [4022, 8000, 8686, 55555, 54321, 1024, 10001, 8443, 8888]
 
 # --- 端口动态管理 ---
 PORT_STATS_FILE = "data/port-stats.json"
+
+# m3u-checker-max 反馈数据 URL（通过 GitHub Raw 访问）
+FEEDBACK_URL = os.environ.get(
+    "FEEDBACK_URL",
+    "https://raw.githubusercontent.com/JE668/m3u-checker-max/main/output/feedback.json"
+)
 
 # 连续多少次零扫描后自动休眠端口（默认端口×2，更宽容）
 MISSES_BEFORE_DEACTIVATE = 3
@@ -301,6 +325,44 @@ def _update_port_stats_after_scan(stats, scanned_ports, source_ip_file):
     return deactivated
 
 
+def compute_ip_signature(ips: list) -> str:
+    """计算IP列表签名"""
+    sig = hashlib.sha256()
+    for ip in sorted(ips):
+        sig.update(ip.encode())
+    return sig.hexdigest()
+
+def load_previous_ip_signature() -> str:
+    if os.path.exists(IP_SIGNATURE_FILE):
+        try:
+            with open(IP_SIGNATURE_FILE) as f:
+                return f.read().strip()
+        except OSError:
+            pass
+    return None
+
+def save_ip_signature(sig: str):
+    try:
+        os.makedirs(os.path.dirname(IP_SIGNATURE_FILE), exist_ok=True)
+        with open(IP_SIGNATURE_FILE, 'w') as f:
+            f.write(sig)
+    except OSError:
+        pass
+
+def load_external_feedback() -> dict:
+    """加载 m3u-checker-max 的反馈数据，用于优化源优先级"""
+    try:
+        r = requests.get(FEEDBACK_URL, timeout=10)
+        if r.status_code == 200:
+            feedback = json.loads(r.text)
+            version = feedback.pop("_version", 1)
+            live_print(f"📥 已加载下游反馈数据: {feedback.get('total_channels', 0)} 个有效频道 (v{version})")
+            return feedback
+    except (requests.RequestException, json.JSONDecodeError, ValueError) as e:
+        live_print(f"⚠️ 下游反馈不可用: {e}")
+    return {}
+
+
 def update_discovery_database(new_ips):
     """更新发现库"""
     log_section("📂 更新发现库 (data/discovery.txt)", "🔹")
@@ -337,12 +399,12 @@ def update_discovery_database(new_ips):
 # 扫描阶段超时配置（两阶段：连接快筛 + 读数据给足时间）
 # connect=0.5s: 够快，0.5s内没完成TCP握手 → 真实不可达，直接放弃
 # read=3.0s: 够慢，udpxy处理+网络RTT最多吃2-3s，给足缓冲不误杀
-SCAN_CONNECT_TIMEOUT = 0.5
-SCAN_READ_TIMEOUT = 3.0
+SCAN_CONNECT_TIMEOUT = float(os.environ.get("SCAN_CONNECT_TIMEOUT", "0.5"))
+SCAN_READ_TIMEOUT = float(os.environ.get("SCAN_READ_TIMEOUT", "3.0"))
 
 # 增量验证超时（更短：已知的存活IP应该秒回）
-INCR_CONNECT_TIMEOUT = 0.3
-INCR_READ_TIMEOUT = 0.5
+INCR_CONNECT_TIMEOUT = float(os.environ.get("INCR_CONNECT_TIMEOUT", "0.3"))
+INCR_READ_TIMEOUT = float(os.environ.get("INCR_READ_TIMEOUT", "0.5"))
 
 
 async def check_udpxy(ip_port, found_set=None, timeout=None, client=None):
@@ -350,6 +412,10 @@ async def check_udpxy(ip_port, found_set=None, timeout=None, client=None):
 
     timeout 为 None 时使用 SCAN_* 默认配置（扫描阶段）。
     传入 (connect_timeout, read_timeout) 元组时使用自定义值（增量验证等）。
+
+    .. deprecated::
+        不传 client 参数时会创建临时 httpx.AsyncClient()，
+        应始终传入外部 client 以避免重复创建开销。
     """
     ip = ip_port.split(":")[0]
     if found_set is not None and ip in found_set: return False, None
@@ -388,6 +454,7 @@ async def run_native_scan(segments, ports, found_set=None):
         live_print("⚠️ 无有效网段"); return []
 
     scan_workers = int(os.environ.get("SCAN_WORKERS", "500"))
+    MAX_PENDING = scan_workers * 2  # 最大并发任务数上限（滚动窗口 × 2）
 
     # 复用外部 found_set（跨扫描共享，IP 命中后跳过其他端口）
     if found_set is None:
@@ -396,6 +463,11 @@ async def run_native_scan(segments, ports, found_set=None):
 
     # 端口优先级：高频端口排前面，更快命中
     port_list = [int(p) for p in ports]
+
+    # 加载质量评分，跳过评分过低的源
+    scores = load_source_scores()
+    min_score = float(os.environ.get("MIN_SOURCE_SCORE", "10.0"))
+    high_score_ports = filter_by_score(scores, min_score) if scores else set()
 
     async def check_one(ip_port, timeout, client):
         async with sem:
@@ -435,7 +507,10 @@ async def run_native_scan(segments, ports, found_set=None):
                     if ip in found_set:
                         continue
                     for port in port_list:
-                        yield f"{ip}:{port}"
+                        ip_port = f"{ip}:{port}"
+                        if scores and ip_port not in high_score_ports and ip_port in scores:
+                            continue  # 跳过低评分端口
+                        yield ip_port
 
         total_tasks = len(segments) * 254 * len(port_list)
         live_print(f"🎯 全量扫描: 持续任务流 (并发: {scan_workers}, 预估任务: {total_tasks})")
@@ -462,7 +537,7 @@ async def run_native_scan(segments, ports, found_set=None):
                     live_print(f"    🎯 命中: {matched_ip}")
 
             # 补充新任务，维持并发数
-            while len(pending) < scan_workers:
+            while len(pending) < min(scan_workers, MAX_PENDING):
                 try:
                     ip_port = next(task_gen)
                     pending.add(asyncio.create_task(check_one(ip_port, None, client)))
@@ -487,6 +562,15 @@ async def run_native_scan(segments, ports, found_set=None):
     
     return alive_ips, scan_elapsed
 
+
+def _is_invalid_ip(ip):
+    """检查 IP 是否为内网/回环/保留地址"""
+    try:
+        addr = ipaddress.ip_address(ip)
+        return addr.is_private or addr.is_loopback or addr.is_link_local
+    except ValueError:
+        return True
+
 def scrape_fofa():
     """FOFA 抓取（含 Cookie 失效检测与降级提示，使用 httpx 同步客户端）"""
     log_section("📡 抓取 FOFA 资源", "🔹")
@@ -503,6 +587,7 @@ def scrape_fofa():
             return []
 
         raw_list = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+)', r.text)
+        raw_list = [ip for ip in raw_list if not _is_invalid_ip(ip.split(':')[0])]
         if raw_list:
             counts = Counter(raw_list)
             live_print(f"✅ 获取 {len(raw_list)} 条记录")
@@ -646,12 +731,41 @@ async def main():
 
     unique_all = sorted(list(set(fips + sips)))
 
-    # 3. 最终复核（同步 geo 查询 offload 到线程，避免阻塞事件循环）
-    log_section("🌍 最终结果复核", "🔹")
-    geo_ips, gp, gf, review_lines = await asyncio.to_thread(_review_geo, unique_all)
+    # 加载下游反馈，优先测试评分高的源
+    feedback = await asyncio.to_thread(load_external_feedback)
+    feedback_channel_scores = feedback.get("channel_scores", {})
+    if feedback_channel_scores:
+        def _fb_key(ip_port):
+            score = feedback_channel_scores.get(ip_port, {})
+            if not score:
+                ip = ip_port.split(":")[0]
+                score = feedback_channel_scores.get(ip, {})
+            return score.get("best_bw", 0)
+        unique_all.sort(key=_fb_key, reverse=True)
+
+    # IP 列表签名检测：如果 IP 列表未变化，跳过归属复核使用缓存
+    current_sig = compute_ip_signature(unique_all)
+    previous_sig = load_previous_ip_signature()
+
+    if current_sig == previous_sig and os.path.exists(SOURCE_IP_FILE):
+        live_print("📋 IP 列表未变化，跳过归属复核（使用缓存结果）")
+        with open(SOURCE_IP_FILE, "r", encoding="utf-8") as f:
+            geo_ips = [line.strip() for line in f if line.strip()]
+        gp = len(geo_ips)
+        gf = 0
+        review_lines = [f"  📋 缓存结果: {gp} 个有效 IP (IP 列表未变化)"]
+        for line in review_lines:
+            live_print(line)
+        save_ip_signature(current_sig)
+    else:
+        save_ip_signature(current_sig)
+        # 3. 最终复核（同步 geo 查询 offload 到线程，避免阻塞事件循环）
+        log_section("🌍 最终结果复核", "🔹")
+        geo_ips, gp, gf, review_lines = await asyncio.to_thread(_review_geo, unique_all)
+        for line in review_lines:
+            live_print(line)
+
     stats["geo_pass"], stats["geo_fail"] = gp, gf
-    for line in review_lines:
-        live_print(line)
     
 
     # 4. 写入文件（标准 M3U 格式 + 原子化写入）

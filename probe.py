@@ -12,10 +12,70 @@ SOURCE_NONCHECK_FILE = "output/source-m3u-noncheck.txt"
 LOG_FILE = "output/log.txt"
 RTP_FILE = "data/rtp/ChinaTelecom-Guangdong.txt"
 SNAPSHOT_DIR = "data/.last_snapshot" # 变动比对快照目录
+SOURCE_SCORE_FILE = "data/source_scores.json"
 
 # 下游仓库联动触发已统一移至 .github/workflows/main.yml（通过 gh CLI 触发），
 # 避免与 Python 内触发重复，并集中错误处理与 Job Summary 汇报。
 # 下游仓库：JE668/m3u-checker-max (update.yml) / JE668/iptv-api (main.yml)
+
+def load_source_scores() -> dict:
+    """加载源质量评分数据"""
+    if os.path.exists(SOURCE_SCORE_FILE):
+        try:
+            with open(SOURCE_SCORE_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, OSError):
+            pass
+    return {}
+
+def save_source_scores(scores: dict):
+    """保存源质量评分数据"""
+    try:
+        os.makedirs(os.path.dirname(SOURCE_SCORE_FILE), exist_ok=True)
+        with open(SOURCE_SCORE_FILE, 'w', encoding='utf-8') as f:
+            json.dump(scores, f, ensure_ascii=False, indent=2)
+    except OSError:
+        pass
+
+def update_source_score(scores: dict, host_port: str, success: bool, bandwidth_mbps: float = 0.0):
+    """更新单个源的质量评分"""
+    if host_port not in scores:
+        scores[host_port] = {
+            "total_tests": 0,
+            "successes": 0,
+            "consecutive_fails": 0,
+            "total_bandwidth": 0.0,
+            "last_success": None,
+            "score": 50.0
+        }
+    
+    entry = scores[host_port]
+    entry["total_tests"] += 1
+    
+    if success:
+        entry["successes"] += 1
+        entry["consecutive_fails"] = 0
+        entry["total_bandwidth"] += bandwidth_mbps
+        entry["last_success"] = datetime.now().isoformat()
+    else:
+        entry["consecutive_fails"] += 1
+    
+    # 计算评分: 成功率(60%) + 带宽稳定性(30%) + 连续性(10%)
+    success_rate = entry["successes"] / entry["total_tests"] if entry["total_tests"] > 0 else 0
+    avg_bw = entry["total_bandwidth"] / entry["successes"] if entry["successes"] > 0 else 0
+    bw_score = min(avg_bw / 50.0, 1.0)  # 50Mbps 为满分
+    
+    streak_bonus = min(entry["successes"] / 10.0, 1.0)  # 10次连续成功为满分
+    
+    entry["score"] = round(success_rate * 60 + bw_score * 30 + streak_bonus * 10, 1)
+    entry["avg_bandwidth"] = round(avg_bw, 1)
+
+def filter_by_score(scores: dict, min_score: float = 10.0) -> set:
+    """过滤掉评分过低的源"""
+    if not scores:
+        return set()
+    return {hp for hp, s in scores.items() if s.get("score", 0) >= min_score}
+
 
 # ===============================
 # 3. 比对与联动逻辑
@@ -92,8 +152,20 @@ async def async_fast_ip_probe(client, host_port, url_list):
             pass
         return False, 0.0
     
-    # 并发测试最多3个URL
-    tasks = [_probe_single_url(url) for url in url_list[:3]]
+    async def _probe_with_retry(test_url):
+        for attempt in range(3):
+            try:
+                result = await _probe_single_url(test_url)
+                if result[0]:
+                    return result
+            except Exception:
+                pass
+            if attempt < 2:
+                await asyncio.sleep(0.5 * (attempt + 1))
+        return False, 0.0
+
+    # 并发测试最多3个URL（带重试）
+    tasks = [_probe_with_retry(url) for url in url_list[:3]]
     results = await asyncio.gather(*tasks)
     
     # 取最佳结果
@@ -151,6 +223,7 @@ async def main():
             probe_workers = int(os.environ.get("PROBE_WORKERS", "50"))
             sem = asyncio.Semaphore(probe_workers)
             ip_found = set()  # 已找到有效端口的 IP，跳过剩余端口
+            probe_results = {}  # hp -> (ok, bw) 用于批量更新评分
             
             async with httpx.AsyncClient(
                 limits=httpx.Limits(max_keepalive_connections=300, max_connections=1000),
@@ -181,6 +254,7 @@ async def main():
                         ip = hp.split(":")[0]
                         live_print(msg)
                         logs.append(msg.strip())
+                        probe_results[hp] = (ok, bw)
                         if ok:
                             valid_hostports.add(hp)
                             meta_data[hp] = {"bandwidth_mbps": bw}
@@ -203,10 +277,18 @@ async def main():
                             # 该 IP 所有端口都测完了，下一个 IP
                             ip_idx += 1
 
-            # 写入元数据供下游 m3u-checker-max 使用
+            # 保存所有评分更新
+            if probe_results:
+                all_scores = load_source_scores()
+                for hp, (ok, bw) in probe_results.items():
+                    update_source_score(all_scores, hp, ok, bw)
+                save_source_scores(all_scores)
+
+            # 写入元数据供下游 m3u-checker-max 使用（_version 字段用于跨项目接口版本控制）
             if meta_data:
-                atomic_write(SOURCE_META_FILE, json.dumps(meta_data, ensure_ascii=False, indent=2))
-                live_print(f" 📝 服务器元数据已写入: {SOURCE_META_FILE} ({len(meta_data)} 台)")
+                meta_json = {"_version": 1, **meta_data}
+                await asyncio.to_thread(atomic_write, SOURCE_META_FILE, json.dumps(meta_json, ensure_ascii=False, indent=2))
+                live_print(f" 📝 服务器元数据已写入: {SOURCE_META_FILE} ({len(meta_data)} 台, v{meta_json['_version']})")
 
             # ==========================================
             # 6. 重新拼装存活 IP 并写入 source-m3u.txt（标准 M3U 格式）
@@ -214,24 +296,26 @@ async def main():
             live_print(f"━━━ 💾 数据重组与归档 ━━━━━━━━━━━━━━━━━━━━━")
 
             # 先写日志
-            with open(LOG_FILE, "w", encoding="utf-8") as f:
-                f.write(f"服务器抽测报告 | 时间: {datetime.now()}\n" + "\n".join(sorted(logs)))
+            await asyncio.to_thread(
+                atomic_write, LOG_FILE,
+                f"服务器抽测报告 | 时间: {datetime.now()}\n" + "\n".join(sorted(logs))
+            )
             live_print(f" 📝 成功覆写日志: {LOG_FILE}")
 
             # 读取 RTP 模板进行重新组装（RTP 解析与拼接改用 utils 公共函数）
             rtp_entries = parse_rtp_entries(RTP_FILE)
             if not valid_hostports:
                 # 没有存活 IP，清空文件
-                atomic_write(SOURCE_M3U_FILE, "")
+                await asyncio.to_thread(atomic_write, SOURCE_M3U_FILE, "")
                 live_print(f" 📝 存活 IP 为 0，已清空 {SOURCE_M3U_FILE}")
             elif rtp_entries:
                 m3u_lines = build_m3u(rtp_entries, valid_hostports)
-                atomic_write(SOURCE_M3U_FILE, "\n".join(m3u_lines))
+                await asyncio.to_thread(atomic_write, SOURCE_M3U_FILE, "\n".join(m3u_lines))
                 live_print(f" 📝 成功重组纯净版: {SOURCE_M3U_FILE} (标准M3U)")
                 live_print(f"✨ 测速结束: 存活 {len(valid_hostports)} 个 IP | 生成 {len(m3u_lines)-1} 条纯净链接")
             else:
                 # 有存活 IP 但 RTP 模板缺失/为空：写入空 M3U 头，避免下游使用过期数据
-                atomic_write(SOURCE_M3U_FILE, "#EXTM3U\n")
+                await asyncio.to_thread(atomic_write, SOURCE_M3U_FILE, "#EXTM3U\n")
                 live_print(f" ⚠️ RTP 模板为空或缺失 {RTP_FILE}，已写入空 M3U 头")
 
     # ==========================================
