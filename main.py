@@ -750,6 +750,7 @@ async def main():
     # 始终加载现有发现库（包含历史 C-segment 和端口）
     all_segs, all_ports = await asyncio.to_thread(update_discovery_database, fips)
     stats["segments_total"] = len(all_segs)
+    live_print(f"📊 发现库加载: {len(all_segs)} 个 segment, {len(all_ports)} 个端口")
     
     # FOFA 结果为空时，尝试爬虫补充
     if not fips:
@@ -766,15 +767,19 @@ async def main():
                         f.write(f"SEG|{s}\n")
                     for p in sorted(all_ports, key=int):
                         f.write(f"PORT|{p}\n")
+        else:
+            live_print("⚠️ 爬虫也失败，将使用历史发现库继续扫描")
     
     # 检查是否有任何 segment 可扫描
     if not all_segs:
         live_print("❌ 发现库为空且爬虫无结果，无法扫描")
         return
     
+    live_print(f"🔍 开始验证 {len(all_segs)} 个 segment...")
     valid_segs, blacklist_skip = await asyncio.to_thread(filter_segments, all_segs)
     stats["segments_valid"] = len(valid_segs)
     stats["blacklist_skip"] = blacklist_skip
+    live_print(f"✅ 验证完成: {len(valid_segs)} 个有效 segment")
 
     # ---- 端口动态管理（基于历史命中率过滤 + 排序） ----
     port_stats = _load_port_stats()
@@ -793,13 +798,15 @@ async def main():
 
     # 共享 found_set
     shared_found = set()
+    live_print(f"🚀 准备扫描: {len(valid_segs)} 段 × 254 IP × {len(sorted_ports)} 端口 = {len(valid_segs)*254*len(sorted_ports):,} 任务")
     if sorted_ports:
         sips, scan_seconds = await run_native_scan(valid_segs, sorted_ports, shared_found)
         stats["scan_seconds"] = scan_seconds
     else:
         sips = []
+        live_print("⚠️ 无 active 端口，跳过扫描")
     stats["scan_found"] = len(sips)
-    live_print(f"📊 扫描汇总: 发现 {len(sips)} 个存活 IP | 命中IP集: {len(shared_found)}")
+    live_print(f"📊 扫描完成: 发现 {len(sips)} 个新 IP | 总命中: {len(shared_found)} | 耗时: {stats.get('scan_seconds', 0):.1f}s")
 
     # ---- 扫描后更新端口统计（在 source-ip 写入前记录 scanned_ports） ----
     scanned_ports = [str(p) for p in sorted_ports]
