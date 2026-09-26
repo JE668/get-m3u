@@ -30,6 +30,7 @@ PUBLIC_M3U_SOURCES = [
     "https://raw.githubusercontent.com/qist/iptv/master/tv.m3u",
     "https://raw.githubusercontent.com/evils0t/iptv/master/m3u/iptv.m3u",
     # Tzwcard 系列（与 get-m3u 相同源）
+    "https://raw.githubusercontent.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List/refs/heads/master/GuangdongIPTV_rtp_all.m3u",
     "https://raw.githubusercontent.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List/refs/heads/master/GuangdongIPTV_rtp_4k.m3u",
     "https://raw.githubusercontent.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List/refs/heads/master/GuangdongIPTV_rtp_hd.m3u",
 ]
