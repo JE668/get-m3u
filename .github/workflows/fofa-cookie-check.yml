@@ -1,0 +1,116 @@
+name: 🔑 FOFA Cookie 健康检查
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # 每天 08:00 UTC (北京时间 16:00)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: 🔍 Cookie 状态检查
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: 📥 检出代码
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+
+      - name: 🐍 配置 Python 3.12
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: 🔍 检查 FOFA Cookie 有效性
+        id: check
+        env:
+          FOFA_COOKIE: ${{ secrets.FOFA_COOKIE }}
+        run: |
+          if [ -z "$FOFA_COOKIE" ]; then
+            echo "status=missing" >> $GITHUB_OUTPUT
+            echo "## ⚠️ FOFA Cookie 未设置" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **FOFA_COOKIE Secret 不存在**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "🔧 **解决方法:**" >> $GITHUB_STEP_SUMMARY
+            echo "1. 登录 https://fofa.info" >> $GITHUB_STEP_SUMMARY
+            echo "2. F12 → Network → 复制 Cookie 头" >> $GITHUB_STEP_SUMMARY
+            echo "3. 创建 Secret: https://github.com/JE668/get-m3u/settings/secrets/actions" >> $GITHUB_STEP_SUMMARY
+            echo "4. 名称: FOFA_COOKIE" >> $GITHUB_STEP_SUMMARY
+            echo "5. 值: 完整的 Cookie 字符串" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+
+          # 使用 curl 检查 cookie 有效性
+          HTTP_CODE=$(curl -s -o /tmp/fofa_response.html -w "%{http_code}" \
+            -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" \
+            -H "Cookie: $FOFA_COOKIE" \
+            "https://fofa.info/result?qbase64=IlVEUFxZIiAmJiBjb3VudHJ5PSJDTiIgJiYgcmVnaW9uPSJHdWFuZ2Rvbmci&filter_type=last_month" \
+            --max-time 15 2>/dev/null || echo "000")
+
+          # 检查响应内容
+          if [ "$HTTP_CODE" = "200" ]; then
+            if grep -qi "udpxy\|result" /tmp/fofa_response.html 2>/dev/null; then
+              echo "status=valid" >> $GITHUB_OUTPUT
+              echo "## ✅ FOFA Cookie 有效" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "✅ **Cookie 状态正常**" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "📊 **统计:**" >> $GITHUB_STEP_SUMMARY
+              echo "| 指标 | 状态 |" >> $GITHUB_STEP_SUMMARY
+              echo "|------|------|" >> $GITHUB_STEP_SUMMARY
+              echo "| HTTP 状态码 | 200 |" >> $GITHUB_STEP_SUMMARY
+              echo "| 响应内容 | 包含搜索结果 |" >> $GITHUB_STEP_SUMMARY
+              echo "| 检查时间 | $(date +'%Y-%m-%d %H:%M:%S') UTC |" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "status=expired" >> $GITHUB_OUTPUT
+              echo "## ⚠️ FOFA Cookie 可能已过期" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "⚠️ **HTTP 200 但响应异常**" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "响应内容不包含预期的搜索结果，Cookie 可能已失效" >> $GITHUB_STEP_SUMMARY
+            fi
+          elif [ "$HTTP_CODE" = "403" ] || [ "$HTTP_CODE" = "401" ]; then
+            echo "status=expired" >> $GITHUB_OUTPUT
+            echo "## ⚠️ FOFA Cookie 已过期" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **Cookie 已失效** (HTTP $HTTP_CODE)" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "🔧 **解决方法:**" >> $GITHUB_STEP_SUMMARY
+            echo "1. 登录 https://fofa.info" >> $GITHUB_STEP_SUMMARY
+            echo "2. F12 → Network → 复制 Cookie 头" >> $GITHUB_STEP_SUMMARY
+            echo "3. 更新 Secret: https://github.com/JE668/get-m3u/settings/secrets/actions" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "💡 **提示:** 即使 Cookie 过期，main.py 会自动降级为爬虫模式" >> $GITHUB_STEP_SUMMARY
+          elif [ "$HTTP_CODE" = "000" ]; then
+            echo "status=error" >> $GITHUB_OUTPUT
+            echo "## ❌ FOFA 请求失败" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **网络请求失败** (HTTP 000)" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "可能是网络问题或 FOFA 服务不可用" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "status=error" >> $GITHUB_OUTPUT
+            echo "## ⚠️ FOFA 请求异常" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "⚠️ **HTTP $HTTP_CODE**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "请检查 FOFA 服务状态或 Cookie 格式" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: 📊 生成报告
+        if: always()
+        run: |
+          echo "## 📋 检查详情" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| 项目 | 值 |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|-----|" >> $GITHUB_STEP_SUMMARY
+          echo "| 检查时间 | $(date +'%Y-%m-%d %H:%M:%S') UTC |" >> $GITHUB_STEP_SUMMARY
+          echo "| 状态 | ${{ steps.check.outputs.status }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 仓库 | JE668/get-m3u |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "> 🔍 [查看完整日志](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY

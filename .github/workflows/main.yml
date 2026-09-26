@@ -47,6 +47,45 @@ jobs:
             echo "ℹ️ ip2region 无更新，使用现有版本"
           fi
 
+      - name: 🔍 FOFA Cookie 健康检查
+        env:
+          FOFA_COOKIE: ${{ secrets.FOFA_COOKIE }}
+        run: |
+          if [ -z "$FOFA_COOKIE" ]; then
+            echo "## ⚠️ FOFA Cookie 未设置" >> $GITHUB_STEP_SUMMARY
+            echo "⚠️ FOFA_COOKIE 环境变量为空，将使用爬虫模式" >> $GITHUB_STEP_SUMMARY
+            echo "请手动更新: https://github.com/JE668/get-m3u/settings/secrets/actions" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+          
+          # 使用 curl 检查 cookie 有效性
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "User-Agent: Mozilla/5.0" \
+            -H "Cookie: $FOFA_COOKIE" \
+            "https://fofa.info/result?qbase64=IlVEUFhZIiAmJiBjb3VudHJ5PSJDTiIgJiYgcmVnaW9uPSJHdWFuZ2Rvbmci&filter_type=last_month" \
+            --max-time 15 2>/dev/null || echo "000")
+          
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "✅ FOFA Cookie 有效"
+            echo "## ✅ FOFA Cookie 健康" >> $GITHUB_STEP_SUMMARY
+            echo "Cookie 状态正常，将使用 FOFA + 爬虫双模式" >> $GITHUB_STEP_SUMMARY
+          elif [ "$HTTP_CODE" = "403" ] || [ "$HTTP_CODE" = "401" ]; then
+            echo "⚠️ FOFA Cookie 已过期 (HTTP $HTTP_CODE)"
+            echo "## ⚠️ FOFA Cookie 已过期" >> $GITHUB_STEP_SUMMARY
+            echo "Cookie 状态: HTTP $HTTP_CODE" >> $GITHUB_STEP_SUMMARY
+            echo "将自动降级为爬虫模式（无 FOFA 依赖）" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "🔧 **手动更新方法:**" >> $GITHUB_STEP_SUMMARY
+            echo "1. 登录 https://fofa.info" >> $GITHUB_STEP_SUMMARY
+            echo "2. F12 → Network → 复制 Cookie" >> $GITHUB_STEP_SUMMARY
+            echo "3. 更新 Secret: https://github.com/JE668/get-m3u/settings/secrets/actions" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ FOFA 请求失败 (HTTP $HTTP_CODE)，将使用爬虫模式"
+            echo "## ℹ️ FOFA 不可用" >> $GITHUB_STEP_SUMMARY
+            echo "HTTP 状态: $HTTP_CODE" >> $GITHUB_STEP_SUMMARY
+            echo "将自动降级为爬虫模式" >> $GITHUB_STEP_SUMMARY
+          fi
+
       - name: 🔍 阶段1 — 源发现 (main.py)
         env:
           FOFA_COOKIE: ${{ secrets.FOFA_COOKIE }}

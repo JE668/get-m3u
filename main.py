@@ -9,6 +9,7 @@ import httpx
 import ip2region.util as ip2region_util
 import ip2region.searcher as ip2region_searcher
 from utils import live_print, write_summary, log_section, atomic_write, parse_rtp_entries, build_m3u, build_compat
+from utils.crawler import crawl_segments, segments_from_ip_list
 from probe import load_source_scores, update_source_score, filter_by_score
 
 # --- 初始化离线 IP 归属地查询（ip2region xdb，零网络延迟） ---
@@ -695,11 +696,41 @@ async def main():
     # 2. 抓取与扫描（同步阻塞调用均 offload 到线程）
     fips = await asyncio.to_thread(scrape_fofa)
     stats["fofa"] = len(fips)
-    all_segs, all_ports = await asyncio.to_thread(update_discovery_database, fips)
-    stats["segments_total"] = len(all_segs)
-    valid_segs, blacklist_skip = await asyncio.to_thread(filter_segments, all_segs)
-    stats["segments_valid"] = len(valid_segs)
-    stats["blacklist_skip"] = blacklist_skip
+    
+    # FOFA 结果为空时，使用爬虫作为备用数据源
+    if not fips:
+        live_print("⚠️ FOFA 返回 0 条结果（cookie 可能已过期），切换到爬虫模式")
+        crawler_segments = await asyncio.to_thread(crawl_segments)
+        if crawler_segments:
+            fips = segments_from_ip_list(
+                [f"{seg.rsplit('.', 1)[0]}.{i}" for seg in crawler_segments for i in range(1, 255)]
+            )
+            # 简化：直接使用爬虫发现的 segment 列表
+            live_print(f"🕷️ 爬虫发现 {len(crawler_segments)} 个 segment")
+            # 将 segment 转换为 IP 列表用于扫描
+            all_segs = crawler_segments
+            all_ports = DEFAULT_PORTS
+            stats["segments_total"] = len(all_segs)
+            valid_segs, blacklist_skip = await asyncio.to_thread(filter_segments, all_segs)
+            stats["segments_valid"] = len(valid_segs)
+            stats["blacklist_skip"] = blacklist_skip
+        else:
+            live_print("❌ 爬虫也未能获取有效 segment，终止")
+            return
+    else:
+        all_segs, all_ports = await asyncio.to_thread(update_discovery_database, fips)
+        stats["segments_total"] = len(all_segs)
+        valid_segs, blacklist_skip = await asyncio.to_thread(filter_segments, all_segs)
+        stats["segments_valid"] = len(valid_segs)
+        stats["blacklist_skip"] = blacklist_skip
+        
+        # 额外从爬虫获取补充 segment
+        crawler_segments = await asyncio.to_thread(crawl_segments, use_cache=True)
+        if crawler_segments:
+            new_segs = [s for s in crawler_segments if s not in all_segs]
+            if new_segs:
+                live_print(f"🕷️ 爬虫补充 {len(new_segs)} 个新 segment")
+                valid_segs.extend(new_segs)
 
     # ---- 端口动态管理（基于历史命中率过滤 + 排序） ----
     port_stats = _load_port_stats()
