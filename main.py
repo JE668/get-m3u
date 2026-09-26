@@ -697,40 +697,34 @@ async def main():
     fips = await asyncio.to_thread(scrape_fofa)
     stats["fofa"] = len(fips)
     
-    # FOFA 结果为空时，使用爬虫作为备用数据源
+    # 始终加载现有发现库（包含历史 C-segment 和端口）
+    all_segs, all_ports = await asyncio.to_thread(update_discovery_database, fips)
+    stats["segments_total"] = len(all_segs)
+    
+    # FOFA 结果为空时，尝试爬虫补充
     if not fips:
-        live_print("⚠️ FOFA 返回 0 条结果（cookie 可能已过期），切换到爬虫模式")
+        live_print("⚠️ FOFA 返回 0 条结果（cookie 可能已过期），尝试爬虫补充")
         crawler_segments = await asyncio.to_thread(crawl_segments)
-        if crawler_segments:
-            fips = segments_from_ip_list(
-                [f"{seg.rsplit('.', 1)[0]}.{i}" for seg in crawler_segments for i in range(1, 255)]
-            )
-            # 简化：直接使用爬虫发现的 segment 列表
-            live_print(f"🕷️ 爬虫发现 {len(crawler_segments)} 个 segment")
-            # 将 segment 转换为 IP 列表用于扫描
-            all_segs = crawler_segments
-            all_ports = DEFAULT_PORTS
-            stats["segments_total"] = len(all_segs)
-            valid_segs, blacklist_skip = await asyncio.to_thread(filter_segments, all_segs)
-            stats["segments_valid"] = len(valid_segs)
-            stats["blacklist_skip"] = blacklist_skip
-        else:
-            live_print("❌ 爬虫也未能获取有效 segment，终止")
-            return
-    else:
-        all_segs, all_ports = await asyncio.to_thread(update_discovery_database, fips)
-        stats["segments_total"] = len(all_segs)
-        valid_segs, blacklist_skip = await asyncio.to_thread(filter_segments, all_segs)
-        stats["segments_valid"] = len(valid_segs)
-        stats["blacklist_skip"] = blacklist_skip
-        
-        # 额外从爬虫获取补充 segment
-        crawler_segments = await asyncio.to_thread(crawl_segments, use_cache=True)
         if crawler_segments:
             new_segs = [s for s in crawler_segments if s not in all_segs]
             if new_segs:
                 live_print(f"🕷️ 爬虫补充 {len(new_segs)} 个新 segment")
-                valid_segs.extend(new_segs)
+                all_segs.extend(new_segs)
+                # 更新发现库
+                with open(DISCOVERY_FILE, "w", encoding="utf-8") as f:
+                    for s in sorted(all_segs):
+                        f.write(f"SEG|{s}\n")
+                    for p in sorted(all_ports, key=int):
+                        f.write(f"PORT|{p}\n")
+    
+    # 检查是否有任何 segment 可扫描
+    if not all_segs:
+        live_print("❌ 发现库为空且爬虫无结果，无法扫描")
+        return
+    
+    valid_segs, blacklist_skip = await asyncio.to_thread(filter_segments, all_segs)
+    stats["segments_valid"] = len(valid_segs)
+    stats["blacklist_skip"] = blacklist_skip
 
     # ---- 端口动态管理（基于历史命中率过滤 + 排序） ----
     port_stats = _load_port_stats()
