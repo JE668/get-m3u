@@ -783,6 +783,10 @@ async def main():
     stats["segments_valid"] = len(valid_segs)
     stats["blacklist_skip"] = blacklist_skip
     live_print(f"✅ 验证完成: {len(valid_segs)} 个有效 segment")
+    
+    if not valid_segs:
+        live_print("❌ 无有效 segment，无法扫描")
+        return
 
     # ---- 端口动态管理（基于历史命中率过滤 + 排序） ----
     port_stats = _load_port_stats()
@@ -803,6 +807,7 @@ async def main():
     shared_found = set()
     live_print(f"🚀 准备扫描: {len(valid_segs)} 段 × 254 IP × {len(sorted_ports)} 端口 = {len(valid_segs)*254*len(sorted_ports):,} 任务")
     if sorted_ports:
+        live_print(f"🔍 开始扫描...")
         sips, scan_seconds = await run_native_scan(valid_segs, sorted_ports, shared_found)
         stats["scan_seconds"] = scan_seconds
     else:
@@ -814,7 +819,9 @@ async def main():
     # ---- 扫描后更新端口统计（在 source-ip 写入前记录 scanned_ports） ----
     scanned_ports = [str(p) for p in sorted_ports]
 
+    # 合并 FOFA 结果和扫描结果
     unique_all = sorted(list(set(fips + sips)))
+    live_print(f"📋 合并结果: FOFA={len(fips)} + 扫描={len(sips)} = 总计 {len(unique_all)} 个唯一 IP")
 
     # 加载下游反馈，优先测试评分高的源
     feedback = await asyncio.to_thread(load_external_feedback)
