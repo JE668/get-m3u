@@ -32,7 +32,7 @@ jobs:
       - name: 📦 安装依赖
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements.txt pytest
           echo "✅ 依赖安装完成"
 
       - name: 🗄️ 更新 ip2region 库
@@ -46,6 +46,9 @@ jobs:
             rm -f data/ip2region.xdb.new 2>/dev/null
             echo "ℹ️ ip2region 无更新，使用现有版本"
           fi
+
+      - name: 🧪 冒烟测试（导入图守门，防止 ModuleNotFoundError 浪费整套 CI）
+        run: python -m pytest tests/test_smoke.py -q 2>&1 | tail -5
 
       - name: 🔍 FOFA Cookie 健康检查
         env:
