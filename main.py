@@ -82,6 +82,10 @@ FEEDBACK_URL = os.environ.get(
 MISSES_BEFORE_DEACTIVATE = 3
 DEFAULT_PORT_MISSES_EXTRA = 3  # 默认端口额外容忍次数
 
+# C段验证缓存（避免每次重新验证所有 segment）
+SEGMENT_CACHE_FILE = os.path.join(os.path.dirname(DISCOVERY_FILE), "segment_cache.json")
+SEGMENT_CACHE_TTL = 7 * 24 * 3600  # 7 天缓存
+
 # ===============================
 # 核心功能函数
 # ===============================
@@ -108,12 +112,35 @@ def get_geo_info(ip):
 SAMPLE_IPS_PER_SEG = [1, 100, 200]  # 每个C段抽测3个IP
 SAMPLE_GEO_THRESHOLD = 2              # 至少2个IP不合格才跳过（容忍1个误报）
 
+def _load_segment_cache():
+    """加载已验证的 C 段缓存"""
+    if not os.path.exists(SEGMENT_CACHE_FILE):
+        return {}
+    try:
+        with open(SEGMENT_CACHE_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        # 过滤过期条目
+        now = time.time()
+        return {k: v for k, v in data.items() if now - v.get("ts", 0) < SEGMENT_CACHE_TTL}
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+def _save_segment_cache(cache):
+    """保存已验证的 C 段缓存"""
+    try:
+        os.makedirs(os.path.dirname(SEGMENT_CACHE_FILE), exist_ok=True)
+        with open(SEGMENT_CACHE_FILE, "w", encoding="utf-8") as f:
+            json.dump(cache, f, ensure_ascii=False, indent=2)
+    except OSError as e:
+        live_print(f"⚠️ 段缓存写入失败: {e}")
+
 def filter_segments(segments):
     """C段 预校验与清洗（多IP抽样，防止 .1 网关误判）。
     
     - 每段抽 SAMPLE_IPS_PER_SEG 个IP做归属地测试
     - 至少 SAMPLE_GEO_THRESHOLD 个IP不合格才跳过（容忍1个误报）
     - 不再永久写入黑名单文件（避免单个网关IP误判导致整段永久消失）
+    - 已验证过的 segment 使用 7 天缓存，避免重复验证
     """
     log_section("🛡️ C段 归属地预校验（多IP抽样）", "🔹")
     blacklist = set()
@@ -121,14 +148,28 @@ def filter_segments(segments):
         with open(BLACKLIST_FILE, "r", encoding="utf-8") as f:
             blacklist = set([line.strip() for line in f if line.strip()])
 
-    valid_segments, skipped_segments = [], []
-    total = len(segments)
+    # 加载已验证缓存
+    segment_cache = _load_segment_cache()
+    cached_valid = [seg for seg in segments if seg in segment_cache and segment_cache[seg].get("valid")]
+    cached_invalid = [seg for seg in segments if seg in segment_cache and not segment_cache[seg].get("valid")]
+    
+    # 只验证未缓存的 segment
+    to_verify = [seg for seg in segments if seg not in segment_cache]
+    
+    valid_segments = list(cached_valid)
+    skipped_segments = list(cached_invalid)
     blacklist_skip = 0
-    live_print(f"📋 待检测: {total} 个 | 黑名单库: {len(blacklist)} 个 | 抽样: {len(SAMPLE_IPS_PER_SEG)} 个IP/段")
-
-    for idx, seg in enumerate(segments, 1):
+    
+    total = len(segments)
+    live_print(f"📋 待检测: {total} 个 | 缓存命中: {len(cached_valid)} 个 | 黑名单库: {len(blacklist)} 个")
+    live_print(f"   本次需验证: {len(to_verify)} 个 | 已验证无效: {len(cached_invalid)} 个")
+    
+    now_ts = time.time()
+    
+    for idx, seg in enumerate(to_verify, 1):
         if seg in blacklist:
             blacklist_skip += 1
+            segment_cache[seg] = {"valid": False, "reason": "blacklist", "ts": now_ts}
             continue
         # 多IP抽样（.1/.100/.200），防止网关IP误判
         sample_details = []
@@ -144,18 +185,23 @@ def filter_segments(segments):
         
         if fail_count >= SAMPLE_GEO_THRESHOLD:
             # 至少2个IP不合格才跳过（容忍1个误报）
-            live_print(f"  [{idx}/{total}] ❌ 跳过: {seg}")
+            live_print(f"  [{idx}/{len(to_verify)}] ❌ 跳过: {seg}")
             for line in detail_lines:
                 live_print(f"      {line}")
             skipped_segments.append(seg)
+            segment_cache[seg] = {"valid": False, "reason": "geo_fail", "ts": now_ts}
         else:
             # 至少1个IP合格即通过
             valid_segments.append(seg)
-            live_print(f"  [{idx}/{total}] ✅ 通过: {seg} ({ok_count}/{len(SAMPLE_IPS_PER_SEG)} 合格)")
+            live_print(f"  [{idx}/{len(to_verify)}] ✅ 通过: {seg} ({ok_count}/{len(SAMPLE_IPS_PER_SEG)} 合格)")
             for line in detail_lines:
                 live_print(f"      {line}")
+            segment_cache[seg] = {"valid": True, "reason": "geo_pass", "ts": now_ts}
 
-    live_print(f"📊 最终有效 C段: {len(valid_segments)} 个 (历史黑名单跳过: {blacklist_skip} 个, 本次临时跳过: {len(skipped_segments)} 个)")
+    # 保存缓存
+    _save_segment_cache(segment_cache)
+    
+    live_print(f"📊 最终有效 C段: {len(valid_segments)} 个 (缓存命中: {len(cached_valid)} 个, 本次新验证: {len(valid_segments) - len(cached_valid)} 个, 历史黑名单跳过: {blacklist_skip} 个, 本次临时跳过: {len(skipped_segments) - len(cached_invalid)} 个)")
     
     return valid_segments, blacklist_skip
 
