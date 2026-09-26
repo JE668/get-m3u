@@ -262,6 +262,8 @@ def select_scan_segments(valid_segs, known_alive_ips=None, dead_ips=None):
 
     state = _load_scan_state()
     now_ts = time.time()
+    live_print(f"📂 扫描状态加载: {len(state)} 段已记录"
+               f" (文件{'存在' if os.path.exists(SCAN_STATE_FILE) else '不存在!'}: {os.path.abspath(SCAN_STATE_FILE)})")
 
     # 生产中段（含已知存活 IP）每轮必扫
     hot_segs = set()
