@@ -84,7 +84,9 @@ MISSES_BEFORE_DEACTIVATE = 3
 DEFAULT_PORT_MISSES_EXTRA = 3  # 默认端口额外容忍次数
 
 # C段验证缓存（避免每次重新验证所有 segment）
-SEGMENT_CACHE_FILE = os.path.join(os.path.dirname(DISCOVERY_FILE), "segment_cache.json")
+# 命名注意：这是 geo 归属地验证缓存，与 utils/crawler.py 的 segments_cache.json
+# （爬虫结果缓存）是两个不同文件，勿混淆
+SEGMENT_CACHE_FILE = os.path.join(os.path.dirname(DISCOVERY_FILE), "segment_geo_cache.json")
 SEGMENT_CACHE_TTL = 7 * 24 * 3600  # 7 天缓存
 
 # ===============================
@@ -201,10 +203,92 @@ def filter_segments(segments):
 
     # 保存缓存
     _save_segment_cache(segment_cache)
-    
+
     live_print(f"📊 最终有效 C段: {len(valid_segments)} 个 (缓存命中: {len(cached_valid)} 个, 本次新验证: {len(valid_segments) - len(cached_valid)} 个, 历史黑名单跳过: {blacklist_skip} 个, 本次临时跳过: {len(skipped_segments) - len(cached_invalid)} 个)")
-    
+
     return valid_segments, blacklist_skip
+
+
+# ===============================
+# 2b. 扫描配额轮换（避免每次全量扫 100 万+ 任务）
+# ===============================
+#
+# 策略：
+# - 含已知存活 IP 的段（生产中段）→ 每轮必扫（增量验证 + 同段新端口探测）
+# - 其余段按「未扫描优先 → 最久未扫优先 → 历史命中高优先」排序，取配额 N 个
+# - 配额默认 80 段/轮：283 段约 4 轮（12h）全覆盖；0 = 不限制（退回旧行为）
+
+SCAN_STATE_FILE = "data/segment_scan_state.json"
+SCAN_SEGMENT_QUOTA = int(os.environ.get("SCAN_SEGMENT_QUOTA", "80"))
+
+
+def _load_scan_state():
+    """加载段扫描状态 {seg: {"last_scanned": ts, "hits": n, "runs": n}}"""
+    if not os.path.exists(SCAN_STATE_FILE):
+        return {}
+    try:
+        with open(SCAN_STATE_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+
+def _save_scan_state(state):
+    try:
+        with open(SCAN_STATE_FILE, "w", encoding="utf-8") as f:
+            json.dump(state, f, ensure_ascii=False)
+    except OSError as e:
+        live_print(f"⚠️ 扫描状态写入失败: {e}")
+
+
+def select_scan_segments(valid_segs, known_alive_ips=None):
+    """从有效段中按轮换策略选出本轮要扫描的段。
+
+    返回 (selected_segs, stats_line)
+    """
+    if SCAN_SEGMENT_QUOTA <= 0 or len(valid_segs) <= SCAN_SEGMENT_QUOTA:
+        return list(valid_segs), f"全量模式: {len(valid_segs)} 段 (配额={SCAN_SEGMENT_QUOTA or '∞'})"
+
+    state = _load_scan_state()
+    now_ts = time.time()
+
+    # 生产中段（含已知存活 IP）每轮必扫
+    hot_segs = set()
+    for ip_port in (known_alive_ips or []):
+        seg = ip_port.split(":")[0].rsplit(".", 1)[0]
+        if seg in valid_segs:
+            hot_segs.add(seg)
+
+    # 其余段按优先级排序：未扫过的最优先，然后按 last_scanned 升序，同档 hits 降序
+    rest = [s for s in valid_segs if s not in hot_segs]
+    rest.sort(key=lambda s: (state.get(s, {}).get("last_scanned", 0.0),
+                             -state.get(s, {}).get("hits", 0)))
+
+    quota_left = max(0, SCAN_SEGMENT_QUOTA - len(hot_segs))
+    selected = sorted(hot_segs) + rest[:quota_left]
+
+    live_print(f"🎯 扫描配额: {len(selected)}/{len(valid_segs)} 段 "
+               f"(生产中段 {len(hot_segs)} 必扫 + 轮换 {min(quota_left, len(rest))} 段, "
+               f"剩余 {len(rest) - min(quota_left, len(rest))} 段下轮)")
+    # 标记本轮扫描时间（实际命中数在扫描后由 update_scan_state 补记）
+    for seg in selected:
+        entry = state.setdefault(seg, {"last_scanned": 0.0, "hits": 0, "runs": 0})
+        entry["last_scanned"] = now_ts
+        entry["runs"] = entry.get("runs", 0) + 1
+    _save_scan_state(state)
+    return selected, None
+
+
+def update_scan_state(scanned_segs, found_ips):
+    """扫描结束后更新各段命中数"""
+    if not scanned_segs:
+        return
+    state = _load_scan_state()
+    for ip_port in found_ips:
+        seg = ip_port.split(":")[0].rsplit(".", 1)[0]
+        if seg in state:
+            state[seg]["hits"] = state[seg].get("hits", 0) + 1
+    _save_scan_state(state)
 
 # ===============================
 # 2a. 端口动态管理（基于历史命中率自动休眠/激活）
@@ -526,26 +610,18 @@ async def run_native_scan(segments, ports, found_set=None):
         limits=httpx.Limits(max_keepalive_connections=200, max_connections=1000),
         timeout=httpx.Timeout(connect=SCAN_CONNECT_TIMEOUT, read=SCAN_READ_TIMEOUT, write=1.5, pool=0.5),
     ) as client:
-        # 增量验证：先快速验证上次的存活 IP（随完随处理）
+        # 增量验证：不再串行阻塞，而是作为高优任务混入全量任务流前端
+        # （旧实现单独 await as_completed，500 并发只用了 33 个槽位）
+        incr_tasks = []
+        known_alive = []
         if os.path.exists(SOURCE_IP_FILE):
             with open(SOURCE_IP_FILE, "r", encoding="utf-8") as f:
                 known_alive = [line.strip() for line in f if line.strip()]
-            if known_alive:
-                live_print(f"🔄 增量验证: {len(known_alive)} 个已知 IP (connect≤0.3s, read≤0.5s)...")
-                still_alive = []
-                tasks = [asyncio.create_task(check_one(ip, (INCR_CONNECT_TIMEOUT, INCR_READ_TIMEOUT), client)) for ip in known_alive]
-                for coro in asyncio.as_completed(tasks):
-                    ok, matched = await coro
-                    if ok and matched:
-                        still_alive.append(matched)
-                        alive_ips.append(matched)
-                live_print(f"✅ 已知存活验证: {len(still_alive)}/{len(known_alive)} 个")
-                removed = len(known_alive) - len(still_alive)
-                if removed > 0:
-                    # 仅提示，不在此写回 SOURCE_IP_FILE：
-                    # 最终归档（阶段4）会用 geo_ips 覆盖写该文件，中途写回既冗余、
-                    # 又是 event loop 内同步 I/O，且会产生裁剪版中间态。
-                    live_print(f"🧹 清理 {removed} 个失效 IP (最终以阶段4归档为准)")
+        if known_alive:
+            live_print(f"🔄 增量验证: {len(known_alive)} 个已知 IP 混入任务流 (connect≤0.3s, read≤0.5s)")
+            incr_tasks = [asyncio.create_task(
+                check_one(ip, (INCR_CONNECT_TIMEOUT, INCR_READ_TIMEOUT), client)
+            ) for ip in known_alive]
 
         # 全量扫描：持续任务流，滚动窗口
         def _task_generator():
@@ -564,11 +640,12 @@ async def run_native_scan(segments, ports, found_set=None):
         live_print(f"🎯 全量扫描: 持续任务流 (并发: {scan_workers}, 预估任务: {total_tasks})")
         task_gen = _task_generator()
         completed = 0
+        incr_done = 0
         start_time = time.time()
 
-        # 初始化：启动 scan_workers 个任务
-        pending = set()
-        for _ in range(scan_workers):
+        # 初始化：增量验证任务优先进入 pending
+        pending = set(incr_tasks)
+        while len(pending) < min(scan_workers, MAX_PENDING):
             try:
                 ip_port = next(task_gen)
                 pending.add(asyncio.create_task(check_one(ip_port, None, client)))
@@ -578,8 +655,16 @@ async def run_native_scan(segments, ports, found_set=None):
         while pending:
             done, pending = await asyncio.wait(pending, return_when=asyncio.FIRST_COMPLETED)
             for task in done:
-                completed += 1
                 ok, matched_ip = task.result()
+                if task in incr_tasks:
+                    # 增量任务单独计数，不进扫描进度
+                    incr_done += 1
+                    if ok and matched_ip:
+                        alive_ips.append(matched_ip)
+                    if incr_done == len(incr_tasks):
+                        live_print(f"✅ 已知存活验证完成: {incr_done}/{len(known_alive)} 个已处理")
+                    continue
+                completed += 1
                 if ok and matched_ip:
                     alive_ips.append(matched_ip)
                     live_print(f"    🎯 命中: {matched_ip}")
@@ -804,16 +889,27 @@ async def main():
     sorted_ports = _filter_ports_by_stats(all_ports, port_stats)
     live_print(f"📋 端口扫描计划: {sorted_ports} ({len(sorted_ports)} 个 active)")
 
+    # ---- 扫描配额轮换：生产中段必扫 + 其余段按优先级取配额 ----
+    known_alive = []
+    if os.path.exists(SOURCE_IP_FILE):
+        with open(SOURCE_IP_FILE, "r", encoding="utf-8") as f:
+            known_alive = [line.strip() for line in f if line.strip()]
+    scan_segs, quota_msg = select_scan_segments(valid_segs, known_alive)
+    if quota_msg:
+        live_print(f"🎯 {quota_msg}")
+    stats["segments_scanned"] = len(scan_segs)
+
     # 共享 found_set
     shared_found = set()
-    live_print(f"🚀 准备扫描: {len(valid_segs)} 段 × 254 IP × {len(sorted_ports)} 端口 = {len(valid_segs)*254*len(sorted_ports):,} 任务")
-    if sorted_ports:
+    live_print(f"🚀 准备扫描: {len(scan_segs)} 段 × 254 IP × {len(sorted_ports)} 端口 = {len(scan_segs)*254*len(sorted_ports):,} 任务")
+    if sorted_ports and scan_segs:
         live_print(f"🔍 开始扫描...")
-        sips, scan_seconds = await run_native_scan(valid_segs, sorted_ports, shared_found)
+        sips, scan_seconds = await run_native_scan(scan_segs, sorted_ports, shared_found)
         stats["scan_seconds"] = scan_seconds
+        update_scan_state(scan_segs, sips)
     else:
         sips = []
-        live_print("⚠️ 无 active 端口，跳过扫描")
+        live_print("⚠️ 无 active 端口或无有效段，跳过扫描")
     stats["scan_found"] = len(sips)
     live_print(f"📊 扫描完成: 发现 {len(sips)} 个新 IP | 总命中: {len(shared_found)} | 耗时: {stats.get('scan_seconds', 0):.1f}s")
 
