@@ -118,12 +118,17 @@ def check_cookie_valid(cookie: str) -> Tuple[bool, str]:
             # 检查是否包含登录页面重定向
             if "login" in r.url.lower() or "signin" in r.url.lower():
                 return False, "Cookie 已过期（跳转到登录页）"
-            
-            # 检查响应内容是否包含搜索结果
-            if "udpxy" in r.text.lower() or "result" in r.text.lower():
-                return True, "Cookie 有效"
-            else:
-                return False, "Cookie 可能已过期（响应异常）"
+
+            body = r.text
+            # SPA 骨架防误判：骨架自带 "result"/"udpxy" 字样，必须有真实登录态证据
+            # 登录后导航栏含「退出」，游客页含「登录」按钮
+            if "退出" in body or "logout" in body.lower():
+                return True, "Cookie 有效（已登录）"
+            if "登录" in body:
+                return False, ("Cookie 无登录态（缺 session token）。"
+                               "正确取法：登录后 F12→Network→任选 fofa.info 请求→"
+                               "复制 Request Headers 里的完整 Cookie 头（含 HttpOnly token）")
+            return False, "Cookie 可能已过期（响应无登录态证据）"
         elif r.status_code == 403:
             return False, "Cookie 已过期（403 Forbidden）"
         elif r.status_code == 401:
