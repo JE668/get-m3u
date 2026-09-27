@@ -242,3 +242,17 @@ def segments_from_ip_list(ips: List[str]) -> List[str]:
         if is_valid_public_ip(ip):
             segments.add(ip_to_segment(ip))
     return list(segments)
+
+
+def crawl_ports() -> List[str]:
+    """从爬虫缓存的 ip:port 对里提取端口集合（新端口入池的另一个来源）。
+
+    无需额外网络请求：复用 crawl_segments 已保存的 data/segments_cache.json。
+    """
+    cache = load_segment_cache()
+    ports = set()
+    for ips in cache.values():
+        for _ip, port in ips:
+            if str(port).isdigit():
+                ports.add(str(port))
+    return sorted(ports, key=int)

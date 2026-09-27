@@ -9,7 +9,7 @@ import httpx
 import ip2region.util as ip2region_util
 import ip2region.searcher as ip2region_searcher
 from utils import live_print, write_summary, log_section, atomic_write, parse_rtp_entries, build_m3u, build_compat
-from utils.crawler import crawl_segments, segments_from_ip_list
+from utils.crawler import crawl_segments, crawl_ports, segments_from_ip_list
 from probe import load_source_scores, update_source_score, filter_by_score
 
 # --- 初始化离线 IP 归属地查询（ip2region xdb，零网络延迟） ---
@@ -219,7 +219,7 @@ def filter_segments(segments):
 # - 配额默认 80 段/轮：283 段约 4 轮（12h）全覆盖；0 = 不限制（退回旧行为）
 
 SCAN_STATE_FILE = "data/segment_scan_state.json"
-SCAN_SEGMENT_QUOTA = int(os.environ.get("SCAN_SEGMENT_QUOTA", "80"))
+SCAN_SEGMENT_QUOTA = int(os.environ.get("SCAN_SEGMENT_QUOTA", "200"))
 
 
 def _load_scan_state():
@@ -554,6 +554,17 @@ SCAN_READ_TIMEOUT = float(os.environ.get("SCAN_READ_TIMEOUT", "3.0"))
 INCR_CONNECT_TIMEOUT = float(os.environ.get("INCR_CONNECT_TIMEOUT", "0.3"))
 INCR_READ_TIMEOUT = float(os.environ.get("INCR_READ_TIMEOUT", "0.5"))
 
+# 存活主机多端口扫掠：udpxy 经常开在非标端口，对已存活 IP 探一轮常见 IPTV 口
+# （主机不变，补端口即翻几倍产出）。命中的端口会回写入发现库参与后续轮换。
+EXTRA_PROBE_PORTS = [
+    '80', '443', '500', '1080', '3128', '3333', '4000', '4001', '4002', '4003',
+    '4022', '4023', '5146', '5000', '5001', '5555', '6006', '6666', '7777',
+    '8000', '8001', '8080', '8081', '8118', '8443', '8686', '888', '8888', '8889',
+    '9000', '9001', '9901', '9981', '9982', '10000', '10001', '55555', '54321',
+    '1935', '7080', '8090', '6203', '17934',
+]
+SWEEP_PORTS_ENV = os.environ.get("PORT_SWEEP", "1")  # 0=关闭存活机多端口扫掠
+
 
 async def check_udpxy(ip_port, found_set=None, timeout=None, client=None):
     """HTTP 指纹探测（两阶段超时：connect快筛 + read给足时间）。
@@ -639,6 +650,19 @@ async def run_native_scan(segments, ports, found_set=None):
                 check_one(ip, (INCR_CONNECT_TIMEOUT, INCR_READ_TIMEOUT), client)
             ) for ip in known_alive]
 
+        # 存活主机多端口扫掠：同机扩口，命中端口将回写发现库（出参）
+        sweep_tasks = []
+        sweep_new_ports = []  # out: 本轮回扫发现的新端口
+        if SWEEP_PORTS_ENV != "0" and known_alive:
+            alive_ips_only = {ip.split(":")[0] for ip in known_alive}
+            candidates = [p for p in EXTRA_PROBE_PORTS if p not in {str(x) for x in port_list}]
+            if candidates:
+                sweep_targets = [f"{ip}:{p}" for ip in alive_ips_only for p in candidates]
+                live_print(f"🔎 存活主机端口扫掠: {len(alive_ips_only)} 台 × {len(candidates)} 候选口 = {len(sweep_targets)} 任务")
+                sweep_tasks = [asyncio.create_task(
+                    check_one(t, (INCR_CONNECT_TIMEOUT, INCR_READ_TIMEOUT), client)
+                ) for t in sweep_targets]
+
         # 全量扫描：持续任务流，滚动窗口
         def _task_generator():
             for seg in segments:
@@ -659,8 +683,8 @@ async def run_native_scan(segments, ports, found_set=None):
         incr_done = 0
         start_time = time.time()
 
-        # 初始化：增量验证任务优先进入 pending
-        pending = set(incr_tasks)
+        # 初始化：增量验证 + 存活主机端口扫掠任务优先进入 pending
+        pending = set(incr_tasks) | set(sweep_tasks)
         while len(pending) < min(scan_workers, MAX_PENDING):
             try:
                 ip_port = next(task_gen)
@@ -679,6 +703,14 @@ async def run_native_scan(segments, ports, found_set=None):
                         alive_ips.append(matched_ip)
                     if incr_done == len(incr_tasks):
                         live_print(f"✅ 已知存活验证完成: {incr_done}/{len(known_alive)} 个已处理")
+                    continue
+                if task in sweep_tasks:
+                    # 端口扫掠命中 → 记录存活 URL + 新端口
+                    if ok and matched_ip:
+                        alive_ips.append(matched_ip)
+                        port = matched_ip.rsplit(":", 1)[1]
+                        sweep_new_ports.append(port)
+                        live_print(f"    🔎 扫掠命中: {matched_ip}（新端口 :{port}）")
                     continue
                 completed += 1
                 if ok and matched_ip:
@@ -707,9 +739,46 @@ async def run_native_scan(segments, ports, found_set=None):
         live_print(f"✅ 扫描结束 | 总发现 {len(set(alive_ips))} 个")
         live_print(f"   📊 统计: 命中IP={len(found_set)} | 存活IP={len(set(alive_ips))} | 扫描耗时 {scan_elapsed:.2f}s")
 
+        # 端口扫掠结果汇总（sweep_new_ports 已在主循环内填充）
+        if sweep_new_ports:
+            uniq_ports = sorted(set(sweep_new_ports) - {str(x) for x in port_list})
+            if uniq_ports:
+                live_print(f"  🆕 存活机多端口扫掠新端口入池: {uniq_ports}")
+                _append_ports_to_discovery(uniq_ports)
+
     alive_ips = list(set(alive_ips))
-    
+
     return alive_ips, scan_elapsed
+
+
+def _append_ports_to_discovery(ports):
+    """把存活机多端口扫掠/爬虫发现的新端口追加入发现库（PORT| 行）。
+
+    重写完 discovery.txt 后，下次 _sync_discovery_to_stats 会给新端口试用期。
+    """
+    try:
+        existing_segs, existing_ports = set(), set()
+        if os.path.exists(DISCOVERY_FILE):
+            with open(DISCOVERY_FILE, "r", encoding="utf-8") as f:
+                for line in f:
+                    if "|" in line:
+                        tag, val = line.strip().split("|", 1)
+                        if tag == "SEG":
+                            existing_segs.add(val)
+                        elif tag == "PORT":
+                            existing_ports.add(val)
+        new_ports = set(str(p) for p in ports) - existing_ports
+        if not new_ports:
+            return
+        all_ports = sorted(existing_ports | new_ports, key=lambda x: int(x) if x.isdigit() else 0)
+        with open(DISCOVERY_FILE, "w", encoding="utf-8") as f:
+            for s in sorted(existing_segs):
+                f.write(f"SEG|{s}\n")
+            for p in all_ports:
+                f.write(f"PORT|{p}\n")
+        live_print(f"  📥 端口池新增 {len(new_ports)} 个（总 {len(all_ports)}）")
+    except OSError as e:
+        live_print(f"⚠️ 端口回写失败: {e}")
 
 
 def _is_invalid_ip(ip):
@@ -941,6 +1010,13 @@ async def main():
             if new_segs:
                 live_print(f"🕷️ 爬虫补充 {len(new_segs)} 个新 segment")
                 all_segs.extend(new_segs)
+            # 顺带把公开 M3U 源中存活过 udpxy 的端口入池（段之外，端口也要长新血）
+            crawler_ports = [p for p in crawl_ports() if p not in {str(x) for x in all_ports}]
+            if crawler_ports:
+                _append_ports_to_discovery(crawler_ports)
+                all_ports = sorted(set(str(x) for x in all_ports) | set(crawler_ports),
+                                   key=lambda x: int(x) if x.isdigit() else 0)
+            if new_segs:
                 # 更新发现库
                 with open(DISCOVERY_FILE, "w", encoding="utf-8") as f:
                     for s in sorted(all_segs):
