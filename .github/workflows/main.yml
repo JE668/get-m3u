@@ -58,6 +58,8 @@ jobs:
       - name: 🔍 阶段1 — 源发现 (main.py)
         env:
           FOFA_COOKIE: ${{ secrets.FOFA_COOKIE }}
+          FOFA_EMAIL: ${{ secrets.FOFA_EMAIL }}
+          FOFA_API_KEY: ${{ secrets.FOFA_API_KEY }}
           PYTHONUNBUFFERED: 1
         run: stdbuf -oL python main.py 2>&1 | tee /tmp/discovery.log
 

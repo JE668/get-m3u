@@ -720,9 +720,65 @@ def _is_invalid_ip(ip):
     except ValueError:
         return True
 
+def scrape_fofa_api():
+    """FOFA 官方 API 抓取（JSON，稳定）。
+
+    使用 FOFA_EMAIL + FOFA_API_KEY（个人中心 → API）。官方接口返回稳定 JSON，
+    不受前端 SPA 改版影响；账号无 API 权限时返回 error 并回退。
+    """
+    import base64
+    email = os.environ.get("FOFA_EMAIL", "")
+    api_key = os.environ.get("FOFA_API_KEY", "")
+    if not email or not api_key:
+        return None  # 未配置 → 让调用方走 cookie 路径
+
+    query = '"UDPXYY" && country="CN" && region="Guangdong"'
+    qbase64 = base64.b64encode(query.encode()).decode()
+    try:
+        r = httpx.get(
+            "https://fofa.info/api/v1/search/all",
+            params={"email": email, "key": api_key, "qbase64": qbase64,
+                    "size": "100", "fields": "host,ip,port,lastupdatetime"},
+            timeout=20,
+        )
+        data = r.json()
+        if data.get("error"):
+            live_print(f"⚠️ FOFA API 错误: {data.get('errmsg')}（回退 cookie 抓取）")
+            return None
+        results = data.get("results", [])
+        ips = []
+        for row in results:
+            # fields=host,ip,port,... → row[1]=ip, row[2]=port
+            try:
+                ip, port = str(row[1]), str(row[2])
+                if ip and port.isdigit() and not _is_invalid_ip(ip):
+                    ips.append(f"{ip}:{port}")
+            except (IndexError, TypeError):
+                continue
+        if ips:
+            live_print(f"✅ FOFA API 获取 {len(ips)} 条记录 (size={data.get('size', '?')})")
+            return list(dict.fromkeys(ips))
+        live_print("⚠️ FOFA API 返回 0 条记录")
+        return []
+    except Exception as e:
+        # 广阔兜底：API 是探测通道，任何异常都应安全降级
+        live_print(f"⚠️ FOFA API 异常: {e}（回退 cookie 抓取）")
+        return None
+
+
 def scrape_fofa():
-    """FOFA 抓取（含 Cookie 失效检测与降级提示，使用 httpx 同步客户端）"""
+    """FOFA 抓取：官方 API 优先（稳定 JSON），cookie 页面抓取兜底（SPA 后已基本失效）。
+
+    外层 main() 对空结果会进一步降级爬虫模式，这里只负责「FOFA 能不能给出 IP」。
+    """
     log_section("📡 抓取 FOFA 资源", "🔹")
+
+    # 1) 官方 API（需要 FOFA_EMAIL + FOFA_API_KEY secrets）
+    api_ips = scrape_fofa_api()
+    if api_ips is not None:
+        return api_ips
+
+    # 2) Cookie 页面抓取（FOFA 已 SPA 化，大概率拿不到结果；保留作金丝雀）
     if not HEADERS["Cookie"]:
         live_print("⏭️ 未配置 Cookie，跳过。"); return []
     try:
@@ -733,7 +789,6 @@ def scrape_fofa():
             return []
         if "账号登录" in r.text or "login" in str(r.url).lower():
             live_print("❌ 错误: FOFA Cookie 已失效！请更新 secrets.FOFA_COOKIE")
-            live_print("💡 提示: 在浏览器登录 fofa.info → F12 → Application → Cookies → 复制完整 Cookie 值")
             return []
         if r.status_code == 403:
             live_print("❌ 错误: FOFA 返回 403 禁止访问，可能被限流或封禁")
@@ -748,7 +803,10 @@ def scrape_fofa():
                 live_print(f" - {ip:<21} ({counts[ip]}次)")
             return list(counts.keys())
         else:
-            live_print(f"⚠️ FOFA 页面解析成功但未提取到 IP，可能页面结构变化")
+            # FOFA 前端改版为纯 SPA（Nuxt），搜索结果由 JS 渲染，HTML 里无数据。
+            # 此时乖乖走爬虫降级（外层处理），并提示配置官方 API。
+            live_print("⚠️ FOFA 页面为 SPA 异步渲染，HTML 无结果数据")
+            live_print("💡 根治方案: FOFA 个人中心 → API → 复制 email/key 配置 FOFA_EMAIL/FOFA_API_KEY secrets")
             return []
     except httpx.TimeoutException:
         live_print("❌ FOFA 请求超时（15s），网络不稳定")
