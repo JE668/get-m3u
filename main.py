@@ -915,6 +915,23 @@ async def main():
     stats["segments_total"] = len(all_segs)
     live_print(f"📊 发现库加载: {len(all_segs)} 个 segment, {len(all_ports)} 个端口")
     
+    # ---- APNIC 权威枚举（每轮都跑，24h 缓存；替代枯竭的 FOFA 通道）----
+    # 用本地 ip2region.xdb 离线过滤出 广东+电信 的 /24 段，是新段的主要来源
+    try:
+        from utils.prefixes import enumerate_gd_chinanet_segments
+        apnic_segs = await asyncio.to_thread(enumerate_gd_chinanet_segments, _get_ip2region())
+        new_apnic = [s for s in apnic_segs if s not in all_segs]
+        if new_apnic:
+            all_segs.extend(new_apnic)
+            live_print(f"🌐 APNIC 权威枚举补充 {len(new_apnic)} 个新段（总 {len(all_segs)}）")
+            with open(DISCOVERY_FILE, "w", encoding="utf-8") as f:
+                for s in sorted(all_segs):
+                    f.write(f"SEG|{s}\n")
+                for p in sorted(all_ports, key=int):
+                    f.write(f"PORT|{p}\n")
+    except Exception as e:
+        live_print(f"⚠️ APNIC 枚举失败（不影响主流程）: {e}")
+
     # FOFA 结果为空时，尝试爬虫补充
     if not fips:
         live_print("⚠️ FOFA 返回 0 条结果（cookie 可能已过期），尝试爬虫补充")
@@ -932,7 +949,7 @@ async def main():
                         f.write(f"PORT|{p}\n")
         else:
             live_print("⚠️ 爬虫也失败，将使用历史发现库继续扫描")
-    
+
     # 检查是否有任何 segment 可扫描
     if not all_segs:
         live_print("❌ 发现库为空且爬虫无结果，无法扫描")
