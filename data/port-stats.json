@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "run_counter": 621,
-  "last_run": "2026-09-28T04:58:32Z",
+  "run_counter": 622,
+  "last_run": "2026-09-28T13:40:56Z",
   "ports": {
     "22": {
       "runs": 13,
@@ -44,9 +44,9 @@
       "source": "fofa"
     },
     "500": {
-      "runs": 621,
+      "runs": 622,
       "hits": 618,
-      "missed_streak": 1,
+      "missed_streak": 2,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "fofa"
@@ -60,9 +60,9 @@
       "source": "fofa"
     },
     "1024": {
-      "runs": 621,
+      "runs": 622,
       "hits": 0,
-      "missed_streak": 3,
+      "missed_streak": 4,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "default"
@@ -124,16 +124,16 @@
       "source": "fofa"
     },
     "2901": {
-      "runs": 621,
+      "runs": 622,
       "hits": 621,
-      "missed_streak": 0,
+      "missed_streak": 1,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "fofa"
     },
     "4000": {
-      "runs": 621,
-      "hits": 621,
+      "runs": 622,
+      "hits": 622,
       "missed_streak": 0,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
@@ -148,8 +148,8 @@
       "source": "fofa"
     },
     "4022": {
-      "runs": 621,
-      "hits": 621,
+      "runs": 622,
+      "hits": 622,
       "missed_streak": 0,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
@@ -228,9 +228,9 @@
       "source": "fofa"
     },
     "8000": {
-      "runs": 621,
+      "runs": 622,
       "hits": 620,
-      "missed_streak": 1,
+      "missed_streak": 2,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "default"
@@ -268,18 +268,18 @@
       "source": "fofa"
     },
     "8188": {
-      "runs": 621,
-      "hits": 621,
+      "runs": 622,
+      "hits": 622,
       "missed_streak": 0,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "fofa"
     },
     "8443": {
-      "runs": 621,
+      "runs": 622,
       "hits": 76,
-      "missed_streak": 6,
-      "active": false,
+      "missed_streak": 1,
+      "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "default"
     },
@@ -292,8 +292,8 @@
       "source": "fofa"
     },
     "8686": {
-      "runs": 621,
-      "hits": 522,
+      "runs": 622,
+      "hits": 523,
       "missed_streak": 0,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
@@ -364,9 +364,9 @@
       "source": "fofa"
     },
     "8888": {
-      "runs": 621,
+      "runs": 622,
       "hits": 613,
-      "missed_streak": 2,
+      "missed_streak": 3,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "default"
@@ -436,17 +436,17 @@
       "source": "fofa"
     },
     "10000": {
-      "runs": 621,
-      "hits": 620,
+      "runs": 622,
+      "hits": 621,
       "missed_streak": 0,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "fofa"
     },
     "10001": {
-      "runs": 621,
+      "runs": 622,
       "hits": 110,
-      "missed_streak": 4,
+      "missed_streak": 5,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "default"
@@ -460,8 +460,8 @@
       "source": "fofa"
     },
     "16883": {
-      "runs": 621,
-      "hits": 610,
+      "runs": 622,
+      "hits": 611,
       "missed_streak": 0,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
@@ -516,17 +516,17 @@
       "source": "fofa"
     },
     "54321": {
-      "runs": 621,
+      "runs": 622,
       "hits": 113,
-      "missed_streak": 6,
-      "active": false,
+      "missed_streak": 1,
+      "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "default"
     },
     "55555": {
-      "runs": 621,
+      "runs": 622,
       "hits": 397,
-      "missed_streak": 2,
+      "missed_streak": 3,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "default"
@@ -948,17 +948,17 @@
       "source": "fofa"
     },
     "6001": {
-      "runs": 1,
+      "runs": 2,
       "hits": 0,
-      "missed_streak": 1,
+      "missed_streak": 2,
       "active": true,
       "first_seen": "2026-09-28T04:39:54Z",
       "source": "fofa"
     },
     "8001": {
-      "runs": 1,
+      "runs": 2,
       "hits": 0,
-      "missed_streak": 1,
+      "missed_streak": 2,
       "active": true,
       "first_seen": "2026-09-28T04:39:54Z",
       "source": "fofa"
