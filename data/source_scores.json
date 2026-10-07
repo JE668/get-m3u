@@ -1,11 +1,11 @@
 {
   "121.10.7.16:4000": {
-    "total_tests": 51,
-    "successes": 51,
+    "total_tests": 52,
+    "successes": 52,
     "consecutive_fails": 0,
-    "total_bandwidth": 123.19999999999999,
-    "last_success": "2026-10-07T10:12:37.564450",
-    "score": 71.4,
+    "total_bandwidth": 126.1,
+    "last_success": "2026-10-07T18:51:51.153409",
+    "score": 71.5,
     "avg_bandwidth": 2.4
   },
   "113.95.138.51:8188": {
@@ -378,13 +378,13 @@
     "avg_bandwidth": 2.6
   },
   "113.110.200.126:55555": {
-    "total_tests": 12,
-    "successes": 12,
+    "total_tests": 13,
+    "successes": 13,
     "consecutive_fails": 0,
-    "total_bandwidth": 29.1,
-    "last_success": "2026-10-07T10:12:37.564432",
+    "total_bandwidth": 32.0,
+    "last_success": "2026-10-07T18:51:51.153394",
     "score": 71.5,
-    "avg_bandwidth": 2.4
+    "avg_bandwidth": 2.5
   },
   "14.221.176.132:4022": {
     "total_tests": 6,
