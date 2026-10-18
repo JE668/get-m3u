@@ -1,10 +1,10 @@
 {
   "121.10.7.16:4000": {
-    "total_tests": 91,
-    "successes": 91,
+    "total_tests": 92,
+    "successes": 92,
     "consecutive_fails": 0,
-    "total_bandwidth": 220.90000000000003,
-    "last_success": "2026-10-18T10:51:41.455807",
+    "total_bandwidth": 223.20000000000005,
+    "last_success": "2026-10-18T15:49:51.736645",
     "score": 71.5,
     "avg_bandwidth": 2.4
   },
@@ -576,6 +576,96 @@
     "avg_bandwidth": 0
   },
   "113.95.138.126:8888": {
+    "total_tests": 1,
+    "successes": 0,
+    "consecutive_fails": 1,
+    "total_bandwidth": 0.0,
+    "last_success": null,
+    "score": 0.0,
+    "avg_bandwidth": 0
+  },
+  "14.155.190.181:8888": {
+    "total_tests": 1,
+    "successes": 1,
+    "consecutive_fails": 0,
+    "total_bandwidth": 2.3,
+    "last_success": "2026-10-18T15:49:51.736626",
+    "score": 62.4,
+    "avg_bandwidth": 2.3
+  },
+  "14.221.176.199:4022": {
+    "total_tests": 1,
+    "successes": 1,
+    "consecutive_fails": 0,
+    "total_bandwidth": 2.3,
+    "last_success": "2026-10-18T15:49:51.736652",
+    "score": 62.4,
+    "avg_bandwidth": 2.3
+  },
+  "116.5.169.83:4022": {
+    "total_tests": 1,
+    "successes": 1,
+    "consecutive_fails": 0,
+    "total_bandwidth": 2.2,
+    "last_success": "2026-10-18T15:49:51.736657",
+    "score": 62.3,
+    "avg_bandwidth": 2.2
+  },
+  "116.18.38.254:4000": {
+    "total_tests": 1,
+    "successes": 1,
+    "consecutive_fails": 0,
+    "total_bandwidth": 2.2,
+    "last_success": "2026-10-18T15:49:51.736661",
+    "score": 62.3,
+    "avg_bandwidth": 2.2
+  },
+  "113.101.225.85:4022": {
+    "total_tests": 1,
+    "successes": 0,
+    "consecutive_fails": 1,
+    "total_bandwidth": 0.0,
+    "last_success": null,
+    "score": 0.0,
+    "avg_bandwidth": 0
+  },
+  "119.136.113.253:8888": {
+    "total_tests": 1,
+    "successes": 1,
+    "consecutive_fails": 0,
+    "total_bandwidth": 2.2,
+    "last_success": "2026-10-18T15:49:51.736670",
+    "score": 62.3,
+    "avg_bandwidth": 2.2
+  },
+  "113.95.135.12:4022": {
+    "total_tests": 1,
+    "successes": 0,
+    "consecutive_fails": 1,
+    "total_bandwidth": 0.0,
+    "last_success": null,
+    "score": 0.0,
+    "avg_bandwidth": 0
+  },
+  "14.155.192.4:8888": {
+    "total_tests": 1,
+    "successes": 0,
+    "consecutive_fails": 1,
+    "total_bandwidth": 0.0,
+    "last_success": null,
+    "score": 0.0,
+    "avg_bandwidth": 0
+  },
+  "113.95.134.87:8888": {
+    "total_tests": 1,
+    "successes": 0,
+    "consecutive_fails": 1,
+    "total_bandwidth": 0.0,
+    "last_success": null,
+    "score": 0.0,
+    "avg_bandwidth": 0
+  },
+  "14.154.194.15:4022": {
     "total_tests": 1,
     "successes": 0,
     "consecutive_fails": 1,
