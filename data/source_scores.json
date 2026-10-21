@@ -1,10 +1,10 @@
 {
   "121.10.7.16:4000": {
-    "total_tests": 104,
-    "successes": 104,
+    "total_tests": 105,
+    "successes": 105,
     "consecutive_fails": 0,
-    "total_bandwidth": 253.70000000000007,
-    "last_success": "2026-10-21T11:39:15.398960",
+    "total_bandwidth": 256.00000000000006,
+    "last_success": "2026-10-21T17:06:48.143772",
     "score": 71.5,
     "avg_bandwidth": 2.4
   },
