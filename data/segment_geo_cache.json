@@ -1,9 +1,4 @@
 {
-  "168.228.44.0/24": {
-    "valid": false,
-    "reason": "geo_fail",
-    "ts": 1792641799.4075727
-  },
   "106.110.171": {
     "valid": false,
     "reason": "geo_fail",
@@ -41748,5 +41743,10 @@
     "valid": false,
     "reason": "geo_fail",
     "ts": 1793090831.6258755
+  },
+  "168.228.44.0/24": {
+    "valid": false,
+    "reason": "geo_fail",
+    "ts": 1793266813.0980706
   }
 }

@@ -747,12 +747,12 @@
     "avg_bandwidth": 0
   },
   "14.221.177.222:4022": {
-    "total_tests": 13,
-    "successes": 8,
+    "total_tests": 14,
+    "successes": 9,
     "consecutive_fails": 0,
-    "total_bandwidth": 18.5,
-    "last_success": "2026-10-29T00:50:26.668768",
-    "score": 46.3,
+    "total_bandwidth": 20.9,
+    "last_success": "2026-10-29T09:51:12.748272",
+    "score": 49.0,
     "avg_bandwidth": 2.3
   }
 }
