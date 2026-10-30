@@ -754,5 +754,14 @@
     "last_success": "2026-10-29T09:51:12.748272",
     "score": 42.2,
     "avg_bandwidth": 2.3
+  },
+  "14.221.177.129:4022": {
+    "total_tests": 1,
+    "successes": 1,
+    "consecutive_fails": 0,
+    "total_bandwidth": 2.6,
+    "last_success": "2026-10-30T18:00:51.683269",
+    "score": 62.6,
+    "avg_bandwidth": 2.6
   }
 }
