@@ -756,30 +756,30 @@
     "avg_bandwidth": 2.3
   },
   "14.221.177.129:4022": {
-    "total_tests": 12,
-    "successes": 8,
+    "total_tests": 13,
+    "successes": 9,
     "consecutive_fails": 0,
-    "total_bandwidth": 20.5,
-    "last_success": "2026-11-02T21:45:51.797261",
-    "score": 49.5,
+    "total_bandwidth": 23.2,
+    "last_success": "2026-11-03T06:10:18.740129",
+    "score": 52.1,
     "avg_bandwidth": 2.6
   },
   "14.155.220.212:8888": {
-    "total_tests": 4,
-    "successes": 4,
+    "total_tests": 5,
+    "successes": 5,
     "consecutive_fails": 0,
-    "total_bandwidth": 8.6,
-    "last_success": "2026-11-02T21:45:51.797254",
-    "score": 65.3,
-    "avg_bandwidth": 2.1
+    "total_bandwidth": 9.4,
+    "last_success": "2026-11-03T06:10:18.740134",
+    "score": 66.1,
+    "avg_bandwidth": 1.9
   },
   "119.136.115.37:8888": {
-    "total_tests": 4,
+    "total_tests": 5,
     "successes": 3,
-    "consecutive_fails": 0,
+    "consecutive_fails": 1,
     "total_bandwidth": 8.1,
     "last_success": "2026-11-02T21:45:51.797268",
-    "score": 49.6,
+    "score": 40.6,
     "avg_bandwidth": 2.7
   },
   "116.5.169.200:4022": {
@@ -792,21 +792,21 @@
     "avg_bandwidth": 2.5
   },
   "14.19.178.8:4022": {
-    "total_tests": 4,
-    "successes": 3,
-    "consecutive_fails": 0,
-    "total_bandwidth": 8.5,
-    "last_success": "2026-11-02T21:45:51.797200",
-    "score": 49.7,
-    "avg_bandwidth": 2.8
-  },
-  "14.145.187.242:4022": {
-    "total_tests": 4,
+    "total_tests": 5,
     "successes": 4,
     "consecutive_fails": 0,
-    "total_bandwidth": 10.7,
-    "last_success": "2026-11-02T21:45:51.797265",
-    "score": 65.6,
+    "total_bandwidth": 11.4,
+    "last_success": "2026-11-03T06:10:18.740097",
+    "score": 53.7,
+    "avg_bandwidth": 2.9
+  },
+  "14.145.187.242:4022": {
+    "total_tests": 5,
+    "successes": 5,
+    "consecutive_fails": 0,
+    "total_bandwidth": 13.5,
+    "last_success": "2026-11-03T06:10:18.740122",
+    "score": 66.6,
     "avg_bandwidth": 2.7
   },
   "125.94.180.108:8686": {
