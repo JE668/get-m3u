@@ -792,12 +792,12 @@
     "avg_bandwidth": 2.5
   },
   "14.19.178.8:4022": {
-    "total_tests": 18,
-    "successes": 16,
+    "total_tests": 19,
+    "successes": 17,
     "consecutive_fails": 0,
-    "total_bandwidth": 44.900000000000006,
-    "last_success": "2026-11-07T09:56:06.811743",
-    "score": 65.0,
+    "total_bandwidth": 47.60000000000001,
+    "last_success": "2026-11-07T17:46:34.600128",
+    "score": 65.4,
     "avg_bandwidth": 2.8
   },
   "14.145.187.242:4022": {
