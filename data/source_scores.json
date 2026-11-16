@@ -963,76 +963,76 @@
     "avg_bandwidth": 0
   },
   "14.145.187.71:4022": {
-    "total_tests": 20,
-    "successes": 20,
+    "total_tests": 21,
+    "successes": 21,
     "consecutive_fails": 0,
-    "total_bandwidth": 55.1,
-    "last_success": "2026-11-16T01:00:37.880230",
+    "total_bandwidth": 58.0,
+    "last_success": "2026-11-16T10:59:40.847457",
     "score": 71.7,
     "avg_bandwidth": 2.8
   },
   "14.155.220.202:8888": {
-    "total_tests": 1,
-    "successes": 1,
+    "total_tests": 2,
+    "successes": 2,
     "consecutive_fails": 0,
-    "total_bandwidth": 3.3,
-    "last_success": "2026-11-16T01:00:37.880198",
-    "score": 63.0,
-    "avg_bandwidth": 3.3
+    "total_bandwidth": 4.3,
+    "last_success": "2026-11-16T10:59:40.847464",
+    "score": 63.3,
+    "avg_bandwidth": 2.1
   },
   "113.64.92.6:4022": {
-    "total_tests": 1,
-    "successes": 1,
+    "total_tests": 2,
+    "successes": 2,
     "consecutive_fails": 0,
-    "total_bandwidth": 3.1,
-    "last_success": "2026-11-16T01:00:37.880221",
-    "score": 62.9,
-    "avg_bandwidth": 3.1
+    "total_bandwidth": 5.9,
+    "last_success": "2026-11-16T10:59:40.847430",
+    "score": 63.8,
+    "avg_bandwidth": 3.0
   },
   "183.10.99.215:4022": {
-    "total_tests": 1,
-    "successes": 1,
+    "total_tests": 2,
+    "successes": 2,
     "consecutive_fails": 0,
-    "total_bandwidth": 2.6,
-    "last_success": "2026-11-16T01:00:37.880226",
-    "score": 62.6,
-    "avg_bandwidth": 2.6
+    "total_bandwidth": 5.0,
+    "last_success": "2026-11-16T10:59:40.847451",
+    "score": 63.5,
+    "avg_bandwidth": 2.5
   },
   "125.94.175.141:4022": {
-    "total_tests": 1,
-    "successes": 1,
+    "total_tests": 2,
+    "successes": 2,
     "consecutive_fails": 0,
-    "total_bandwidth": 2.3,
-    "last_success": "2026-11-16T01:00:37.880233",
-    "score": 62.4,
-    "avg_bandwidth": 2.3
+    "total_bandwidth": 3.5999999999999996,
+    "last_success": "2026-11-16T10:59:40.847461",
+    "score": 63.1,
+    "avg_bandwidth": 1.8
   },
   "119.136.115.141:8888": {
-    "total_tests": 1,
-    "successes": 1,
+    "total_tests": 2,
+    "successes": 2,
     "consecutive_fails": 0,
-    "total_bandwidth": 3.0,
-    "last_success": "2026-11-16T01:00:37.880236",
-    "score": 62.8,
-    "avg_bandwidth": 3.0
+    "total_bandwidth": 5.8,
+    "last_success": "2026-11-16T10:59:40.847467",
+    "score": 63.7,
+    "avg_bandwidth": 2.9
   },
   "183.33.59.161:8686": {
-    "total_tests": 1,
-    "successes": 1,
+    "total_tests": 2,
+    "successes": 2,
     "consecutive_fails": 0,
-    "total_bandwidth": 3.0,
-    "last_success": "2026-11-16T01:00:37.880239",
-    "score": 62.8,
-    "avg_bandwidth": 3.0
+    "total_bandwidth": 5.8,
+    "last_success": "2026-11-16T10:59:40.847470",
+    "score": 63.7,
+    "avg_bandwidth": 2.9
   },
   "14.221.177.204:4022": {
-    "total_tests": 1,
-    "successes": 0,
-    "consecutive_fails": 1,
-    "total_bandwidth": 0.0,
-    "last_success": null,
-    "score": 0.0,
-    "avg_bandwidth": 0
+    "total_tests": 2,
+    "successes": 1,
+    "consecutive_fails": 0,
+    "total_bandwidth": 1.7,
+    "last_success": "2026-11-16T10:59:40.847473",
+    "score": 32.0,
+    "avg_bandwidth": 1.7
   },
   "113.95.141.73:4022": {
     "total_tests": 1,
@@ -1062,18 +1062,18 @@
     "avg_bandwidth": 1.4
   },
   "113.95.144.244:8888": {
-    "total_tests": 1,
+    "total_tests": 2,
     "successes": 0,
-    "consecutive_fails": 1,
+    "consecutive_fails": 2,
     "total_bandwidth": 0.0,
     "last_success": null,
     "score": 0.0,
     "avg_bandwidth": 0
   },
   "183.31.11.44:8000": {
-    "total_tests": 1,
+    "total_tests": 2,
     "successes": 0,
-    "consecutive_fails": 1,
+    "consecutive_fails": 2,
     "total_bandwidth": 0.0,
     "last_success": null,
     "score": 0.0,
