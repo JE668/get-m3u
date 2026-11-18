@@ -1,16 +1,16 @@
 {
   "_version": 1,
-  "_generated_at": "2026-11-18T02:57:58Z",
+  "_generated_at": "2026-11-18T11:30:53Z",
+  "14.145.187.71:4022": {
+    "bandwidth_mbps": 2.7
+  },
+  "183.10.99.215:4022": {
+    "bandwidth_mbps": 2.2
+  },
   "14.221.177.204:4022": {
-    "bandwidth_mbps": 2.4
+    "bandwidth_mbps": 2.6
   },
   "119.136.115.141:8888": {
     "bandwidth_mbps": 2.3
-  },
-  "14.145.187.71:4022": {
-    "bandwidth_mbps": 1.9
-  },
-  "183.10.99.215:4022": {
-    "bandwidth_mbps": 2.1
   }
 }
