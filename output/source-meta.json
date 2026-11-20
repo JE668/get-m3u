@@ -1,10 +1,10 @@
 {
   "_version": 1,
-  "_generated_at": "2026-11-20T02:16:47Z",
+  "_generated_at": "2026-11-20T11:15:54Z",
   "183.10.99.215:4022": {
-    "bandwidth_mbps": 2.3
+    "bandwidth_mbps": 2.2
   },
   "14.145.187.71:4022": {
-    "bandwidth_mbps": 2.7
+    "bandwidth_mbps": 2.6
   }
 }

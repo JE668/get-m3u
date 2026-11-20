@@ -963,11 +963,11 @@
     "avg_bandwidth": 0
   },
   "14.145.187.71:4022": {
-    "total_tests": 31,
-    "successes": 31,
+    "total_tests": 32,
+    "successes": 32,
     "consecutive_fails": 0,
-    "total_bandwidth": 84.50000000000001,
-    "last_success": "2026-11-20T02:16:47.090275",
+    "total_bandwidth": 87.10000000000001,
+    "last_success": "2026-11-20T11:15:54.957174",
     "score": 71.6,
     "avg_bandwidth": 2.7
   },
@@ -990,11 +990,11 @@
     "avg_bandwidth": 3.0
   },
   "183.10.99.215:4022": {
-    "total_tests": 12,
-    "successes": 12,
+    "total_tests": 13,
+    "successes": 13,
     "consecutive_fails": 0,
-    "total_bandwidth": 27.400000000000006,
-    "last_success": "2026-11-20T02:16:47.090261",
+    "total_bandwidth": 29.600000000000005,
+    "last_success": "2026-11-20T11:15:54.957158",
     "score": 71.4,
     "avg_bandwidth": 2.3
   },
