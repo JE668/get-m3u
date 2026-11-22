@@ -990,13 +990,13 @@
     "avg_bandwidth": 3.0
   },
   "183.10.99.215:4022": {
-    "total_tests": 19,
-    "successes": 19,
+    "total_tests": 20,
+    "successes": 20,
     "consecutive_fails": 0,
-    "total_bandwidth": 42.400000000000006,
-    "last_success": "2026-11-22T11:05:23.650819",
+    "total_bandwidth": 45.00000000000001,
+    "last_success": "2026-11-22T19:23:54.863014",
     "score": 71.3,
-    "avg_bandwidth": 2.2
+    "avg_bandwidth": 2.3
   },
   "125.94.175.141:4022": {
     "total_tests": 2,
