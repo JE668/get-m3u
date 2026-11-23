@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "run_counter": 813,
-  "last_run": "2026-11-22T19:23:53Z",
+  "run_counter": 814,
+  "last_run": "2026-11-23T01:35:53Z",
   "ports": {
     "22": {
       "runs": 13,
@@ -60,9 +60,9 @@
       "source": "fofa"
     },
     "1024": {
-      "runs": 813,
+      "runs": 814,
       "hits": 0,
-      "missed_streak": 3,
+      "missed_streak": 4,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "default"
@@ -148,8 +148,8 @@
       "source": "fofa"
     },
     "4022": {
-      "runs": 813,
-      "hits": 749,
+      "runs": 814,
+      "hits": 750,
       "missed_streak": 0,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
@@ -228,9 +228,9 @@
       "source": "fofa"
     },
     "8000": {
-      "runs": 813,
+      "runs": 814,
       "hits": 651,
-      "missed_streak": 4,
+      "missed_streak": 5,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "default"
@@ -276,10 +276,10 @@
       "source": "fofa"
     },
     "8443": {
-      "runs": 813,
+      "runs": 814,
       "hits": 76,
-      "missed_streak": 6,
-      "active": false,
+      "missed_streak": 1,
+      "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "default"
     },
@@ -292,9 +292,9 @@
       "source": "fofa"
     },
     "8686": {
-      "runs": 813,
-      "hits": 563,
-      "missed_streak": 3,
+      "runs": 814,
+      "hits": 564,
+      "missed_streak": 0,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "default"
@@ -364,10 +364,10 @@
       "source": "fofa"
     },
     "8888": {
-      "runs": 813,
+      "runs": 814,
       "hits": 683,
-      "missed_streak": 6,
-      "active": false,
+      "missed_streak": 1,
+      "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "default"
     },
@@ -444,9 +444,9 @@
       "source": "fofa"
     },
     "10001": {
-      "runs": 813,
+      "runs": 814,
       "hits": 110,
-      "missed_streak": 4,
+      "missed_streak": 5,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "default"
@@ -516,17 +516,17 @@
       "source": "fofa"
     },
     "54321": {
-      "runs": 813,
+      "runs": 814,
       "hits": 113,
-      "missed_streak": 6,
-      "active": false,
+      "missed_streak": 1,
+      "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "default"
     },
     "55555": {
-      "runs": 813,
+      "runs": 814,
       "hits": 410,
-      "missed_streak": 2,
+      "missed_streak": 3,
       "active": true,
       "first_seen": "2026-06-19T19:54:57.937061Z",
       "source": "default"
@@ -1281,6 +1281,14 @@
       "missed_streak": 3,
       "active": false,
       "first_seen": "2026-11-17T07:19:58Z",
+      "source": "fofa"
+    },
+    "50002": {
+      "runs": 1,
+      "hits": 0,
+      "missed_streak": 1,
+      "active": true,
+      "first_seen": "2026-11-23T01:28:12Z",
       "source": "fofa"
     }
   }
