@@ -963,11 +963,11 @@
     "avg_bandwidth": 0
   },
   "14.145.187.71:4022": {
-    "total_tests": 40,
-    "successes": 40,
+    "total_tests": 41,
+    "successes": 41,
     "consecutive_fails": 0,
-    "total_bandwidth": 107.70000000000002,
-    "last_success": "2026-11-25T07:59:31.963687",
+    "total_bandwidth": 110.30000000000001,
+    "last_success": "2026-11-25T19:12:28.073713",
     "score": 71.6,
     "avg_bandwidth": 2.7
   },
